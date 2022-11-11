@@ -43,15 +43,15 @@ export default function Router() {
 							</Auth>
 						}
 					/>
+					<Route
+						path="/products"
+						element={
+							<Auth>
+								<Products />
+							</Auth>
+						}
+					/>
 				</Route>
-				<Route
-					path="/products"
-					element={
-						<Auth>
-							<Products />
-						</Auth>
-					}
-				/>
 			</Routes>
 		</BrowserRouter>
 	);
