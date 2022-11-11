@@ -26,7 +26,7 @@ export default function Confirm({
 					>
 						✕
 					</button>
-					<h3 className="font-bold text-xl">{modalTitle}</h3>
+					<h3 className="font-bold text-xl text-center">{modalTitle}</h3>
 
 					{children}
 
