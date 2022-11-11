@@ -4,6 +4,7 @@ const ProductsController = {
 	search: async (req, res) => {
 		const { keyword } = req.query;
 		await Product.find({ name: { $regex: keyword, $options: "i" } })
+			.populate("category")
 			.then((product) => {
 				return res.status(200).json({ data: product });
 			})
@@ -14,6 +15,8 @@ const ProductsController = {
 
 	index: async (req, res) => {
 		await Product.find()
+			.populate({ path: "category", select: "name" })
+			.populate({ path: "supplier", select: "name" })
 			.then((products) => {
 				return res.status(200).json({ data: products });
 			})
@@ -25,6 +28,7 @@ const ProductsController = {
 	show: async (req, res) => {
 		const { id } = req.params;
 		await Product.findById(id)
+			.populate("category")
 			.then((product) => {
 				return res.status(200).json(product);
 			})

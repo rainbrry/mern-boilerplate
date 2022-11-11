@@ -60,7 +60,7 @@ export default function EditProduct({ product }) {
 							name="category"
 							id="category"
 							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500 bg-white"
-							defaultValue={product.category}
+							defaultValue={product.category._id}
 							onChange={(e) => setValue("category", e.target.value)}
 							{...register("category", { required: true })}
 						>
@@ -80,7 +80,7 @@ export default function EditProduct({ product }) {
 							name="supplier"
 							id="supplier"
 							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500 bg-white"
-							defaultValue={product.supplier}
+							defaultValue={product.supplier._id}
 							onChange={(e) => setValue("supplier", e.target.value)}
 							{...register("supplier", { required: true })}
 						>

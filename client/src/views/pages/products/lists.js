@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { rupiah } from "../../../helpers/currency";
 import {
 	getProducts,
 	productsSelector,
 } from "../../../redux/features/productsSlice";
+import DetailProduct from "./detail";
 import EditProduct from "./edit";
 import DeleteProduct from "./delete";
 
@@ -22,9 +24,6 @@ export default function ListProducts() {
 						<tr>
 							<th className="p-4 whitespace-nowrap">
 								<div className="font-semibold">Name</div>
-							</th>
-							<th className="p-4 whitespace-nowrap">
-								<div className="font-semibold">Category</div>
 							</th>
 							<th className="p-4 whitespace-nowrap">
 								<div className="font-semibold">Purchase price</div>
@@ -48,24 +47,26 @@ export default function ListProducts() {
 									className="border-b-2 border-gray-200 hover:bg-gray-300"
 								>
 									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-medium text-gray-800 capitalize">
+										<div className="font-medium text-gray-800 capitalize w-80 truncate">
 											{product.name}
 										</div>
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-normal">{product.category}</div>
+										<div className="font-normal">
+											{rupiah(product.purchasePrice)}
+										</div>
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-normal">{product.purchasePrice}</div>
-									</td>
-									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-normal">{product.salesPrice}</div>
+										<div className="font-normal">
+											{rupiah(product.salesPrice)}
+										</div>
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-normal">{product.stock}</div>
 									</td>
 									<td className="p-2 whitespace-nowrap">
-										<div className="text-md text-center flex gap-2 justify-center">
+										<div className="text-md flex gap-2 justify-center">
+											<DetailProduct product={product} />
 											<EditProduct product={product} />
 											<DeleteProduct id={product._id} />
 										</div>
