@@ -1,0 +1,16 @@
+PORT=5000
+
+# DB
+DB_URI=mongodb://localhost:27017/mern
+DB_NAME=mern
+DB_HOST=localhost
+DB_PORT=27017
+DB_USERNAME=
+DB_PASSWORD=
+
+# JWT
+ACCESS_TOKEN_KEY=access-token-key
+REFRESH_TOKEN_KEY=refresh-token-key
+
+# PASSWORD KEY
+PASSWORD_KEY=password-key
