@@ -4,10 +4,7 @@ const { Schema } = mongoose;
 
 const SupplierSchema = new Schema(
 	{
-		name: { type: String, required: true },
-		address: { type: String },
-		phone: { type: String },
-		email: { type: String },
+		name: { type: String, required: true, lowercase: true },
 	},
 	{
 		versionKey: false,
