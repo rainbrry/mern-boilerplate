@@ -1,9 +1,8 @@
 import React, { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
+import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
 import { addProduct } from "../../../redux/features/productsSlice";
 import Modal from "../../components/Modal";
-import CreateableSelect from "react-select/creatable";
 
 export default function AddProduct() {
 	const [openModal, setOpenModal] = useState(false);
