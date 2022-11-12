@@ -13,9 +13,7 @@ import {
 } from "redux-persist";
 import usersReducer from "./features/usersSlice";
 import authReducer from "./features/authSlice";
-import suppliersReducer from "./features/suppliersSlice";
 import productsReducer from "./features/productsSlice";
-import categoriesReducer from "./features/categoriesSlice";
 
 const encryptor = encryptTransform({
 	secretKey: "this-is-secret-and-you-dont-know-it",
@@ -38,8 +36,6 @@ const store = configureStore({
 	reducer: {
 		auth: persistedReducer,
 		users: usersReducer,
-		suppliers: suppliersReducer,
-		categories: categoriesReducer,
 		products: productsReducer,
 	},
 	middleware: (getDefaultMiddleware) =>

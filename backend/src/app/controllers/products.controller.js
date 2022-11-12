@@ -1,10 +1,9 @@
-import Product from "../models/product.model.js";
+import Product from "../schemas/products.schema.js";
 
 const ProductsController = {
 	search: async (req, res) => {
 		const { keyword } = req.query;
 		await Product.find({ name: { $regex: keyword, $options: "i" } })
-			.populate("category")
 			.then((product) => {
 				return res.status(200).json({ data: product });
 			})
@@ -15,8 +14,6 @@ const ProductsController = {
 
 	index: async (req, res) => {
 		await Product.find()
-			.populate({ path: "category", select: "name" })
-			.populate({ path: "supplier", select: "name" })
 			.then((products) => {
 				return res.status(200).json({ data: products });
 			})
@@ -28,9 +25,8 @@ const ProductsController = {
 	show: async (req, res) => {
 		const { id } = req.params;
 		await Product.findById(id)
-			.populate("category")
 			.then((product) => {
-				return res.status(200).json(product);
+				return res.status(200).json({ data: product });
 			})
 			.catch((err) => {
 				return res.status(500).json(err.message);
@@ -38,8 +34,7 @@ const ProductsController = {
 	},
 
 	store: async (req, res) => {
-		const { name, category, supplier, purchasePrice, salesPrice, markup } =
-			req.body;
+		const { name, category, supplier, purchasePrice, salesPrice } = req.body;
 
 		const product = new Product({
 			name,
@@ -47,7 +42,6 @@ const ProductsController = {
 			supplier,
 			purchasePrice,
 			salesPrice,
-			markup,
 		});
 
 		await product
@@ -62,8 +56,7 @@ const ProductsController = {
 
 	update: async (req, res) => {
 		const { id } = req.params;
-		const { name, category, supplier, purchasePrice, salesPrice, markup } =
-			req.body;
+		const { name, category, supplier, purchasePrice, salesPrice } = req.body;
 
 		await Product.findByIdAndUpdate(
 			id,
@@ -73,7 +66,6 @@ const ProductsController = {
 				supplier,
 				purchasePrice,
 				salesPrice,
-				markup,
 			},
 			{ new: true }
 		)

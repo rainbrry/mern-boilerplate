@@ -1,24 +1,36 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import Modal from "../../components/Modal";
 import { useForm } from "react-hook-form";
 import { useDispatch, useSelector } from "react-redux";
-import { updateProduct } from "../../../redux/features/productsSlice";
-import { suppliersSelector } from "../../../redux/features/suppliersSlice";
-import { categoriesSelector } from "../../../redux/features/categoriesSlice";
+import {
+	productsSelector,
+	updateProduct,
+} from "../../../redux/features/productsSlice";
 
-export default function EditProduct({ product }) {
+export default function EditProduct({ id }) {
 	const [openModal, setOpenModal] = useState(false);
 	const dispatch = useDispatch();
+	const product = useSelector((state) =>
+		productsSelector.selectById(state, id)
+	);
 
-	const categories = useSelector(categoriesSelector.selectAll);
-	const suppliers = useSelector(suppliersSelector.selectAll);
+	const {
+		register,
+		handleSubmit,
+		reset,
+		formState: { isSubmitSuccessful },
+	} = useForm();
 
-	const { register, handleSubmit, setValue, reset } = useForm();
-	const store = (data) => {
-		dispatch(updateProduct(data));
+	const update = async (data) => {
+		await dispatch(updateProduct(data));
 		setOpenModal(!openModal);
-		reset();
 	};
+
+	useEffect(() => {
+		if (isSubmitSuccessful) {
+			reset();
+		}
+	}, [isSubmitSuccessful, reset]);
 
 	return (
 		<div>
@@ -30,7 +42,7 @@ export default function EditProduct({ product }) {
 				modalTitle={"Edit product"}
 				modalWitdh={"max-w-lg"}
 			>
-				<form onSubmit={handleSubmit(store)} method="POST" className="w-full">
+				<form onSubmit={handleSubmit(update)} className="w-full">
 					<input
 						type="hidden"
 						name="id"
@@ -48,49 +60,8 @@ export default function EditProduct({ product }) {
 							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
 							placeholder="name"
 							defaultValue={product.name}
-							onChange={(e) => setValue("name", e.target.value)}
 							{...register("name", { required: true })}
 						/>
-					</div>
-					<div className="px-4 py-2">
-						<label htmlFor="category" className="block text-sm text-dark">
-							Category
-						</label>
-						<select
-							name="category"
-							id="category"
-							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500 bg-white"
-							defaultValue={product.category._id}
-							onChange={(e) => setValue("category", e.target.value)}
-							{...register("category", { required: true })}
-						>
-							<option value="">Choose category</option>
-							{categories.map((category) => (
-								<option key={category._id} value={category._id}>
-									{category.name}
-								</option>
-							))}
-						</select>
-					</div>
-					<div className="px-4 py-2">
-						<label htmlFor="supplier" className="block text-sm text-dark">
-							Supplier
-						</label>
-						<select
-							name="supplier"
-							id="supplier"
-							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500 bg-white"
-							defaultValue={product.supplier._id}
-							onChange={(e) => setValue("supplier", e.target.value)}
-							{...register("supplier", { required: true })}
-						>
-							<option value="">Choose supplier</option>
-							{suppliers.map((supplier) => (
-								<option key={supplier._id} value={supplier._id}>
-									{supplier.name}
-								</option>
-							))}
-						</select>
 					</div>
 					<div className="px-4 py-2">
 						<label htmlFor="purchase_price" className="block text-sm text-dark">
@@ -103,7 +74,6 @@ export default function EditProduct({ product }) {
 							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
 							placeholder="Purchase price"
 							defaultValue={product.purchasePrice}
-							onChange={(e) => setValue("purchasePrice", e.target.value)}
 							{...register("purchasePrice", { required: true })}
 						/>
 					</div>
@@ -118,23 +88,7 @@ export default function EditProduct({ product }) {
 							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
 							placeholder="Sales price"
 							defaultValue={product.salesPrice}
-							onChange={(e) => setValue("salesPrice", e.target.value)}
 							{...register("salesPrice", { required: true })}
-						/>
-					</div>
-					<div className="px-4 py-2">
-						<label htmlFor="markup" className="block text-sm text-dark">
-							Markup
-						</label>
-						<input
-							type="number"
-							name="markup"
-							id="markup"
-							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
-							placeholder="Markup in %"
-							defaultValue={product.markup}
-							onChange={(e) => setValue("markup", e.target.value)}
-							{...register("markup", { required: true })}
 						/>
 					</div>
 					<div className="py-2 mt-2 flex justify-end">

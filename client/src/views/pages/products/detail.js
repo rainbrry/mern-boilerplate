@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import Modal from "../../components/Modal";
 import { rupiah } from "../../../helpers/currency";
+import { useSelector } from "react-redux";
+import { productsSelector } from "../../../redux/features/productsSlice";
 
-export default function DetailProduct({ product }) {
+export default function DetailProduct({ id }) {
 	const [openModal, setOpenModal] = useState(false);
+
+	const product = useSelector((state) =>
+		productsSelector.selectById(state, id)
+	);
 
 	return (
 		<div>
@@ -13,109 +19,46 @@ export default function DetailProduct({ product }) {
 				btnModal={"Detail"}
 				btnStyle={"px-4 py-1 bg-cyan-600 rounded-lg shadow text-white"}
 				modalTitle={"Detail product"}
-				modalWitdh={"max-w-lg"}
+				modalWitdh={"max-w-xl"}
 			>
-				<form className="w-full">
-					<input disabled type="hidden" name="id" value={product._id} />
-					<div className="px-4 py-2">
-						<label htmlFor="name" className="block text-sm text-dark">
-							Name
-						</label>
-						<input
-							disabled
-							type="text"
-							name="name"
-							id="name"
-							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
-							placeholder="name"
-							defaultValue={product.name}
-						/>
+				<div className="w-full px-4 py-2 flex flex-col gap-2">
+					<div>
+						<span>Nama barang</span>
+						<div className="p-1.5 w-full border-2 border-gray-400 capitalize rounded-lg">
+							{product.name}
+						</div>
 					</div>
-					<div className="px-4 py-2">
-						<label htmlFor="name" className="block text-sm text-dark">
-							Category
-						</label>
-						<input
-							disabled
-							type="text"
-							name="name"
-							id="name"
-							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
-							placeholder="name"
-							defaultValue={product.category.name}
-						/>
+					<div>
+						<span>Kategori</span>
+						<div className="p-1.5 w-full border-2 border-gray-400 capitalize rounded-lg">
+							{product.category}
+						</div>
 					</div>
-					<div className="px-4 py-2">
-						<label htmlFor="name" className="block text-sm text-dark">
-							Supplier
-						</label>
-						<input
-							disabled
-							type="text"
-							name="name"
-							id="name"
-							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
-							placeholder="name"
-							defaultValue={product.supplier.name}
-						/>
+					<div>
+						<span>Supplier</span>
+						<div className="p-1.5 w-full border-2 border-gray-400 capitalize rounded-lg">
+							{product.supplier}
+						</div>
 					</div>
-					<div className="px-4 py-2">
-						<label htmlFor="purchase_price" className="block text-sm text-dark">
-							Purchase price
-						</label>
-						<input
-							disabled
-							type="number"
-							name="purchase_price"
-							id="purchase_price"
-							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
-							placeholder="Purchase price"
-							defaultValue={rupiah(product.purchasePrice)}
-						/>
+					<div>
+						<span>Harga beli</span>
+						<div className="p-1.5 w-full border-2 border-gray-400 capitalize rounded-lg">
+							{rupiah(product.purchasePrice)}
+						</div>
 					</div>
-					<div className="px-4 py-2">
-						<label htmlFor="sales_price" className="block text-sm text-dark">
-							Sales price
-						</label>
-						<input
-							disabled
-							type="number"
-							name="sales_price"
-							id="sales_price"
-							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
-							placeholder="Sales price"
-							defaultValue={rupiah(product.salesPrice)}
-						/>
+					<div>
+						<span>Harga jual</span>
+						<div className="p-1.5 w-full border-2 border-gray-400 capitalize rounded-lg">
+							{rupiah(product.salesPrice)}
+						</div>
 					</div>
-					<div className="px-4 py-2">
-						<label htmlFor="stock" className="block text-sm text-dark">
-							Stock
-						</label>
-						<input
-							disabled
-							type="number"
-							name="stock"
-							id="stock"
-							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
-							placeholder="Sales price"
-							defaultValue={product.stock}
-						/>
+					<div>
+						<span>Stock</span>
+						<div className="p-1.5 w-full border-2 border-gray-400 capitalize rounded-lg">
+							{product.stock}
+						</div>
 					</div>
-					<div className="px-4 py-2">
-						<label htmlFor="markup" className="block text-sm text-dark">
-							Markup
-						</label>
-						<input
-							disabled
-							type="text"
-							name="markup"
-							id="markup"
-							className="w-full px-4 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
-							placeholder="Markup in %"
-							defaultValue={`${product.markup}%`}
-						/>
-					</div>
-				</form>
+				</div>
 			</Modal>
 		</div>
 	);

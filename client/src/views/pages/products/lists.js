@@ -16,6 +16,7 @@ export default function ListProducts() {
 	useEffect(() => {
 		dispatch(getProducts());
 	}, [dispatch]);
+
 	return (
 		<div className="py-4">
 			<div className="w-full h-[450px] bg-base-100 rounded shadow-lg overflow-hidden overflow-y-auto">
@@ -66,8 +67,8 @@ export default function ListProducts() {
 									</td>
 									<td className="p-2 whitespace-nowrap">
 										<div className="text-md flex gap-2 justify-center">
-											<DetailProduct product={product} />
-											<EditProduct product={product} />
+											<DetailProduct id={product._id} />
+											<EditProduct id={product._id} />
 											<DeleteProduct id={product._id} />
 										</div>
 									</td>
