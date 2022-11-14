@@ -20,6 +20,7 @@ export default function Modal({
 			<div className={`modal ${open ? "modal-open" : ""}`}>
 				<div className={`modal-box relative ${modalWitdh}`}>
 					<button
+						tabIndex={-1}
 						onClick={handleModal}
 						className="btn btn-sm btn-circle absolute right-2 top-2"
 					>
