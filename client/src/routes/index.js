@@ -1,14 +1,16 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import MainLayout from "../views/layouts/MainLayout";
+import Guest from "../middlewares/Guest";
+import Auth from "../middlewares/Auth";
+import Login from "../views/pages/auth/Login";
 import Home from "../views/pages/home";
 import Users from "../views/pages/users";
 import Products from "../views/pages/products";
-import Login from "../views/pages/auth/Login";
+import Purchasings from "../views/pages/purchasings";
 import Error403 from "../views/pages/error/Error403";
 import Error404 from "../views/pages/error/Error404";
-import Guest from "../middlewares/Guest";
-import Auth from "../middlewares/Auth";
+import AddPurchasing from "../views/pages/purchasings/create";
 
 export default function Router() {
 	return (
@@ -48,6 +50,22 @@ export default function Router() {
 						element={
 							<Auth>
 								<Products />
+							</Auth>
+						}
+					/>
+					<Route
+						path="/purchasings"
+						element={
+							<Auth>
+								<Purchasings />
+							</Auth>
+						}
+					/>
+					<Route
+						path="/purchase"
+						element={
+							<Auth>
+								<AddPurchasing />
 							</Auth>
 						}
 					/>
