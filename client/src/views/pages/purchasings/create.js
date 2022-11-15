@@ -50,9 +50,9 @@ export default function AddPurchasing() {
 			</div>
 
 			<div className="flex flex-col items-end px-10  justify-center h-20 rounded-b-xl shadow-lg w-full bg-teal-100">
-				<div>
-					Total: <span className="text-2xl">{rupiah(grandTotal || 0)}</span>
-				</div>
+				<span className="text-2xl font-semibold">
+					Total: {rupiah(grandTotal || 0)}
+				</span>
 			</div>
 		</div>
 	);
