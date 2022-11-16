@@ -14,8 +14,10 @@ export default function ListProducts() {
 	const products = useSelector(productsSelector.selectAll);
 
 	useEffect(() => {
-		dispatch(getProducts());
-	}, [dispatch]);
+		if (!products.length) {
+			dispatch(getProducts());
+		}
+	}, [dispatch, products.length]);
 
 	return (
 		<div className="py-4">

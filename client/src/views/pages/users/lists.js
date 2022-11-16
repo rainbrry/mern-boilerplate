@@ -9,8 +9,10 @@ export default function ListUser() {
 	const users = useSelector(usersSelector.selectAll);
 
 	useEffect(() => {
-		dispatch(getUsers());
-	}, [dispatch]);
+		if (!users.length) {
+			dispatch(getUsers());
+		}
+	}, [dispatch, users.length]);
 
 	return (
 		<div className="py-4">
