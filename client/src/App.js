@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { getAuth } from "./redux/features/authSlice";
 import { Toaster } from "react-hot-toast";
 import Router from "./routes";
+import FocusTrap from "focus-trap-react";
 
 export default function App() {
 	const [mounted, setMounted] = useState(false);
@@ -99,15 +100,17 @@ export default function App() {
 	}
 
 	return (
-		<main className="flex h-screen overflow-hidden bg-base-200">
-			<Router />
-			<Toaster
-				position="top-center"
-				reverseOrder={false}
-				containerStyle={{
-					top: 80,
-				}}
-			/>
-		</main>
+		<FocusTrap>
+			<main className="flex h-screen overflow-hidden bg-base-200">
+				<Router />
+				<Toaster
+					position="top-center"
+					reverseOrder={false}
+					containerStyle={{
+						top: 80,
+					}}
+				/>
+			</main>
+		</FocusTrap>
 	);
 }

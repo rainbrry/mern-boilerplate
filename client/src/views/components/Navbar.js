@@ -17,6 +17,7 @@ export default function Navbar({ open, setOpen }) {
 				<button
 					className="btn btn-square btn-ghost"
 					onClick={() => setOpen(!open)}
+					tabIndex={-1}
 				>
 					<svg
 						xmlns="http://www.w3.org/2000/svg"
@@ -36,7 +37,7 @@ export default function Navbar({ open, setOpen }) {
 			<div className="flex-none mr-10">
 				<div className="dropdown dropdown-end">
 					<div className="flex items-center">
-						<label tabIndex={0} className="m-1 capitalize peer cursor-pointer">
+						<label tabIndex={-1} className="m-1 capitalize peer cursor-pointer">
 							{auth.user?.name}
 						</label>
 						<svg
@@ -56,7 +57,7 @@ export default function Navbar({ open, setOpen }) {
 					</div>
 					<button
 						onClick={signout}
-						tabIndex={0}
+						tabIndex={-1}
 						className="dropdown-content menu hover:overflow-hidden focus:overflow-hidden bg-base-300 shadow-xl opacity-80 rounded-box w-52 p-4 text-lg hover:bg-gray-300 hover:text-white font-semibold"
 					>
 						Logout

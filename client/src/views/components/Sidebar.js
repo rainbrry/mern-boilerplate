@@ -22,6 +22,7 @@ export default function Sidebar({ open }) {
 							end
 							className="flex items-center p-3 text-base font-normal
 							text-base-600 rounded-lg focus:bg-cyan-500 focus:text-white"
+							tabIndex={-1}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -52,6 +53,7 @@ export default function Sidebar({ open }) {
 							to="/users"
 							className="flex items-center p-3 text-base font-normal
 							text-base-600 rounded-lg focus:bg-cyan-500 focus:text-white"
+							tabIndex={-1}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -77,6 +79,7 @@ export default function Sidebar({ open }) {
 							to="/products"
 							className="flex items-center p-3 text-base font-normal
 							text-base-600 rounded-lg focus:bg-cyan-500 focus:text-white"
+							tabIndex={-1}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -102,6 +105,7 @@ export default function Sidebar({ open }) {
 							to="/purchasings"
 							className="flex items-center p-3 text-base font-normal
 							text-base-600 rounded-lg focus:bg-cyan-500 focus:text-white"
+							tabIndex={-1}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -127,6 +131,7 @@ export default function Sidebar({ open }) {
 							to="/categories"
 							className="flex items-center p-3 text-base font-normal
 							text-base-600 rounded-lg focus:bg-cyan-500 focus:text-white"
+							tabIndex={-1}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"
@@ -152,6 +157,7 @@ export default function Sidebar({ open }) {
 							to="/reports"
 							className="flex items-center p-3 text-base font-normal
 							text-base-600 rounded-lg focus:bg-cyan-500 focus:text-white"
+							tabIndex={-1}
 						>
 							<svg
 								xmlns="http://www.w3.org/2000/svg"

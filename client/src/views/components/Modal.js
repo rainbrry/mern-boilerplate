@@ -12,13 +12,16 @@ export default function Modal({
 	const handleModal = () => setOpen(!open);
 
 	window.onkeyup = (e) => {
-		if (e.key === "F2") setOpen(true);
 		if (open && e.key === "Escape") setOpen(false);
 	};
 
 	return (
 		<div>
-			<button onClick={handleModal} className={`${btnStyle} outline-none`}>
+			<button
+				onClick={handleModal}
+				className={`${btnStyle} outline-none`}
+				tabIndex={-1}
+			>
 				{btnModal}
 			</button>
 
@@ -26,6 +29,7 @@ export default function Modal({
 				<div className={`modal-box relative ${modalWitdh}`}>
 					<button
 						onClick={handleModal}
+						tabIndex={-1}
 						className="btn btn-sm btn-circle absolute right-2 top-2"
 					>
 						✕
