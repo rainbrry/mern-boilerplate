@@ -28,8 +28,8 @@ route.delete("/user/:id", isAdmin, UsersController.destroy);
 
 // Product routes
 route.get("/products", isAdmin, ProductsController.index);
-// route.get("/product/:keyword", isAdmin, ProductsController.search);
 route.get("/product/:id", isAdmin, ProductsController.show);
+route.get("/search-product", isAdmin, ProductsController.search);
 route.post("/product", isAdmin, ProductsController.store);
 route.put("/product/:id", isAdmin, ProductsController.update);
 route.delete("/product/:id", isAdmin, ProductsController.destroy);

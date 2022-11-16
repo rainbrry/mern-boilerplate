@@ -2,8 +2,8 @@ import Product from "../schemas/products.schema.js";
 
 const ProductsController = {
 	search: async (req, res) => {
-		const { keyword } = req.query;
-		await Product.find({ name: { $regex: keyword, $options: "i" } })
+		const { query } = req.query;
+		await Product.find({ name: { $regex: query, $options: "i" } })
 			.then((product) => {
 				return res.status(200).json({ data: product });
 			})
