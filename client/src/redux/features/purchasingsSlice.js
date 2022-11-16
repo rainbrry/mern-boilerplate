@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { toast } from "react-hot-toast";
 
 const cartSlice = createSlice({
 	name: "purchasing-cart",
@@ -11,7 +12,7 @@ const cartSlice = createSlice({
 				(item) => item._id === action.payload._id
 			);
 
-			if (itemInCart) itemInCart.qty++;
+			if (itemInCart) toast.error("Item sudah ada di keranjang");
 			else state.cart.push({ ...action.payload, qty: 1 });
 		},
 

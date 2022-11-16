@@ -8,8 +8,8 @@ import toast from "react-hot-toast";
 
 export const searchProducts = createAsyncThunk(
 	"products/searchProducts",
-	async (keyword) => {
-		const response = await axios.post("products/search", keyword);
+	async (query) => {
+		const response = await axios.get(`search-product?query=${query}`);
 		return response.data.data;
 	}
 );
@@ -64,9 +64,7 @@ const productsSlice = createSlice({
 	extraReducers: {
 		[searchProducts.fulfilled]: (state, action) => {
 			productEntity.setAll(state, action.payload);
-		},
-		[searchProducts.rejected]: (state, action) => {
-			toast.error(action.error.message);
+			if (action.payload.length === 0) toast.error("Produk tidak ditemukan");
 		},
 
 		[getProducts.fulfilled]: (state, action) => {
