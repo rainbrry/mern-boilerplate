@@ -25,21 +25,29 @@ export default function AddPurchasing() {
 				<div className="flex flex-1 items-center">
 					<ListsProduct />
 				</div>
-				<button className="px-6 py-2 bg-green-600 rounded shadow-lg text-white hover:bg-green-800">
+				<button
+					className="px-6 py-2 bg-green-600 rounded shadow-lg text-white hover:bg-green-800"
+					tabIndex={-1}
+				>
 					Simpan transaksi
 				</button>
-				<button className="px-6 py-2 bg-cyan-500 rounded shadow-lg text-white hover:bg-cyan-700">
+				<button
+					className="px-6 py-2 bg-cyan-500 rounded shadow-lg text-white hover:bg-cyan-700"
+					tabIndex={-1}
+				>
 					Hold transaksi
 				</button>
 				<button
 					onClick={() => dispatch(clearCart())}
 					className="px-6 py-2 bg-yellow-500 rounded shadow-lg text-white hover:bg-yellow-700"
+					tabIndex={-1}
 				>
 					Clear
 				</button>
 				<NavLink
 					to={"/purchasings"}
 					className="px-4 py-2 bg-red-500 hover:bg-red-700 rounded-md shadow-md text-white"
+					tabIndex={-1}
 				>
 					Batal
 				</NavLink>
