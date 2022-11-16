@@ -13,7 +13,7 @@ export default function App() {
 		if (auth.isLogin) {
 			dispatch(getAuth());
 		}
-	}, [dispatch, auth.isLogin, auth.token, mounted]);
+	}, [dispatch, auth.isLogin]);
 
 	useEffect(() => {
 		setTimeout(() => {
