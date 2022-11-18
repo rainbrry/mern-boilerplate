@@ -1,17 +1,25 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import SellingCart from "./cart";
+import ListsProduct from "./lists-product";
 
 export default function AddSelling() {
+	const cart = useSelector((state) => state.sellings.cart);
+
+	console.log(cart);
+
 	return (
 		<div className="px-8 py-4 overflow-hidden">
 			<h3 className="text-2xl text-base-500">Transaksi baru</h3>
 			<div className="w-full flex gap-4 justify-end items-center px-4 py-2 bg-base-200">
 				<div className="flex flex-1 items-center">
-					<span className="text-base-500">Cari produk</span>
+					<ListsProduct />
 				</div>
 				<button
-					className="px-6 py-2 bg-green-600 rounded shadow-lg text-white hover:bg-green-800"
+					className={`px-6 py-2 rounded shadow-lg text-white ${
+						!cart.length && "bg-gray-400"
+					} bg-green-500 hover:bg-green-800`}
 					tabIndex={-1}
 				>
 					Simpan transaksi
