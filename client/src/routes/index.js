@@ -8,9 +8,11 @@ import Home from "../views/pages/home";
 import Users from "../views/pages/users";
 import Products from "../views/pages/products";
 import Purchasings from "../views/pages/purchasings";
+import AddPurchasing from "../views/pages/purchasings/create";
+import Sellings from "../views/pages/sellings";
+import AddSelling from "../views/pages/sellings/create";
 import Error403 from "../views/pages/error/Error403";
 import Error404 from "../views/pages/error/Error404";
-import AddPurchasing from "../views/pages/purchasings/create";
 
 export default function Router() {
 	return (
@@ -66,6 +68,22 @@ export default function Router() {
 						element={
 							<Auth>
 								<AddPurchasing />
+							</Auth>
+						}
+					/>
+					<Route
+						path="/sellings"
+						element={
+							<Auth>
+								<Sellings />
+							</Auth>
+						}
+					/>
+					<Route
+						path="/sales"
+						element={
+							<Auth>
+								<AddSelling />
 							</Auth>
 						}
 					/>

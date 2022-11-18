@@ -15,6 +15,8 @@ import usersReducer from "./features/usersSlice";
 import authReducer from "./features/authSlice";
 import productsReducer from "./features/productsSlice";
 import purchasingsReducer from "./features/purchasingsSlice";
+import sellingsCartReducer from "./features/sellingsCartSlice";
+import sellingsReducer from "./features/sellingsSlice";
 
 const encryptor = encryptTransform({
 	secretKey: "this-is-secret-and-you-dont-know-it",
@@ -39,6 +41,7 @@ const store = configureStore({
 		users: usersReducer,
 		products: productsReducer,
 		purchasings: purchasingsReducer,
+		sellings: sellingsReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
