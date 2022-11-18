@@ -4,6 +4,7 @@ import { verifyRefreshToken } from "../middlewares/token-middleware.js";
 import AuthController from "../controllers/auth.controller.js";
 import UsersController from "../controllers/users.controller.js";
 import ProductsController from "../controllers/products.controller.js";
+import SellingsController from "../controllers/sellings.controller.js";
 
 const route = Router();
 
@@ -33,5 +34,13 @@ route.get("/search-product", isAdmin, ProductsController.search);
 route.post("/product", isAdmin, ProductsController.store);
 route.put("/product/:id", isAdmin, ProductsController.update);
 route.delete("/product/:id", isAdmin, ProductsController.destroy);
+
+// Selling routes
+route.get("/sellings", isAdmin, SellingsController.index);
+route.get("/selling/:id", isAdmin, SellingsController.show);
+route.post("/selling", isAdmin, SellingsController.store);
+route.put("/selling/:id", isAdmin, SellingsController.update);
+route.delete("/selling/:id", isAdmin, SellingsController.destroy);
+route.put("/return-selling/:id", isAdmin, SellingsController.returnSelling);
 
 export default route;
