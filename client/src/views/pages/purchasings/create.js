@@ -43,22 +43,30 @@ export default function AddPurchasing() {
 				</div>
 				<button
 					onClick={store}
-					className={`px-6 py-2 bg-green-600 rounded shadow-lg text-white hover:bg-green-800`}
+					className={`px-6 py-2 rounded shadow-lg text-white ${
+						!cart.length ? "bg-gray-500" : "bg-green-500 hover:bg-green-800"
+					}`}
 					tabIndex={-1}
 					disabled={!cart.length}
 				>
 					Simpan transaksi
 				</button>
 				<button
-					className="px-6 py-2 bg-cyan-500 rounded shadow-lg text-white hover:bg-cyan-700"
+					className={`px-6 py-2 rounded shadow-lg text-white ${
+						!cart.length ? "bg-gray-500" : "bg-cyan-500 hover:bg-cyan-700"
+					}`}
 					tabIndex={-1}
+					disabled={!cart.length}
 				>
 					Hold transaksi
 				</button>
 				<button
 					onClick={() => dispatch(clearCart())}
-					className="px-6 py-2 bg-yellow-500 rounded shadow-lg text-white hover:bg-yellow-700"
+					className={`px-6 py-2 rounded shadow-lg text-white ${
+						!cart.length ? "bg-gray-500" : "bg-yellow-500 hover:bg-yellow-700"
+					}`}
 					tabIndex={-1}
+					disabled={!cart.length}
 				>
 					Clear
 				</button>
