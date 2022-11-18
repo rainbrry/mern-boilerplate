@@ -1,40 +1,50 @@
-import { createSlice } from "@reduxjs/toolkit";
+import {
+	createAsyncThunk,
+	createEntityAdapter,
+	createSlice,
+} from "@reduxjs/toolkit";
+import axios from "../../helpers/axios";
 import { toast } from "react-hot-toast";
 
-const cartSlice = createSlice({
-	name: "purchasing-cart",
-	initialState: {
-		cart: [],
-	},
-	reducers: {
-		addToCart: (state, action) => {
-			const itemInCart = state.cart.find(
-				(item) => item._id === action.payload._id
-			);
+export const getPurchasings = createAsyncThunk(
+	"purchasings/getPurchasings",
+	async () => {
+		const response = await axios.get("purchasings");
+		return response.data.data;
+	}
+);
 
-			if (itemInCart) toast.error("Item sudah ada di keranjang");
-			else state.cart.push({ ...action.payload, qty: 1 });
+export const addPurchasing = createAsyncThunk(
+	"purchasings/addPurchasing",
+	async (data) => {
+		const response = await axios.post("purchasing", data);
+		return response.data.data;
+	}
+);
+
+const purchasingEntity = createEntityAdapter({
+	selectId: (purchasing) => purchasing._id,
+});
+
+const purchasingsSlice = createSlice({
+	name: "purchasings",
+	initialState: purchasingEntity.getInitialState(),
+	extraReducers: {
+		[getPurchasings.fulfilled]: (state, action) => {
+			purchasingEntity.setAll(state, action.payload);
 		},
 
-		changeQty: (state, action) => {
-			const itemInCart = state.cart.find(
-				(item) => item._id === action.payload.id
-			);
-
-			if (itemInCart) itemInCart.qty = action.payload.qty;
+		[addPurchasing.fulfilled]: (state, action) => {
+			purchasingEntity.addOne(state, action.payload);
+			toast.success("Transaksi berhasil");
 		},
-
-		removeItem: (state, action) => {
-			const items = state.cart.filter((item) => item._id !== action.payload.id);
-			state.cart = items;
-		},
-
-		clearCart: (state) => {
-			state.cart = [];
+		[addPurchasing.rejected]: (state, action) => {
+			toast.error(action.error.message);
 		},
 	},
 });
 
-export const { addToCart, changeQty, removeItem, clearCart } =
-	cartSlice.actions;
-export default cartSlice.reducer;
+export const purchasingsSelector = purchasingEntity.getSelectors(
+	(state) => state.purchasings
+);
+export default purchasingsSlice.reducer;

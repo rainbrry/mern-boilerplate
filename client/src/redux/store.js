@@ -14,6 +14,7 @@ import {
 import usersReducer from "./features/usersSlice";
 import authReducer from "./features/authSlice";
 import productsReducer from "./features/productsSlice";
+import purchasingCartReducer from "./features/purchasingCartSlice";
 import purchasingsReducer from "./features/purchasingsSlice";
 
 const encryptor = encryptTransform({
@@ -38,6 +39,7 @@ const store = configureStore({
 		auth: persistedReducer,
 		users: usersReducer,
 		products: productsReducer,
+		purchasingCart: purchasingCartReducer,
 		purchasings: purchasingsReducer,
 	},
 	middleware: (getDefaultMiddleware) =>

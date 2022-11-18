@@ -3,14 +3,30 @@ import { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { rupiah } from "../../../helpers/currency";
-import { clearCart } from "../../../redux/features/purchasingsSlice";
+import { clearCart } from "../../../redux/features/purchasingCartSlice";
+import { addPurchasing } from "../../../redux/features/purchasingsSlice";
 import PurchasingCart from "./cart";
 import ListsProduct from "./lists-product";
 
 export default function AddPurchasing() {
-	const cart = useSelector((state) => state.purchasings.cart);
+	const cart = useSelector((state) => state.purchasingCart.cart);
 	const [grandTotal, setGrandTotal] = useState(0);
 	const dispatch = useDispatch();
+
+	const store = async () => {
+		const data = {
+			items: cart,
+			purchasings: {
+				grandTotal: grandTotal,
+				status: "success",
+			},
+		};
+
+		if (cart.length) {
+			await dispatch(addPurchasing(data));
+			await dispatch(clearCart());
+		}
+	};
 
 	useEffect(() => {
 		setGrandTotal(
@@ -26,8 +42,10 @@ export default function AddPurchasing() {
 					<ListsProduct />
 				</div>
 				<button
-					className="px-6 py-2 bg-green-600 rounded shadow-lg text-white hover:bg-green-800"
+					onClick={store}
+					className={`px-6 py-2 bg-green-600 rounded shadow-lg text-white hover:bg-green-800`}
 					tabIndex={-1}
+					disabled={!cart.length}
 				>
 					Simpan transaksi
 				</button>

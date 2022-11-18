@@ -3,12 +3,12 @@ import { useDispatch, useSelector } from "react-redux";
 import {
 	changeQty,
 	removeItem,
-} from "../../../redux/features/purchasingsSlice";
+} from "../../../redux/features/purchasingCartSlice";
 import { rupiah } from "../../../helpers/currency";
 
 export default function PurchasingCart() {
 	const dispatch = useDispatch();
-	const { cart } = useSelector((state) => state.purchasings);
+	const { cart } = useSelector((state) => state.purchasingCart);
 
 	return (
 		<div className="w-full h-[580px] bg-base-100 rounded-t-xl shadow-xl overflow-hidden overflow-y-auto">

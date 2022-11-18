@@ -1,9 +1,14 @@
 import { Router } from "express";
-import { isAdmin } from "../middlewares/auth-middleware.js";
+import {
+	isAdmin,
+	isCashier,
+	isLoggedin,
+} from "../middlewares/auth-middleware.js";
 import { verifyRefreshToken } from "../middlewares/token-middleware.js";
 import AuthController from "../controllers/auth.controller.js";
 import UsersController from "../controllers/users.controller.js";
 import ProductsController from "../controllers/products.controller.js";
+import PurchasingsController from "../controllers/purchasings.controller.js";
 
 const route = Router();
 
@@ -33,5 +38,13 @@ route.get("/search-product", isAdmin, ProductsController.search);
 route.post("/product", isAdmin, ProductsController.store);
 route.put("/product/:id", isAdmin, ProductsController.update);
 route.delete("/product/:id", isAdmin, ProductsController.destroy);
+
+// Purchasing routes
+route.get("/purchasings", isAdmin, PurchasingsController.index);
+route.get("/purchasing/:id", isAdmin, PurchasingsController.show);
+route.post("/purchasing", isAdmin, PurchasingsController.store);
+route.put("/purchasing/:id", isAdmin, PurchasingsController.update);
+route.delete("/purchasing/:id", isAdmin, PurchasingsController.destroy);
+route.put("/return-item/:id", isAdmin, PurchasingsController.returnItem);
 
 export default route;
