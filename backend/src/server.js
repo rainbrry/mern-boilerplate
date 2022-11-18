@@ -11,7 +11,10 @@ server.listen(5000, () => {
 	console.log("Server started on port 5000");
 });
 
-mongoose.connect("mongodb://localhost:27017/mern", {
-	useNewUrlParser: true,
-	useUnifiedTopology: true,
-});
+mongoose.connect(
+	"mongodb+srv://est:rest7890@cluster0.pwp60.mongodb.net/?retryWrites=true&w=majority",
+	{
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	}
+);
