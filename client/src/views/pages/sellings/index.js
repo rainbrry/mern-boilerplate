@@ -10,7 +10,7 @@ export default function Sellings() {
 			<div className="flex justify-end">
 				<NavLink
 					to={"/sales"}
-					className="px-8 py-2 bg-cyan-500 rounded-md shadow-md text-white"
+					className="px-8 py-2 bg-blue-500 hover:bg-blue-700 rounded-md shadow-md text-white"
 				>
 					Tambah transaksi
 				</NavLink>

@@ -1,17 +1,16 @@
+import mongoose from "mongoose";
 import Selling from "../schemas/sellings.schema.js";
+import Product from "../schemas/products.schema.js";
 
 const SellingsController = {
 	index: async (req, res) => {
-		try {
-			const sellings = await Selling.find()
-				.populate("user", "name")
-				.populate("items.product", "name")
-				.sort({ date: -1 });
-
-			res.json({ data: sellings });
-		} catch (error) {
-			res.status(500).json({ message: error.message });
-		}
+		await Selling.find()
+			.populate("user", "name _id")
+			.populate("products.product", "name -_id")
+			.exec((err, sellings) => {
+				if (err) return res.status(500).json({ message: err.message });
+				return res.status(200).json({ data: sellings });
+			});
 	},
 
 	show: async (req, res) => {
@@ -27,15 +26,36 @@ const SellingsController = {
 	},
 
 	store: async (req, res) => {
-		try {
-			const selling = new Selling(req.body);
+		const { items, sellings } = req.body;
 
-			await selling.save();
+		const session = await mongoose.startSession();
+		session.startTransaction();
 
-			res.json({ message: "Selling created successfully", data: selling });
-		} catch (error) {
-			res.status(500).json({ message: error.message });
-		}
+		await Selling.create({
+			user: req.userId,
+			products: items,
+			...sellings,
+		})
+			.then(async (selling) => {
+				items.map(async (item) => {
+					await Product.findByIdAndUpdate(item._id, {
+						$inc: { stock: -item.qty },
+					});
+				});
+
+				await session.commitTransaction();
+				session.endSession();
+
+				return res
+					.status(201)
+					.json({ message: "Transaksi berhasil disimpan", data: selling });
+			})
+			.catch(async (error) => {
+				await session.abortTransaction();
+				session.endSession();
+
+				return res.status(500).json({ message: error.message });
+			});
 	},
 
 	update: async (req, res) => {

@@ -41,6 +41,7 @@ const store = configureStore({
 		users: usersReducer,
 		products: productsReducer,
 		purchasings: purchasingsReducer,
+		sellingCart: sellingsCartReducer,
 		sellings: sellingsReducer,
 	},
 	middleware: (getDefaultMiddleware) =>

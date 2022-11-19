@@ -1,20 +1,24 @@
 import React from "react";
+import { rupiah } from "../../../helpers/currency";
 import { useDispatch, useSelector } from "react-redux";
 import {
-	changeQty,
 	removeItem,
-} from "../../../redux/features/purchasingsSlice";
-import { rupiah } from "../../../helpers/currency";
+	updateQuantity,
+} from "../../../redux/features/sellingsCartSlice";
 
 export default function SellingCart() {
 	const dispatch = useDispatch();
-	const { cart } = useSelector((state) => state.purchasings);
+	const cart = useSelector((state) => state.sellingCart.cart);
+
+	const changeQty = (item, qty) => {
+		dispatch(updateQuantity({ id: item._id, stock: item.stock, qty }));
+	};
 
 	return (
 		<div className="w-full h-[580px] bg-base-100 rounded-t-xl shadow-xl overflow-hidden overflow-y-auto">
 			<div className="flex flex-row border-b-4 w-full px-5">
 				<div className="px-3 py-2 w-5/12 font-medium">Nama barang</div>
-				<div className="px-4 py-2 w-2/12">Harga beli</div>
+				<div className="px-4 py-2 w-2/12">Harga</div>
 				<div className="px-4 py-2 w-1/12">Qty</div>
 				<div className="px-4 py-2 w-2/12 text-center">Total</div>
 				<div className="pl-6 py-2 w-2/12 text-center">Action</div>
@@ -35,7 +39,7 @@ export default function SellingCart() {
 									{item.name}
 								</div>
 								<div className="px-4 py-1 w-2/12 truncate">
-									{rupiah(item.purchasePrice)}
+									{rupiah(item.salesPrice)}
 								</div>
 								<div className="w-20">
 									<input
@@ -45,10 +49,9 @@ export default function SellingCart() {
 										className="text-center w-20 py-1 border-2 rounded shadow-lg border-gray-500"
 										autoComplete={"off"}
 										autoFocus={true}
-										defaultValue={item.qty}
-										onChange={(e) =>
-											dispatch(changeQty({ id: item._id, qty: e.target.value }))
-										}
+										max={item.stock}
+										value={item.qty || 0}
+										onChange={(e) => changeQty(item, e.target.value)}
 									/>
 								</div>
 								<div className="px-4 py-1 w-3/12 truncate text-center">

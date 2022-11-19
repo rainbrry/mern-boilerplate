@@ -1,24 +1,24 @@
 import { createSlice } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 
 const sellingSlice = createSlice({
 	name: "sellings-cart",
-	initialState: {
-		cart: [],
-	},
+	initialState: { cart: [] },
 	reducers: {
 		addToCart: (state, action) => {
-			const { product, quantity } = action.payload;
-			const item = state.cart.find((item) => item.product._id === product._id);
-			if (item) {
-				item.quantity += quantity;
-			} else {
-				state.cart.push({ product, quantity });
-			}
+			if (action.payload.stock < 1) toast.error("Stok kurang");
+
+			const itemInCart = state.cart.find(
+				(item) => item._id === action.payload._id
+			);
+
+			if (itemInCart) toast.error("Item sudah ada di keranjang");
+			else state.cart.push({ ...action.payload, qty: 1 });
 		},
 
 		removeItem: (state, action) => {
-			const { productId } = action.payload;
-			state.cart = state.cart.filter((item) => item.product._id !== productId);
+			const items = state.cart.filter((item) => item._id !== action.payload.id);
+			state.cart = items;
 		},
 
 		clearCart: (state) => {
@@ -26,10 +26,20 @@ const sellingSlice = createSlice({
 		},
 
 		updateQuantity: (state, action) => {
-			const { productId, quantity } = action.payload;
-			const item = state.cart.find((item) => item.product._id === productId);
-			if (item) {
-				item.quantity = quantity;
+			const itemInCart = state.cart.find(
+				(item) => item._id === action.payload.id
+			);
+
+			if (itemInCart) itemInCart.qty = action.payload.qty;
+
+			if (action.payload.stock < itemInCart.qty) {
+				toast.error("Stok kurang");
+				itemInCart.qty = action.payload.stock;
+			}
+
+			if (itemInCart.qty < 1) {
+				itemInCart.qty = 1;
+				toast.error("Qty tidak boleh kurang dari 1");
 			}
 		},
 	},

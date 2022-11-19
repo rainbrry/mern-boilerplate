@@ -3,6 +3,7 @@ import {
 	createEntityAdapter,
 	createSlice,
 } from "@reduxjs/toolkit";
+import toast from "react-hot-toast";
 import axios from "../../helpers/axios";
 
 export const getSellings = createAsyncThunk(
@@ -48,7 +49,7 @@ export const deleteSelling = createAsyncThunk(
 export const returnSelling = createAsyncThunk(
 	"sellings/returnSelling",
 	async (id) => {
-		const response = await axios.put(`selling/return/${id}`);
+		const response = await axios.put(`return-selling/${id}`);
 		return response.data.data;
 	}
 );
@@ -61,12 +62,32 @@ const sellingSlice = createSlice({
 	name: "sellings",
 	initialState: sellingEntity.getInitialState(),
 	extraReducers: {
-		[getSellings.fulfilled]: sellingEntity.setAll,
-		[showSellings.fulfilled]: sellingEntity.setOne,
-		[addSelling.fulfilled]: sellingEntity.addOne,
-		[updateSelling.fulfilled]: sellingEntity.upsertOne,
-		[deleteSelling.fulfilled]: sellingEntity.removeOne,
-		[returnSelling.fulfilled]: sellingEntity.upsertOne,
+		[getSellings.fulfilled]: (state, action) => {
+			sellingEntity.setAll(state, action.payload);
+		},
+		[showSellings.fulfilled]: (state, action) => {
+			sellingEntity.setOne(state, action.payload);
+		},
+
+		[addSelling.fulfilled]: (state, action) => {
+			sellingEntity.addOne(state, action.payload);
+			toast.success("Transaksi berhasil");
+		},
+
+		[updateSelling.fulfilled]: (state, action) => {
+			sellingEntity.upsertOne(state, action.payload);
+			toast.success("Transaksi berhasil diupdate");
+		},
+
+		[deleteSelling.fulfilled]: (state, action) => {
+			sellingEntity.removeOne(state, action.payload);
+			toast.success("Transaksi berhasil dihapus");
+		},
+
+		[returnSelling.fulfilled]: (state, action) => {
+			sellingEntity.upsertOne(state, action.payload);
+			toast.success("Transaksi berhasil dibatalkan");
+		},
 	},
 });
 

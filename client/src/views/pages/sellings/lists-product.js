@@ -3,6 +3,8 @@ import Modal from "../../components/Modal";
 import { rupiah } from "../../../helpers/currency";
 import { useDispatch } from "react-redux";
 import axios from "../../../helpers/axios";
+import { addToCart } from "../../../redux/features/sellingsCartSlice";
+import toast from "react-hot-toast";
 
 export default function ListsProduct() {
 	const [products, setProducts] = useState([]);
@@ -10,6 +12,12 @@ export default function ListsProduct() {
 	const dispatch = useDispatch();
 
 	const addItem = (data) => {
+		if (data.stock < 1) {
+			toast.error("Stok habis");
+			return false;
+		}
+
+		dispatch(addToCart(data));
 		setOpenModal(false);
 	};
 
@@ -82,7 +90,10 @@ export default function ListsProduct() {
 										<button
 											onClick={() => addItem(product)}
 											tabIndex={-1}
-											className="px-4 py-1 bg-green-600 text-white rounded shadow-lg"
+											className={`px-4 py-1 text-white rounded shadow-lg ${
+												product.stock < 1 ? "bg-gray-500" : "bg-green-500"
+											}`}
+											disabled={product.stock < 1}
 										>
 											Pilih
 										</button>
