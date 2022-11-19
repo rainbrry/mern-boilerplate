@@ -5,19 +5,21 @@ import Product from "../schemas/products.schema.js";
 const SellingsController = {
 	index: async (req, res) => {
 		await Selling.find()
-			.populate("user", "name _id")
-			.populate("products.product", "name -_id")
-			.exec((err, sellings) => {
-				if (err) return res.status(500).json({ message: err.message });
+			.populate("user", "name")
+			.populate("products.product", "name")
+			.then((sellings) => {
 				return res.status(200).json({ data: sellings });
+			})
+			.catch((err) => {
+				return res.status(500).json({ message: err.message });
 			});
 	},
 
 	show: async (req, res) => {
 		try {
 			const selling = await Selling.findById(req.params.id)
-				.populate("user", "name")
-				.populate("items.product", "name");
+				.populate("user", "name -_id")
+				.populate("products.product", "name -_id");
 
 			res.json({ data: selling });
 		} catch (error) {

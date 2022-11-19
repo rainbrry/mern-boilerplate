@@ -18,7 +18,7 @@ export default function PurchasingList() {
 
 	return (
 		<div className="py-4">
-			<div className="w-full h-[450px] bg-base-100 rounded shadow-lg overflow-hidden overflow-y-auto">
+			<div className="w-full h-[600px] bg-base-100 rounded shadow-lg overflow-hidden overflow-y-auto">
 				<table className="table-auto w-full">
 					<thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50 border-b-2 text-left">
 						<tr>
@@ -26,10 +26,7 @@ export default function PurchasingList() {
 								<div className="font-semibold">Tanggal</div>
 							</th>
 							<th className="p-4 whitespace-nowrap">
-								<div className="font-semibold">Faktur</div>
-							</th>
-							<th className="p-4 whitespace-nowrap">
-								<div className="font-semibold">Kasir</div>
+								<div className="font-semibold">Invoice</div>
 							</th>
 							<th className="p-4 whitespace-nowrap">
 								<div className="font-semibold">Total</div>
@@ -51,14 +48,17 @@ export default function PurchasingList() {
 								>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-medium text-gray-800 capitalize">
-											{purchasing.date}
+											{new Date(purchasing.date).toLocaleString("id-ID", {
+												year: "numeric",
+												month: "numeric",
+												day: "numeric",
+												hour: "numeric",
+												minute: "numeric",
+											})}
 										</div>
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-normal">{purchasing._id}</div>
-									</td>
-									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-normal">{purchasing.user.name}</div>
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-normal">
@@ -68,20 +68,12 @@ export default function PurchasingList() {
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-normal">
 											{purchasing.status === "success" ? (
-												<span className="text-white py-1 px-2 bg-teal-400 rounded capitalize">
-													{purchasing.status}
-												</span>
-											) : purchasing.status === "pending" ? (
-												<span className="text-white py-1 px-2 bg-yellow-400 rounded capitalize">
-													{purchasing.status}
+												<span className="flex items-center w-20 justify-center bg-teal-500 px-4 rounded-full text-white">
+													Selesai
 												</span>
 											) : purchasing.status === "hold" ? (
-												<span className="text-white py-1 px-2 bg-blue-400 rounded capitalize">
-													{purchasing.status}
-												</span>
-											) : purchasing.status === "cancelled" ? (
-												<span className="text-white py-1 px-2 bg-red-400 rounded capitalize">
-													{purchasing.status}
+												<span className="flex items-center w-20 justify-center bg-yellow-500 px-4 rounded-full text-white">
+													Ditahan
 												</span>
 											) : (
 												""
@@ -90,13 +82,13 @@ export default function PurchasingList() {
 									</td>
 									<td className="p-2 whitespace-nowrap">
 										<div className="text-md flex gap-2 justify-center">
-											<button className="px-4 py-1 bg-cyan-600 rounded-lg shadow text-white">
+											<button className="px-4 py-1 bg-cyan-600 hover:bg-cyan-800 rounded-lg shadow text-white">
 												Detail
 											</button>
-											<button className="px-4 py-1 bg-green-600 rounded-lg shadow text-white">
+											<button className="px-4 py-1 bg-green-500 hover:bg-green-800 rounded-lg shadow text-white">
 												Edit
 											</button>
-											<button className="px-4 py-1 bg-red-600 rounded-lg shadow text-white">
+											<button className="px-4 py-1 bg-red-600 hover:bg-red-800 rounded-lg shadow text-white">
 												Delete
 											</button>
 										</div>

@@ -4,7 +4,7 @@ const { Schema, model } = mongoose;
 
 const PurchasingSchema = new Schema(
 	{
-		invoice: { type: String, required: true },
+		// invoice: { type: String, required: true },
 		user: { type: Schema.Types.ObjectId, ref: "User" },
 		items: [
 			{

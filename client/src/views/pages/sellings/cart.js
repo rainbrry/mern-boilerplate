@@ -55,7 +55,7 @@ export default function SellingCart() {
 									/>
 								</div>
 								<div className="px-4 py-1 w-3/12 truncate text-center">
-									{rupiah(item.qty * item.purchasePrice)}
+									{rupiah(item.qty * item.salesPrice)}
 								</div>
 								<div className="px-2 py-1 w-1/12">
 									<button

@@ -10,8 +10,6 @@ export default function SellingList() {
 	const dispatch = useDispatch();
 	const sellings = useSelector(sellingsSelector.selectAll);
 
-	console.log(sellings);
-
 	useEffect(() => {
 		if (!sellings.length) {
 			dispatch(getSellings());
@@ -29,9 +27,6 @@ export default function SellingList() {
 							</th>
 							<th className="p-4 whitespace-nowrap">
 								<div className="font-semibold">Invoice</div>
-							</th>
-							<th className="p-4 whitespace-nowrap">
-								<div className="font-semibold">Kasir</div>
 							</th>
 							<th className="p-4 whitespace-nowrap">
 								<div className="font-semibold">Total</div>
@@ -53,14 +48,17 @@ export default function SellingList() {
 								>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-medium text-gray-800 truncate">
-											{new Date(selling.date).toLocaleString()}
+											{new Date(selling.date).toLocaleString("id-ID", {
+												year: "numeric",
+												month: "numeric",
+												day: "numeric",
+												hour: "numeric",
+												minute: "numeric",
+											})}
 										</div>
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-normal">{selling._id}</div>
-									</td>
-									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-normal">{selling.user.name}</div>
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-normal">

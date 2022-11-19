@@ -49,7 +49,7 @@ export default function AddPurchasing() {
 					tabIndex={-1}
 					disabled={!cart.length}
 				>
-					Simpan transaksi
+					Simpan
 				</button>
 				<button
 					className={`px-6 py-2 rounded shadow-lg text-white ${
@@ -58,7 +58,7 @@ export default function AddPurchasing() {
 					tabIndex={-1}
 					disabled={!cart.length}
 				>
-					Hold transaksi
+					Hold
 				</button>
 				<button
 					onClick={() => dispatch(clearCart())}
@@ -71,8 +71,9 @@ export default function AddPurchasing() {
 					Clear
 				</button>
 				<NavLink
+					onClick={() => dispatch(clearCart())}
 					to={"/purchasings"}
-					className="px-4 py-2 bg-red-500 hover:bg-red-700 rounded-md shadow-md text-white"
+					className="px-6 py-2 bg-red-500 hover:bg-red-700 rounded-md shadow-md text-white"
 					tabIndex={-1}
 				>
 					Batal
