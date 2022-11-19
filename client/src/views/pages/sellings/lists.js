@@ -40,10 +40,20 @@ export default function SellingList() {
 						</tr>
 					</thead>
 					<tbody className="text-md divide-y text-left divide-gray-100">
+						{!sellings.length && (
+							<tr>
+								<td className="p-4 whitespace-nowrap" colSpan="5">
+									<div className="text-center text-lg font-semibold mt-56">
+										No data
+									</div>
+								</td>
+							</tr>
+						)}
+
 						{sellings.map((selling, index) => {
 							return (
 								<tr
-									key={selling._id}
+									key={index}
 									className="border-b-2 border-gray-200 hover:bg-gray-300"
 								>
 									<td className="px-4 py-2 whitespace-nowrap">

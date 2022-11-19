@@ -40,6 +40,16 @@ export default function PurchasingList() {
 						</tr>
 					</thead>
 					<tbody className="text-md divide-y text-left divide-gray-100">
+						{!purchasings.length && (
+							<tr>
+								<td className="p-4 whitespace-nowrap" colSpan="5">
+									<div className="text-center text-lg font-semibold mt-56">
+										No data
+									</div>
+								</td>
+							</tr>
+						)}
+
 						{purchasings.map((purchasing, index) => {
 							return (
 								<tr
