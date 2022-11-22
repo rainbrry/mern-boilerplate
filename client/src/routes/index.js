@@ -4,7 +4,6 @@ import MainLayout from "../views/layouts/MainLayout";
 import Guest from "../middlewares/Guest";
 import Auth from "../middlewares/Auth";
 import Login from "../views/pages/auth/Login";
-import Home from "../views/pages/home";
 import Users from "../views/pages/users";
 import Products from "../views/pages/products";
 import Purchasings from "../views/pages/purchasings";
@@ -13,6 +12,7 @@ import Sellings from "../views/pages/sellings";
 import AddSelling from "../views/pages/sellings/create";
 import Error403 from "../views/pages/error/Error403";
 import Error404 from "../views/pages/error/Error404";
+import Dashboard from "../views/pages/dashboard";
 
 export default function Router() {
 	return (
@@ -29,13 +29,14 @@ export default function Router() {
 
 				<Route path="/403" element={<Error403 />} />
 				<Route path="/404" element={<Error404 />} />
+
 				<Route path="/" element={<MainLayout />}>
 					<Route
 						path="/"
 						exact={"true"}
 						element={
 							<Auth>
-								<Home />
+								<Dashboard />
 							</Auth>
 						}
 					/>
