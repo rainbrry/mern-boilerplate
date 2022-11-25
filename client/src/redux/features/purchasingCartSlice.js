@@ -7,32 +7,39 @@ const cartSlice = createSlice({
 	reducers: {
 		addToCart: (state, action) => {
 			const itemInCart = state.cart.find(
-				(item) => item._id === action.payload._id
+				(item) => item.product === action.payload.product
 			);
 
 			if (itemInCart) toast.error("Item sudah ada di keranjang");
 			else state.cart.push({ ...action.payload, qty: 1 });
 		},
 
-		changeQty: (state, action) => {
-			const itemInCart = state.cart.find(
-				(item) => item._id === action.payload.id
-			);
-
-			if (itemInCart) itemInCart.qty = action.payload.qty;
-		},
-
 		removeItem: (state, action) => {
-			const items = state.cart.filter((item) => item._id !== action.payload.id);
+			const items = state.cart.filter(
+				(item) => item.product !== action.payload.product
+			);
 			state.cart = items;
 		},
 
 		clearCart: (state) => {
 			state.cart = [];
 		},
+
+		updateQuantity: (state, action) => {
+			const itemInCart = state.cart.find(
+				(item) => item.product === action.payload.product
+			);
+
+			if (itemInCart) itemInCart.qty = action.payload.qty;
+
+			if (action.payload.qty === "" || action.payload.qty < 1) {
+				itemInCart.qty = 1;
+				toast.error("Qty tidak boleh kurang dari 1");
+			}
+		},
 	},
 });
 
-export const { addToCart, changeQty, removeItem, clearCart } =
+export const { addToCart, updateQuantity, removeItem, clearCart } =
 	cartSlice.actions;
 export default cartSlice.reducer;

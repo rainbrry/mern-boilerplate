@@ -1,22 +1,14 @@
 import React, { useState } from "react";
-import Modal from "../../components/Modal";
-import { rupiah } from "../../../helpers/currency";
-import { useDispatch } from "react-redux";
-import axios from "../../../helpers/axios";
-import { addToCart } from "../../../redux/features/sellingsCartSlice";
-import toast from "react-hot-toast";
+import axios from "../../helpers/axios";
+import { rupiah } from "../../helpers/currency";
+import Modal from "./Modal";
 
-export default function ListsProduct() {
+export default function SearchProduct({ addItem, cartType }) {
 	const [products, setProducts] = useState([]);
 	const [openModal, setOpenModal] = useState(false);
-	const dispatch = useDispatch();
 
-	const addItem = (data) => {
-		if (data.stock < 1) {
-			toast.error("Stok habis");
-			return false;
-		}
-		dispatch(addToCart(data));
+	const addToCart = (product) => {
+		addItem(product);
 		setOpenModal(false);
 	};
 
@@ -26,6 +18,8 @@ export default function ListsProduct() {
 		});
 		setOpenModal(true);
 	};
+
+	console.log(cartType);
 
 	return (
 		<div>
@@ -46,18 +40,18 @@ export default function ListsProduct() {
 				/>
 				<Modal open={openModal} setOpen={setOpenModal} modalWitdh={"max-w-5xl"}>
 					<div className="w-full mt-3 bg-base-100 rounded shadow-lg overflow-hidden overflow-y-auto border-2">
-						{
-							<div className="flex flex-row border-b-4 w-full">
-								<div className="px-3 py-2 w-6/12 font-medium">Nama barang</div>
+						<div className="flex flex-row border-b-4 w-full justify-center">
+							<div className="px-3 py-2 w-6/12 font-medium">Nama barang</div>
+							{cartType === "purchasing" && (
 								<div className="px-4 py-2 w-2/12">Harga beli</div>
-								<div className="px-4 py-2 w-2/12">Harga jual</div>
-								<div className="px-4 py-2 w-1/12">Stok</div>
-								<div className="px-4 py-2 w-1/12">Action</div>
-							</div>
-						}
+							)}
+							<div className="px-4 py-2 w-2/12">Harga jual</div>
+							<div className="px-4 py-2 w-1/12">Stok</div>
+							<div className="px-4 py-2 w-1/12">Action</div>
+						</div>
 
 						{!products.length && (
-							<div className="flex flex-row py-5 w-full">
+							<div className="flex flex-row py-5 w-full justify-center">
 								<div className="px-3 py-2 w-full font-medium text-center">
 									Data tidak ditemukan
 								</div>
@@ -68,26 +62,21 @@ export default function ListsProduct() {
 							<div
 								key={index}
 								tabIndex={0}
-								className="p-2 flex w-full items-center focus:bg-blue-500 focus:opacity-80 focus:text-white outline-none overflow-hidden rounded"
-								onKeyUp={(e) =>
-									e.key === "Enter" &&
-									addItem({
-										product: product._id,
-										stock: product.stock,
-										name: product.name,
-										price: product.salesPrice,
-										qty: 1,
-									})
-								}
+								className="px-4 py-2 flex w-full items-center focus:bg-blue-500 focus:opacity-80 focus:text-white outline-none overflow-hidden rounded"
+								onKeyUp={(e) => e.key === "Enter" && addToCart(product)}
 								autoFocus={true}
 							>
-								<div className="flex flex-row w-full items-center">
+								<div className="flex flex-row w-full items-center justify-center">
 									<div className="py-1 w-6/12 truncate capitalize">
 										{product.name}
 									</div>
-									<div className="px-4 py-1 w-2/12 truncate">
-										{rupiah(product.purchasePrice)}
-									</div>
+
+									{cartType === "purchasing" && (
+										<div className="px-4 py-1 w-2/12 truncate">
+											{rupiah(product.purchasePrice)}
+										</div>
+									)}
+
 									<div className="px-4 py-1 w-2/12 truncate">
 										{rupiah(product.salesPrice)}
 									</div>
@@ -96,12 +85,20 @@ export default function ListsProduct() {
 									</div>
 									<div className="px-4 w-1/12">
 										<button
-											onClick={() => addItem(product)}
+											onClick={() =>
+												addItem({
+													product: product._id,
+													name: product.name,
+													price: product.purchasePrice,
+												})
+											}
 											tabIndex={-1}
 											className={`px-4 py-1 text-white rounded shadow-lg ${
-												product.stock < 1 ? "bg-gray-500" : "bg-green-500"
+												product.stock < 1 && cartType === "selling"
+													? "bg-gray-500"
+													: "bg-green-500"
 											}`}
-											disabled={product.stock < 1}
+											disabled={product.stock < 1 && cartType === "selling"}
 										>
 											Pilih
 										</button>

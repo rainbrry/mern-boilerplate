@@ -31,8 +31,13 @@ const sellingSlice = createSlice({
 			const itemInCart = state.cart.find(
 				(items) => items.product === action.payload.product
 			);
-
+			
 			if (itemInCart) itemInCart.qty = action.payload.qty;
+
+			if (action.payload.qty > itemInCart.stock) {
+				toast.error("Stok kurang");
+				itemInCart.qty = itemInCart.stock;
+			}
 
 			if (action.payload.stock < itemInCart.qty) {
 				toast.error("Stok kurang");

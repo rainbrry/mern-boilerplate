@@ -37,7 +37,7 @@ const PurchasingController = {
 		})
 			.then(async (purchasing) => {
 				items.map(async (item) => {
-					await Product.findByIdAndUpdate(item._id, {
+					await Product.findByIdAndUpdate(item.product, {
 						$inc: { stock: item.qty },
 					});
 				});
