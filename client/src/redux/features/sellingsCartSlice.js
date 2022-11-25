@@ -9,7 +9,7 @@ const sellingSlice = createSlice({
 			if (action.payload.stock < 1) toast.error("Stok kurang");
 
 			const itemInCart = state.cart.find(
-				(item) => item._id === action.payload._id
+				(items) => items.product === action.payload.product
 			);
 
 			if (itemInCart) toast.error("Item sudah ada di keranjang");
@@ -17,7 +17,9 @@ const sellingSlice = createSlice({
 		},
 
 		removeItem: (state, action) => {
-			const items = state.cart.filter((item) => item._id !== action.payload.id);
+			const items = state.cart.filter(
+				(items) => items.product !== action.payload.product
+			);
 			state.cart = items;
 		},
 
@@ -27,7 +29,7 @@ const sellingSlice = createSlice({
 
 		updateQuantity: (state, action) => {
 			const itemInCart = state.cart.find(
-				(item) => item._id === action.payload.id
+				(items) => items.product === action.payload.product
 			);
 
 			if (itemInCart) itemInCart.qty = action.payload.qty;

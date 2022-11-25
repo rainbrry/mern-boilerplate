@@ -5,8 +5,8 @@ import Product from "../schemas/products.schema.js";
 const SellingsController = {
 	index: async (req, res) => {
 		await Selling.find()
-			.populate("user", "name")
-			.populate("products.product", "name")
+			.populate("user", "name -_id")
+			.populate("products.product", "name -_id")
 			.then((sellings) => {
 				return res.status(200).json({ data: sellings });
 			})
@@ -20,7 +20,6 @@ const SellingsController = {
 			const selling = await Selling.findById(req.params.id)
 				.populate("user", "name -_id")
 				.populate("products.product", "name -_id");
-
 			res.json({ data: selling });
 		} catch (error) {
 			res.status(500).json({ message: error.message });
@@ -29,8 +28,8 @@ const SellingsController = {
 
 	store: async (req, res) => {
 		const { items, sellings } = req.body;
-
 		const session = await mongoose.startSession();
+
 		session.startTransaction();
 
 		await Selling.create({
@@ -40,17 +39,22 @@ const SellingsController = {
 		})
 			.then(async (selling) => {
 				items.map(async (item) => {
-					await Product.findByIdAndUpdate(item._id, {
+					await Product.findByIdAndUpdate(item.product, {
 						$inc: { stock: -item.qty },
 					});
 				});
 
+				const sellingPopulated = await Selling.findById(selling._id)
+					.populate("user", "name -_id")
+					.populate("products.product", "name -_id");
+
 				await session.commitTransaction();
 				session.endSession();
 
-				return res
-					.status(201)
-					.json({ message: "Transaksi berhasil disimpan", data: selling });
+				return res.status(201).json({
+					message: "Transaksi berhasil",
+					data: sellingPopulated,
+				});
 			})
 			.catch(async (error) => {
 				await session.abortTransaction();

@@ -16,7 +16,6 @@ export default function ListsProduct() {
 			toast.error("Stok habis");
 			return false;
 		}
-
 		dispatch(addToCart(data));
 		setOpenModal(false);
 	};
@@ -70,7 +69,16 @@ export default function ListsProduct() {
 								key={index}
 								tabIndex={0}
 								className="p-2 flex w-full items-center focus:bg-blue-500 focus:opacity-80 focus:text-white outline-none overflow-hidden rounded"
-								onKeyUp={(e) => e.key === "Enter" && addItem(product)}
+								onKeyUp={(e) =>
+									e.key === "Enter" &&
+									addItem({
+										product: product._id,
+										stock: product.stock,
+										name: product.name,
+										price: product.salesPrice,
+										qty: 1,
+									})
+								}
 								autoFocus={true}
 							>
 								<div className="flex flex-row w-full items-center">

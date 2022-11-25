@@ -6,6 +6,7 @@ import ListsProduct from "./lists-product";
 import { clearCart } from "../../../redux/features/sellingsCartSlice";
 import { rupiah } from "../../../helpers/currency";
 import { addSelling } from "../../../redux/features/sellingsSlice";
+import SaveTransaction from "./save";
 
 export default function AddSelling() {
 	const [grandTotal, setGrandTotal] = useState(0);
@@ -20,7 +21,6 @@ export default function AddSelling() {
 				status: "success",
 			},
 		};
-
 		if (cart.length) {
 			await dispatch(addSelling(data));
 			await dispatch(clearCart());
@@ -29,10 +29,7 @@ export default function AddSelling() {
 
 	useEffect(() => {
 		setGrandTotal(
-			cart.reduce(
-				(acc, curr) => acc + Number(curr.salesPrice) * Number(curr.qty),
-				0
-			)
+			cart.reduce((acc, curr) => acc + Number(curr.price) * Number(curr.qty), 0)
 		);
 	}, [cart]);
 
@@ -43,16 +40,20 @@ export default function AddSelling() {
 				<div className="flex flex-1 items-center">
 					<ListsProduct />
 				</div>
-				<button
-					onClick={store}
-					className={`px-6 py-2 rounded shadow-lg text-white ${
-						!cart.length ? "bg-gray-400" : "bg-green-500 hover:bg-green-800"
-					}`}
-					tabIndex={-1}
-					disabled={!cart.length}
-				>
-					Simpan transaksi
-				</button>
+
+				<SaveTransaction grandTotal={grandTotal} cart={cart} />
+				{
+					// 	<button
+					// 	onClick={store}
+					// 	className={`px-6 py-2 rounded shadow-lg text-white ${
+					// 		!cart.length ? "bg-gray-400" : "bg-green-500 hover:bg-green-800"
+					// 	}`}
+					// 	tabIndex={-1}
+					// 	disabled={!cart.length}
+					// >
+					// 	Simpan
+					// </button>
+				}
 				<button
 					className={`px-6 py-2 rounded shadow-lg text-white ${
 						!cart.length ? "bg-gray-400" : "bg-cyan-500 hover:bg-cyan-700"
@@ -60,7 +61,7 @@ export default function AddSelling() {
 					tabIndex={-1}
 					disabled={!cart.length}
 				>
-					Hold transaksi
+					Hold
 				</button>
 				<button
 					onClick={() => dispatch(clearCart())}

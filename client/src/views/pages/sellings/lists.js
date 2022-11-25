@@ -5,6 +5,7 @@ import {
 	sellingsSelector,
 	getSellings,
 } from "../../../redux/features/sellingsSlice";
+import SellingDetail from "./detail";
 
 export default function SellingList() {
 	const dispatch = useDispatch();
@@ -103,9 +104,7 @@ export default function SellingList() {
 											</div>
 										) : (
 											<div className="text-md flex gap-2 justify-center">
-												<button className="py-1 px-4 bg-cyan-500 hover:bg-cyan-700 text-white rounded-md">
-													Detail
-												</button>
+												<SellingDetail id={selling._id} />
 
 												<button className="py-1 px-4 bg-pink-500 hover:bg-pink-700 text-white rounded-md">
 													Retur

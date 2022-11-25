@@ -68,22 +68,18 @@ const sellingSlice = createSlice({
 		[showSellings.fulfilled]: (state, action) => {
 			sellingEntity.setOne(state, action.payload);
 		},
-
 		[addSelling.fulfilled]: (state, action) => {
 			sellingEntity.addOne(state, action.payload);
 			toast.success("Transaksi berhasil");
 		},
-
 		[updateSelling.fulfilled]: (state, action) => {
 			sellingEntity.upsertOne(state, action.payload);
 			toast.success("Transaksi berhasil diupdate");
 		},
-
 		[deleteSelling.fulfilled]: (state, action) => {
 			sellingEntity.removeOne(state, action.payload);
 			toast.success("Transaksi berhasil dihapus");
 		},
-
 		[returnSelling.fulfilled]: (state, action) => {
 			sellingEntity.upsertOne(state, action.payload);
 			toast.success("Transaksi berhasil dibatalkan");

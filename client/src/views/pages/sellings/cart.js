@@ -10,8 +10,10 @@ export default function SellingCart() {
 	const dispatch = useDispatch();
 	const cart = useSelector((state) => state.sellingCart.cart);
 
-	const changeQty = (item, qty) => {
-		dispatch(updateQuantity({ id: item._id, stock: item.stock, qty }));
+	const changeQty = (items, qty) => {
+		dispatch(
+			updateQuantity({ product: items.product, stock: items.stock, qty })
+		);
 	};
 
 	return (
@@ -39,7 +41,7 @@ export default function SellingCart() {
 									{item.name}
 								</div>
 								<div className="px-4 py-1 w-2/12 truncate">
-									{rupiah(item.salesPrice)}
+									{rupiah(item.price)}
 								</div>
 								<div className="w-20">
 									<input
@@ -55,11 +57,13 @@ export default function SellingCart() {
 									/>
 								</div>
 								<div className="px-4 py-1 w-3/12 truncate text-center">
-									{rupiah(item.qty * item.salesPrice)}
+									{rupiah(item.qty * item.price)}
 								</div>
 								<div className="px-2 py-1 w-1/12">
 									<button
-										onClick={() => dispatch(removeItem({ id: item._id }))}
+										onClick={() =>
+											dispatch(removeItem({ product: item.product }))
+										}
 										className="bg-red-500 hover:bg-red-700 hover:scale-110 transition duration-150 text-white rounded shadow-md px-4 py-1"
 										tabIndex={-1}
 									>
