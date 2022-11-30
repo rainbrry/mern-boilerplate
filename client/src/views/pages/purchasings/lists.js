@@ -1,10 +1,13 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { rupiah } from "../../../helpers/currency";
 import {
 	getPurchasings,
 	purchasingsSelector,
 } from "../../../redux/features/purchasingsSlice";
+import DeletePurchasing from "./delete";
+import PurchasingDetail from "./detail";
 
 export default function PurchasingList() {
 	const dispatch = useDispatch();
@@ -53,7 +56,7 @@ export default function PurchasingList() {
 						{purchasings.map((purchasing, index) => {
 							return (
 								<tr
-									key={purchasing._id}
+									key={index}
 									className="border-b-2 border-gray-200 hover:bg-gray-300"
 								>
 									<td className="px-4 py-2 whitespace-nowrap">
@@ -91,16 +94,15 @@ export default function PurchasingList() {
 										</div>
 									</td>
 									<td className="p-2 whitespace-nowrap">
-										<div className="text-md flex gap-2 justify-center">
-											<button className="px-4 py-1 bg-cyan-600 hover:bg-cyan-800 rounded-lg shadow text-white">
-												Detail
-											</button>
-											<button className="px-4 py-1 bg-green-500 hover:bg-green-800 rounded-lg shadow text-white">
+										<div className="text-md flex gap-2 justify-center text-center">
+											<PurchasingDetail id={purchasing._id} />
+											<NavLink
+												to={`/edit-purchasing/${purchasing._id}`}
+												className="px-4 py-1 bg-green-500 hover:bg-green-800 rounded-lg shadow text-white"
+											>
 												Edit
-											</button>
-											<button className="px-4 py-1 bg-red-600 hover:bg-red-800 rounded-lg shadow text-white">
-												Delete
-											</button>
+											</NavLink>
+											<DeletePurchasing id={purchasing._id} />
 										</div>
 									</td>
 								</tr>

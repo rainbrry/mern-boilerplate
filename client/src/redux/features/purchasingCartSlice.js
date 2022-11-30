@@ -11,7 +11,11 @@ const cartSlice = createSlice({
 			);
 
 			if (itemInCart) toast.error("Item sudah ada di keranjang");
-			else state.cart.push({ ...action.payload, qty: 1 });
+			else state.cart.push({ ...action.payload, qty: action.payload.qty || 1 });
+		},
+
+		editCart: (state, action) => {
+			state.cart.push({ ...action.payload, qty: action.payload.qty });
 		},
 
 		removeItem: (state, action) => {
@@ -40,6 +44,6 @@ const cartSlice = createSlice({
 	},
 });
 
-export const { addToCart, updateQuantity, removeItem, clearCart } =
+export const { addToCart, editCart, updateQuantity, removeItem, clearCart } =
 	cartSlice.actions;
 export default cartSlice.reducer;

@@ -22,6 +22,22 @@ export const addPurchasing = createAsyncThunk(
 	}
 );
 
+export const updatePurchasing = createAsyncThunk(
+	"purchasings/updatePurchasing",
+	async (data) => {
+		const response = await axios.put(`purchasing/${data.id}`, data);
+		return response.data.data;
+	}
+);
+
+export const deletePurchasing = createAsyncThunk(
+	"purchasings/deletePurchasing",
+	async (id) => {
+		await axios.delete(`purchasing/${id}`);
+		return id;
+	}
+);
+
 const purchasingEntity = createEntityAdapter({
 	selectId: (purchasing) => purchasing._id,
 });
@@ -38,8 +54,15 @@ const purchasingsSlice = createSlice({
 			purchasingEntity.addOne(state, action.payload);
 			toast.success("Transaksi berhasil");
 		},
-		[addPurchasing.rejected]: (state, action) => {
-			toast.error(action.error.message);
+
+		[updatePurchasing.fulfilled]: (state, action) => {
+			purchasingEntity.upsertOne(state, action.payload);
+			toast.success("Transaksi berhasil");
+		},
+
+		[deletePurchasing.fulfilled]: (state, action) => {
+			purchasingEntity.removeOne(state, action.payload);
+			toast.success("Transaksi berhasil dihapus");
 		},
 	},
 });

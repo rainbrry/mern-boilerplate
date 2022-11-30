@@ -13,6 +13,7 @@ import AddSelling from "../views/pages/sellings/create";
 import Error403 from "../views/pages/error/Error403";
 import Error404 from "../views/pages/error/Error404";
 import Dashboard from "../views/pages/dashboard";
+import EditPurchasing from "../views/pages/purchasings/edit";
 
 export default function Router() {
 	return (
@@ -72,6 +73,16 @@ export default function Router() {
 							</Auth>
 						}
 					/>
+
+					<Route
+						path="/edit-purchasing/:id"
+						element={
+							<Auth>
+								<EditPurchasing />
+							</Auth>
+						}
+					/>
+
 					<Route
 						path="/sellings"
 						element={
