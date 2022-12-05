@@ -33,10 +33,10 @@ export default function DeletePurchasing({ id, isDisabled }) {
 				</button>
 			}
 		>
-			<span className="font-medium text-lg block mt-5">
+			<span className="font-medium text-lg block mt-5 text-center">
 				Anda yakin akan melanjutkan?
 			</span>
-			<p className="font-medium text-md text-red-500">
+			<p className="font-medium text-md text-red-500 text-center">
 				Data yang dihapus tidak bisa dikembalikan lagi
 			</p>
 		</Confirm>

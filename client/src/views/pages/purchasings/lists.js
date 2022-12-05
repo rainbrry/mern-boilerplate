@@ -94,7 +94,7 @@ export default function PurchasingList() {
 										</div>
 									</td>
 									<td className="p-2 whitespace-nowrap">
-										<div className="text-md flex gap-2 justify-center text-center">
+										<div className="text-md flex gap-2 justify-center">
 											<PurchasingDetail id={purchasing._id} />
 											<NavLink
 												to={`/edit-purchasing/${purchasing._id}`}
