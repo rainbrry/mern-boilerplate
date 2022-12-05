@@ -48,7 +48,7 @@ export default function Cart({
 											autoComplete={"off"}
 											autoFocus={true}
 											max={cartType === "selling" ? item.stock : "false"}
-											value={item.qty || 0}
+											value={item.qty}
 											onChange={(e) =>
 												dispatch(
 													updateQuantity({
@@ -82,7 +82,9 @@ export default function Cart({
 			</div>
 
 			<div className="flex flex-col items-end px-10  justify-center h-20 rounded-b-xl shadow-lg w-full bg-teal-100">
-				<span className="text-2xl font-semibold">{rupiah(grandTotal)}</span>
+				<span className="text-2xl font-semibold">
+					Grand total: {rupiah(grandTotal)}
+				</span>
 			</div>
 		</div>
 	);

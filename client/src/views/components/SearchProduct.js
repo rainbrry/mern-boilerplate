@@ -19,8 +19,6 @@ export default function SearchProduct({ addItem, cartType }) {
 		setOpenModal(true);
 	};
 
-	console.log(cartType);
-
 	return (
 		<div>
 			<div className="flex gap-3 items-center">
