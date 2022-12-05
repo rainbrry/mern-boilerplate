@@ -11,7 +11,7 @@ export default function Sidebar({ open }) {
 			<div className="overflow-y-auto py-4 px-3 rounded dark:bg-gray-800">
 				<div className="border-b-2 w-full border-b-teal-400 shadow-sm mb-2">
 					<div className="text-base-content text-2xl text-center py-2 font-extrabold">
-						Toko Online
+						Disini Logo
 					</div>
 				</div>
 
