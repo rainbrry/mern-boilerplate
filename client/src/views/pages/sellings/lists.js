@@ -1,9 +1,11 @@
 import React, { useEffect } from "react";
 import { useDispatch, useSelector } from "react-redux";
+import { NavLink } from "react-router-dom";
 import { rupiah } from "../../../helpers/currency";
 import {
 	sellingsSelector,
 	getSellings,
+	deleteSelling,
 } from "../../../redux/features/sellingsSlice";
 import SellingDetail from "./detail";
 
@@ -11,11 +13,17 @@ export default function SellingList() {
 	const dispatch = useDispatch();
 	const sellings = useSelector(sellingsSelector.selectAll);
 
+	const destroy = async (id) => {
+		if (window.confirm("Are you sure?")) {
+			await dispatch(deleteSelling(id));
+		}
+	};
+
 	useEffect(() => {
 		if (!sellings.length) {
 			dispatch(getSellings());
 		}
-	}, [sellings, dispatch]);
+	}, [dispatch, sellings.length]);
 
 	return (
 		<div className="py-4">
@@ -51,10 +59,10 @@ export default function SellingList() {
 							</tr>
 						)}
 
-						{sellings.map((selling, index) => {
+						{sellings.map((selling) => {
 							return (
 								<tr
-									key={index}
+									key={selling._id}
 									className="border-b-2 border-gray-200 hover:bg-gray-300"
 								>
 									<td className="px-4 py-2 whitespace-nowrap">
@@ -79,15 +87,17 @@ export default function SellingList() {
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-normal">
 											{selling.status === "success" ? (
-												<span className="flex items-center w-20 justify-center bg-green-500 px-4 rounded-full text-white">
+												<span className="flex items-center w-24 justify-center bg-green-500 px-4 rounded-full text-white">
 													Selesai
 												</span>
 											) : selling.status === "hold" ? (
-												<span className="flex items-center w-20 justify-center bg-yellow-500 px-4 rounded-full text-white">
+												<span className="flex items-center w-24 justify-center bg-yellow-500 px-4 rounded-full text-white">
 													Ditahan
 												</span>
 											) : (
-												""
+												<span className="flex items-center w-24 justify-center bg-red-500 px-4 rounded-full text-white">
+													Returned
+												</span>
 											)}
 										</div>
 									</td>
@@ -106,8 +116,19 @@ export default function SellingList() {
 											<div className="text-md flex gap-2 justify-center">
 												<SellingDetail id={selling._id} />
 
-												<button className="py-1 px-4 bg-pink-500 hover:bg-pink-700 text-white rounded-md">
+												<NavLink
+													to={`/return-selling/${selling._id}`}
+													className={
+														"py-1 px-4 bg-pink-500 hover:bg-pink-700 text-white rounded-md"
+													}
+												>
 													Retur
+												</NavLink>
+												<button
+													onClick={() => destroy(selling._id)}
+													className="py-1 px-4 bg-red-500 hover:bg-red-700 text-white rounded-md"
+												>
+													Hapus
 												</button>
 											</div>
 										)}

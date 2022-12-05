@@ -18,6 +18,7 @@ import purchasingCartReducer from "./features/purchasingCartSlice";
 import purchasingsReducer from "./features/purchasingsSlice";
 import sellingsCartReducer from "./features/sellingsCartSlice";
 import sellingsReducer from "./features/sellingsSlice";
+import returnItemReducer from "./features/returnItemSlice";
 
 const encryptor = encryptTransform({
 	secretKey: "this-is-secret-and-you-dont-know-it",
@@ -45,6 +46,7 @@ const store = configureStore({
 		purchasings: purchasingsReducer,
 		sellingCart: sellingsCartReducer,
 		sellings: sellingsReducer,
+		returnItem: returnItemReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({

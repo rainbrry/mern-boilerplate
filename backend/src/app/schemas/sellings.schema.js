@@ -14,10 +14,9 @@ const SellingSchema = new Schema(
 			},
 		],
 		grandTotal: { type: Number, required: true },
-		pay: { type: Number, required: true },
 		paymentMethod: { type: String, required: true },
-		status: { type: String, required: true },
-		notes: { type: String },
+		pay: { type: Number, required: true },
+		status: { type: String, required: true, default: "success" },
 		date: { type: Date, default: Date.now },
 	},
 	{

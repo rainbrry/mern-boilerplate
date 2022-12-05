@@ -11,8 +11,6 @@ export default function SellingDetail({ id }) {
 		sellingsSelector.selectById(state, id)
 	);
 
-	console.log(selling);
-
 	return (
 		<div>
 			<Modal
@@ -60,71 +58,47 @@ export default function SellingDetail({ id }) {
 					</div>
 				</div>
 
-				<div className="w-full p-4 flex flex-row gap-2 justify-between border-b-2">
-					<div>
-						<span className="text-lg font-semibold">Nama barang</span>
-						<div className="p-1.5 w-full border-gray-400 capitalize rounded-lg">
-							{selling.products.map((product) => (
-								<div key={product._id}>{product.product.name}</div>
-							))}
-						</div>
+				<div className="w-full p-4 border-b-2">
+					<div className="flex flex-row gap-2 justify-between items-center">
+						<div className="text-lg font-semibold w-6/12">Nama barang</div>
+						<div className="text-lg font-semibold w-2/12">Harga</div>
+						<div className="text-lg font-semibold w-2/12">Qty</div>
+						<div className="text-lg font-semibold w-2/12">Total</div>
 					</div>
-
-					<div>
-						<span className="text-lg font-semibold">Harga</span>
-						<div className="p-1.5 w-full border-gray-400 rounded-lg">
-							{selling.products.map((product) => (
-								<div key={product._id}>{rupiah(product.price)}</div>
-							))}
-						</div>
-					</div>
-
-					<div>
-						<span className="text-lg font-semibold">Qty</span>
-						<div className="p-1.5 w-full border-gray-400 rounded-lg">
-							{selling.products.map((product) => (
-								<div key={product._id}>x {product.qty}</div>
-							))}
-						</div>
-					</div>
-
-					<div>
-						<span className="text-lg font-semibold">Total</span>
-						<div className="p-1.5 w-full border-gray-400 capitalize rounded-lg">
-							{selling.products.map((product) => (
-								<div key={product._id}>
-									{rupiah(product.qty * product.price)}
+					<div className="w-full border-gray-400 capitalize rounded-lg">
+						{selling.products.map((product, index) => (
+							<div key={index}>
+								<div className="flex flex-row gap-2 justify-between items-center">
+									<span className="w-6/12 truncate">
+										{product.product.name}
+									</span>
+									<span className="w-2/12 truncate">
+										{rupiah(product.price)}
+									</span>
+									<span className="w-2/12 truncate">{product.qty}</span>
+									<span className="w-2/12 truncate">
+										{rupiah(product.price * product.qty)}
+									</span>
 								</div>
-							))}
-						</div>
+							</div>
+						))}
 					</div>
 				</div>
 
-				<div className="flex flex-col py-2">
-					<div className="flex justify-end px-4">
-						<div className="flex items-center">
-							<span className="text-xl">Grand total : </span>
-							<div className="p-1.5 w-full border-gray-400 rounded-lg text-xl font-semibold">
-								{rupiah(selling.grandTotal)}
-							</div>
-						</div>
+				<div className="flex justify-end py-4">
+					<div className="px-2">
+						<div className="text-lg">Grand total : </div>
+						<div className="text-lg">Total Bayar : </div>
+						<div className="text-lg">Kembalian : </div>
 					</div>
 
-					<div className="flex justify-end px-4">
-						<div className="flex items-center border-b-2 border-gray-800">
-							<span className="text-xl">Jumlah bayar : </span>
-							<div className="p-1.5 w-full border-gray-400 rounded-lg text-xl font-semibold">
-								{rupiah(selling.pay)}
-							</div>
+					<div className="px-2">
+						<div className="text-lg font-semibold">
+							{rupiah(selling.grandTotal)}
 						</div>
-					</div>
-
-					<div className="flex justify-end px-4">
-						<div className="flex items-center">
-							<span className="text-xl">Kembalian : </span>
-							<div className="p-1.5 w-full border-gray-400 rounded-lg text-xl font-semibold">
-								{rupiah(selling.pay - selling.grandTotal)}
-							</div>
+						<div className="text-lg font-semibold">{rupiah(selling.pay)}</div>
+						<div className="text-lg font-semibold">
+							{rupiah(selling.pay - selling.grandTotal)}
 						</div>
 					</div>
 				</div>

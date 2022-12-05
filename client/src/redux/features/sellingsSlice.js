@@ -14,14 +14,6 @@ export const getSellings = createAsyncThunk(
 	}
 );
 
-export const showSellings = createAsyncThunk(
-	"sellings/showSellings",
-	async (id) => {
-		const response = await axios.get(`selling/${id}`);
-		return response.data.data;
-	}
-);
-
 export const addSelling = createAsyncThunk(
 	"sellings/addSelling",
 	async (data) => {
@@ -46,10 +38,10 @@ export const deleteSelling = createAsyncThunk(
 	}
 );
 
-export const returnSelling = createAsyncThunk(
-	"sellings/returnSelling",
-	async (id) => {
-		const response = await axios.put(`return-selling/${id}`);
+export const returnItem = createAsyncThunk(
+	"sellings/returnItem",
+	async (data) => {
+		const response = await axios.put(`return-item/${data.id}`, data);
 		return response.data.data;
 	}
 );
@@ -65,9 +57,7 @@ const sellingSlice = createSlice({
 		[getSellings.fulfilled]: (state, action) => {
 			sellingEntity.setAll(state, action.payload);
 		},
-		[showSellings.fulfilled]: (state, action) => {
-			sellingEntity.setOne(state, action.payload);
-		},
+
 		[addSelling.fulfilled]: (state, action) => {
 			sellingEntity.addOne(state, action.payload);
 			toast.success("Transaksi berhasil");
@@ -76,13 +66,18 @@ const sellingSlice = createSlice({
 			sellingEntity.upsertOne(state, action.payload);
 			toast.success("Transaksi berhasil diupdate");
 		},
+
 		[deleteSelling.fulfilled]: (state, action) => {
 			sellingEntity.removeOne(state, action.payload);
 			toast.success("Transaksi berhasil dihapus");
 		},
-		[returnSelling.fulfilled]: (state, action) => {
+
+		[returnItem.fulfilled]: (state, action) => {
 			sellingEntity.upsertOne(state, action.payload);
-			toast.success("Transaksi berhasil dibatalkan");
+
+			console.log(action.payload);
+
+			toast.success("Berhasil dikembalikan");
 		},
 	},
 });

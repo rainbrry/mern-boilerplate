@@ -46,14 +46,12 @@ route.get("/purchasing/:id", isAdmin, PurchasingsController.show);
 route.post("/purchasing", isAdmin, PurchasingsController.store);
 route.put("/purchasing/:id", isAdmin, PurchasingsController.update);
 route.delete("/purchasing/:id", isAdmin, PurchasingsController.destroy);
-route.put("/return-item/:id", isAdmin, PurchasingsController.returnItem);
 
 // Selling routes
 route.get("/sellings", isAdmin, SellingsController.index);
 route.get("/selling/:id", isAdmin, SellingsController.show);
 route.post("/selling", isAdmin, SellingsController.store);
-route.put("/selling/:id", isAdmin, SellingsController.update);
+route.put("/return-item/:id", isAdmin, SellingsController.returnItem);
 route.delete("/selling/:id", isAdmin, SellingsController.destroy);
-route.put("/return-selling/:id", isAdmin, SellingsController.returnSelling);
 
 export default route;

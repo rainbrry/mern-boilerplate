@@ -16,6 +16,10 @@ const sellingSlice = createSlice({
 			else state.cart.push({ ...action.payload, qty: 1 });
 		},
 
+		editCart: (state, action) => {
+			state.cart.push({ ...action.payload, qty: action.payload.qty });
+		},
+
 		removeItem: (state, action) => {
 			const items = state.cart.filter(
 				(items) => items.product !== action.payload.product
@@ -31,7 +35,7 @@ const sellingSlice = createSlice({
 			const itemInCart = state.cart.find(
 				(items) => items.product === action.payload.product
 			);
-			
+
 			if (itemInCart) itemInCart.qty = action.payload.qty;
 
 			if (action.payload.qty > itemInCart.stock) {
@@ -52,6 +56,6 @@ const sellingSlice = createSlice({
 	},
 });
 
-export const { addToCart, removeItem, clearCart, updateQuantity } =
+export const { addToCart, editCart, removeItem, clearCart, updateQuantity } =
 	sellingSlice.actions;
 export default sellingSlice.reducer;

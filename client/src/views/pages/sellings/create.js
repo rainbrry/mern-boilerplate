@@ -14,7 +14,7 @@ import SaveTransaction from "./save";
 
 export default function AddSelling() {
 	const [grandTotal, setGrandTotal] = useState(0);
-	const cart = useSelector((state) => state.sellingCart.cart);
+	const { cart } = useSelector((state) => state.sellingCart);
 	const dispatch = useDispatch();
 
 	const addItem = (product) => {
@@ -30,8 +30,6 @@ export default function AddSelling() {
 			price: product.salesPrice,
 			qty: 1,
 		};
-
-		console.log(data);
 
 		dispatch(addToCart(data));
 	};

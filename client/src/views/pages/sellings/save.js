@@ -23,19 +23,17 @@ export default function SaveTransaction({ cart, grandTotal }) {
 		const data = {
 			items: cart,
 			sellings: {
-				grandTotal,
 				paymentMethod,
 				pay,
-				status: "success",
 			},
 		};
 
-			if (cart.length) {
-				await dispatch(addSelling(data));
-				await dispatch(clearCart());
-			}
+		if (cart.length) {
+			await dispatch(addSelling(data));
+			await dispatch(clearCart());
+		}
 
-			setOpenModal(false);
+		setOpenModal(false);
 	};
 
 	return (
