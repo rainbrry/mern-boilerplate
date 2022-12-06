@@ -5,6 +5,8 @@ import Chart from "chart.js/auto";
 
 export default function LineChart({ data }) {
 	Chart.register(CategoryScale);
+
+	console.log(data);
 	return (
 		<div className="chart-container">
 			<h2 className="text-xl font-semibold">Line chart</h2>

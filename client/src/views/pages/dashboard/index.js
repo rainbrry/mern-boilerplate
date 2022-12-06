@@ -1,59 +1,29 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { getDashboard } from "../../../redux/features/dashboardSlice";
+import { rupiah } from "../../../helpers/currency";
 import LineChart from "../../components/LineChart";
 
 export default function Dashboard() {
-	const Data = [
-		{
-			id: 1,
-			year: 2016,
-			revenue: 80000,
-			sales: 823,
-		},
-		{
-			id: 2,
-			year: 2017,
-			revenue: 45677,
-			sales: 345,
-		},
-		{
-			id: 3,
-			year: 2018,
-			revenue: 78888,
-			sales: 555,
-		},
-		{
-			id: 4,
-			year: 2019,
-			revenue: 90000,
-			sales: 4555,
-		},
-		{
-			id: 5,
-			year: 2020,
-			revenue: 4300,
-			sales: 234,
-		},
-	];
-
+	const dispatch = useDispatch();
+	const dashboard = useSelector((state) => state.dashboard);
+	const { revenue, expenses, sales, chart } = dashboard;
 	const [chartData, setChartData] = useState({
-		labels: Data.map((item) => item.year),
+		labels: chart.map((item) => item.date),
 		datasets: [
 			{
-				label: "Revenue",
-				data: Data.map((item) => item.revenue),
-				backgroundColor: "rgba(255, 99, 132, 0.2)",
-				borderColor: "rgba(255, 99, 132, 1)",
-				borderWidth: 1,
-			},
-			{
-				label: "Sales",
-				data: Data.map((item) => item.sales),
+				label: "Pemasukan",
+				data: chart.map((item) => item.revenue),
 				backgroundColor: "rgba(255, 99, 132, 0.2)",
 				borderColor: "rgba(255, 99, 132, 1)",
 				borderWidth: 1,
 			},
 		],
 	});
+
+	useEffect(() => {
+		dispatch(getDashboard());
+	}, [dispatch, dashboard.chart.length]);
 
 	return (
 		<div className="px-8 py-4">
@@ -69,27 +39,27 @@ export default function Dashboard() {
 				<div className="w-3/12 h-32 bg-base-100 rounded-lg p-4 shadow-xl flex items-center">
 					<div className="flex flex-col w-64 gap-4 truncate">
 						<h4 className="text-xl text-base-500">Total pemasukan</h4>
-						<p className="text-3xl text-base-500">Rp. 2.000.000</p>
+						<p className="text-3xl text-base-500">{rupiah(revenue || 0)}</p>
 					</div>
 				</div>
 
 				<div className="w-3/12 h-32 bg-base-100 rounded-lg p-4 shadow-xl flex items-center">
 					<div className="flex flex-col w-64 gap-4 truncate">
-						<h4 className="text-xl text-base-500">Laba</h4>
-						<p className="text-3xl text-base-500">Rp. 1.800.000</p>
+						<h4 className="text-xl text-base-500">Total pengeluaran</h4>
+						<p className="text-3xl text-base-500">{rupiah(expenses || 0)}</p>
 					</div>
 				</div>
 
 				<div className="w-3/12 h-32 bg-base-100 rounded-lg p-4 shadow-xl flex items-center">
 					<div className="flex flex-col w-64 gap-4 truncate">
 						<h4 className="text-xl text-base-500">Transaksi penjualan</h4>
-						<p className="text-3xl text-center text-base-500">0</p>
+						<p className="text-3xl text-center text-base-500">{sales}</p>
 					</div>
 				</div>
 			</div>
 			<div className="py-4">
 				<div className="w-full h-[540px] bg-base-100 rounded-lg p-4 shadow-xl">
-					<LineChart data={chartData} />
+					{chart.length ? <LineChart data={chartData} /> : <p>Loading...</p>}
 				</div>
 			</div>
 		</div>

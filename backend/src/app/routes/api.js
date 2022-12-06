@@ -10,13 +10,13 @@ import UsersController from "../controllers/users.controller.js";
 import ProductsController from "../controllers/products.controller.js";
 import PurchasingsController from "../controllers/purchasings.controller.js";
 import SellingsController from "../controllers/sellings.controller.js";
+import DashboardController from "../controllers/dashboard.controller.js";
 
 const route = Router();
 
 // Dashboard
-route.get("/", async (req, res) => {
-	res.send("Hello World");
-});
+route.get("/dashboard", isLoggedin, DashboardController.index);
+route.post("/set-cash", isAdmin, DashboardController.setCash);
 
 // Auth routes
 route.post("/register", AuthController.register);

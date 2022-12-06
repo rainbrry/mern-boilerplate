@@ -19,6 +19,7 @@ import purchasingsReducer from "./features/purchasingsSlice";
 import sellingsCartReducer from "./features/sellingsCartSlice";
 import sellingsReducer from "./features/sellingsSlice";
 import returnItemReducer from "./features/returnItemSlice";
+import dashboardReducer from "./features/dashboardSlice";
 
 const encryptor = encryptTransform({
 	secretKey: "this-is-secret-and-you-dont-know-it",
@@ -40,6 +41,7 @@ const persistedReducer = persistReducer(persistConfig, authReducer);
 const store = configureStore({
 	reducer: {
 		auth: persistedReducer,
+		dashboard: dashboardReducer,
 		users: usersReducer,
 		products: productsReducer,
 		purchasingCart: purchasingCartReducer,
