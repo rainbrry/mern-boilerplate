@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const { Schema, model } = mongoose;
 
@@ -18,9 +19,10 @@ const PurchasingSchema = new Schema(
 		date: { type: Date, default: Date.now },
 	},
 	{
-		timestamps: true,
 		versionKey: false,
 	}
 );
+
+PurchasingSchema.plugin(mongoosePaginate);
 
 export default model("Purchasing", PurchasingSchema);

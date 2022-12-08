@@ -1,40 +1,20 @@
-import User from "../models/user.models.js";
+import User from "../schemas/users.schema.js";
 import {
 	generateAccessToken,
 	generateRefreshToken,
 } from "../helpers/generate-token.js";
-import {
-	encryptPassword,
-	verifyPassword,
-} from "../helpers/encrypt-password.js";
+import { verifyPassword } from "../helpers/encrypt-password.js";
 import { keyName, redisClient } from "../config/index.js";
 
 const AuthController = {
-	register: async (req, res) => {
-		const { name, username, password, role } = req.body;
-
-		const user = await User.findOne({ username });
-		if (user)
-			return res.status(400).json({ message: "Username already exists" });
-
-		const newUser = new User({
-			name,
-			username,
-			password: encryptPassword(password),
-			role,
-		});
-
-		await newUser
-			.save()
-			.then((user) => {
-				const { password, ...newUser } = user._doc;
-				return res.status(200).json({ data: newUser });
-			})
-			.catch((err) => {
-				return res.status(400).json({ message: err.message });
-			});
-	},
-
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Login user
+	 * @route POST /api/auth/login
+	 * @access Public
+	 */
 	login: async (req, res) => {
 		const { username, password } = req.body;
 
@@ -74,6 +54,15 @@ const AuthController = {
 			});
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Logout user
+	 * @route POST /api/auth/logout
+	 * @access Private
+	 * @middleware auth
+	 */
 	logout: async (req, res) => {
 		await redisClient.del(String(req.userId));
 		res.clearCookie(keyName);
@@ -81,6 +70,16 @@ const AuthController = {
 		return res.status(200).json({ message: "Logout successfully" });
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Get auth user
+	 * @route GET /api/get-auth
+	 * @access Private
+	 * @middleware auth
+	 * @middleware refresh-token
+	 */
 	getAuth: async (req, res) => {
 		const user = await User.findById(req.userId);
 		if (!user) return res.status(404).json({ message: "User not found" });
@@ -88,6 +87,17 @@ const AuthController = {
 		return res.status(200).json({ data: user });
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Refresh token
+	 * @route POST /api/auth/refresh-token
+	 * @access Private
+	 * @middleware auth
+	 * @middleware refresh-token
+	 * @middleware check-refresh-token
+	 */
 	refreshToken: async (req, res) => {
 		const accessToken = generateAccessToken({ id: req.userId });
 		const refreshToken = generateRefreshToken({ id: req.userId });

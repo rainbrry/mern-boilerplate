@@ -8,7 +8,7 @@ import toast from "react-hot-toast";
 
 export const getUsers = createAsyncThunk("users/getUsers", async () => {
 	const response = await axios.get("users");
-	return response.data.data;
+	return response.data.data.docs;
 });
 
 export const showUser = createAsyncThunk("users/getUser", async (id) => {

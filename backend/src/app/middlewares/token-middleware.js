@@ -6,6 +6,13 @@ import {
 	keyName,
 } from "../config/index.js";
 
+/**
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @description Verify access token from header
+ * @access Public
+ */
 export const verifyAccessToken = (req, res, next) => {
 	const accessToken = req.headers.authorization?.split(" ")[1];
 	if (!accessToken) {
@@ -25,6 +32,13 @@ export const verifyAccessToken = (req, res, next) => {
 	});
 };
 
+/**
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @description Verify refresh token from cookie
+ * @access Public
+ */
 export const verifyRefreshToken = (req, res, next) => {
 	const refreshToken = req.cookies[String(keyName)];
 	if (!refreshToken) {

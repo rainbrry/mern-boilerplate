@@ -1,4 +1,5 @@
 import mongoose from "mongoose";
+import mongoosePaginate from "mongoose-paginate-v2";
 
 const { Schema, model } = mongoose;
 
@@ -24,5 +25,7 @@ const SellingSchema = new Schema(
 		versionKey: false,
 	}
 );
+
+SellingSchema.plugin(mongoosePaginate);
 
 export default model("Selling", SellingSchema);

@@ -1,6 +1,14 @@
 import { verifyAccessToken } from "./token-middleware.js";
-import User from "../models/user.models.js";
+import User from "../schemas/users.schema.js";
 
+/**
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @description Check if user is logged in
+ * @access Public
+ * @middleware verifyAccessToken
+ */
 export const isLoggedin = (req, res, next) => {
 	verifyAccessToken(req, res, async () => {
 		const user = await User.findById(req.userId, { password: 0 });
@@ -11,6 +19,14 @@ export const isLoggedin = (req, res, next) => {
 	});
 };
 
+/**
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @description Check user role is admin
+ * @access Public
+ * @middleware isLoggedin
+ */
 export const isAdmin = (req, res, next) => {
 	isLoggedin(req, res, async () => {
 		if (req.user.role !== "admin") {
@@ -20,6 +36,14 @@ export const isAdmin = (req, res, next) => {
 	});
 };
 
+/**
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @description Check user role is cashier
+ * @access Public
+ * @middleware isLoggedin
+ */
 export const isCashier = (req, res, next) => {
 	isLoggedin(req, res, async () => {
 		if (req.user.role !== "kasir") {
@@ -29,6 +53,16 @@ export const isCashier = (req, res, next) => {
 	});
 };
 
+/**
+ * @param {Request} req
+ * @param {Response} res
+ * @param {NextFunction} next
+ * @description Check user role is owner
+ * @access Public
+ * @middleware isLoggedin
+ * @note Owner role is the highest role
+ * @note Owner role can access all routes
+ */
 export const isOwner = (req, res, next) => {
 	isLoggedin(req, res, async () => {
 		if (req.user.role !== "owner") {

@@ -3,6 +3,16 @@ import Expense from "../schemas/expenses.schema.js";
 import Cash from "../schemas/cash.schema.js";
 
 const DashboardController = {
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Get dashboard data
+	 * @route GET /api/dashboard
+	 * @access Cashier
+	 * @access Admin
+	 * @access Owner
+	 */
 	index: async (req, res) => {
 		const chart = [];
 
@@ -47,6 +57,15 @@ const DashboardController = {
 			.json({ data: { todaysRevenue, todaysSales, todaysExpenses, chart } });
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Set cash
+	 * @route POST /api/dashboard/cash
+	 * @access Cashier
+	 * @access Admin
+	 */
 	setCash: async (req, res) => {
 		const { cash } = req.body;
 

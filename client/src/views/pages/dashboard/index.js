@@ -23,7 +23,20 @@ export default function Dashboard() {
 
 	useEffect(() => {
 		dispatch(getDashboard());
-	}, [dispatch, dashboard.chart.length]);
+
+		setChartData({
+			labels: chart.map((item) => item.date),
+			datasets: [
+				{
+					label: "Pemasukan",
+					data: chart.map((item) => item.revenue),
+					backgroundColor: "rgba(255, 99, 132, 0.2)",
+					borderColor: "rgba(255, 99, 132, 1)",
+					borderWidth: 1,
+				},
+			],
+		});
+	}, [dispatch, chart]);
 
 	return (
 		<div className="px-8 py-4">

@@ -154,7 +154,7 @@ export default function Sidebar({ open }) {
 
 					<li>
 						<NavLink
-							to="/reports"
+							to="/purchasing-reports"
 							className="flex items-center p-3 text-base font-normal
 							text-base-600 rounded-lg focus:bg-cyan-500 focus:text-white"
 							tabIndex={-1}

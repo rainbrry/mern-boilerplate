@@ -74,9 +74,6 @@ const sellingSlice = createSlice({
 
 		[returnItem.fulfilled]: (state, action) => {
 			sellingEntity.upsertOne(state, action.payload);
-
-			console.log(action.payload);
-
 			toast.success("Berhasil dikembalikan");
 		},
 	},

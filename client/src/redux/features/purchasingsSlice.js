@@ -10,7 +10,7 @@ export const getPurchasings = createAsyncThunk(
 	"purchasings/getPurchasings",
 	async () => {
 		const response = await axios.get("purchasings");
-		return response.data.data;
+		return response.data.data.docs;
 	}
 );
 

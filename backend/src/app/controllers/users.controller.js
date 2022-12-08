@@ -1,23 +1,75 @@
-import User from "../models/user.models.js";
+import User from "../schemas/users.schema.js";
 import createError from "http-errors";
 import { encryptPassword } from "../helpers/encrypt-password.js";
 
 const UsersController = {
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Get all users
+	 * @route GET /api/users
+	 * @access Admin
+	 */
 	index: async (req, res) => {
-		await User.find()
+		await User.paginate({}, { page: req.query.page, limit: 10 })
 			.then((users) => {
 				return res.status(200).json({ data: users });
 			})
-			.catch(() => {
-				return next(createError.InternalServerError("Something went wrong"));
+			.catch((err) => {
+				return res.status(500).json({ message: err.message });
 			});
 	},
 
-	show: async (req, res) => {
-		const user = await User.findById(req.params.id);
-		res.json(user);
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Search user by username or name
+	 * @route GET /api/users/search/:query
+	 * @access Admin
+	 */
+	search: async (req, res) => {
+		await User.find({
+			$or: [
+				{ username: { $regex: req.params.query, $options: "i" } },
+				{ name: { $regex: req.params.query, $options: "i" } },
+			],
+		})
+			.then((user) => {
+				return res.status(200).json({ data: user });
+			})
+			.catch((err) => {
+				return res.status(500).json({ message: err.message });
+			});
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Get user by id
+	 * @route GET /api/users/:id
+	 * @access Admin
+	 */
+	show: async (req, res) => {
+		await User.findById(req.params.id)
+			.then((user) => {
+				return res.status(200).json({ data: user });
+			})
+			.catch((err) => {
+				return res.status(500).json({ message: err.message });
+			});
+	},
+
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Create new user
+	 * @route POST /api/user
+	 * @access Admin
+	 */
 	store: async (req, res) => {
 		const { name, username, role, password } = req.body;
 
@@ -47,6 +99,14 @@ const UsersController = {
 			});
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Update user by id
+	 * @route PUT /api/user/:id
+	 * @access Admin
+	 */
 	update: async (req, res) => {
 		console.log(req.body);
 		await User.findByIdAndUpdate(req.params.id, req.body, {
@@ -60,6 +120,14 @@ const UsersController = {
 			.catch((err) => res.status(400).json(err));
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Delete user by id
+	 * @route DELETE /api/user/:id
+	 * @access Admin
+	 */
 	destroy: async (req, res) => {
 		await User.findByIdAndDelete(req.params.id)
 			.then(() => {

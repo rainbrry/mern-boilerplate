@@ -3,8 +3,19 @@ import Selling from "../schemas/sellings.schema.js";
 import Product from "../schemas/products.schema.js";
 
 const SellingsController = {
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Get all sellings
+	 * @route GET /api/sellings
+	 * @access Admin & Cashier
+	 */
 	index: async (req, res) => {
-		await Selling.find()
+		const today = new Date().setHours(0, 0, 0, 0);
+		await Selling.find({ date: { $gte: today } })
+			.limit(15)
+			.sort({ date: -1, startTime: -1 })
 			.populate("user", "name -_id")
 			.populate("products.product", "name")
 			.then((sellings) => {
@@ -13,8 +24,56 @@ const SellingsController = {
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
 			});
+
+		// const options = {
+		// 	page: req.query.page || 1,
+		// 	limit: req.query.limit || 15,
+		// 	sort: { date: -1 },
+		// 	populate: [
+		// 		{ path: "user", select: "name -_id" },
+		// 		{ path: "products.product", select: "name" },
+		// 	],
+		// };
+		// await Selling.paginate({}, options)
+		// 	.then((sellings) => {
+		// 		return res.status(200).json({ data: sellings });
+		// 	})
+		// 	.catch((err) => {
+		// 		return res.status(500).json({ message: err.message });
+		// 	});
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Search selling by invoice
+	 * @route GET /api/sellings/search/:query
+	 * @access Admin & Cashier
+	 */
+	search: async (req, res) => {
+		const { query } = req.query;
+		await Selling.find({
+			invoice: { $regex: query, $options: "i" },
+		})
+			.populate("user", "name -_id")
+			.populate("products.product", "name")
+			.then((selling) => {
+				return res.status(200).json({ data: selling });
+			})
+			.catch((err) => {
+				return res.status(500).json({ message: err.message });
+			});
+	},
+
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Get selling by id
+	 * @route GET /api/sellings/:id
+	 * @access Cashier
+	 */
 	show: async (req, res) => {
 		await Selling.findById(req.params.id)
 			.populate("user", "name -_id")
@@ -27,6 +86,14 @@ const SellingsController = {
 			});
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Create new selling
+	 * @route POST /api/sellings
+	 * @access Cashier
+	 */
 	store: async (req, res) => {
 		const { items, sellings } = req.body;
 		const session = await mongoose.startSession();
@@ -61,6 +128,10 @@ const SellingsController = {
 			);
 
 			const sellingPopulated = await Selling.findById(selling[0]._id)
+				.where("date")
+				.gte(new Date().setHours(0, 0, 0, 0))
+				.limit(15)
+				.sort({ date: -1, startTime: -1 })
 				.populate("user", "name -_id")
 				.populate("products.product", "name")
 				.session(session);
@@ -75,6 +146,26 @@ const SellingsController = {
 		}
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Update selling
+	 * @route PUT /api/sellings/:id
+	 * @access Cashier
+	 * @todo
+	 * 1. Update selling
+	 * 2. Update product stock
+	 * 3. Update selling total
+	 * 4. Update selling grand total
+	 * 5. Return item
+	 * 6. Update selling status
+	 * 7. Update selling return date
+	 * 8. Update selling return reason
+	 * 9. Update selling return status
+	 * 10. Update selling return by
+	 * 11. Update selling return note
+	 */
 	returnItem: async (req, res) => {
 		const { items } = req.body;
 
@@ -163,6 +254,17 @@ const SellingsController = {
 		}
 	},
 
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Delete selling
+	 * @route DELETE /api/sellings/:id
+	 * @access Cashier
+	 * @todo
+	 * 1. Delete selling
+	 * 2. Update product stock if qty is not 0
+	 */
 	destroy: async (req, res) => {
 		const session = await mongoose.startSession();
 
