@@ -20,10 +20,8 @@ export default function SellingList() {
 	};
 
 	useEffect(() => {
-		if (!sellings.length) {
-			dispatch(getSellings());
-		}
-	}, [dispatch, sellings.length]);
+		dispatch(getSellings());
+	}, [dispatch]);
 
 	return (
 		<div className="py-4">
@@ -67,7 +65,7 @@ export default function SellingList() {
 								>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-medium text-gray-800 truncate">
-											{new Date(selling.date).toLocaleString("id-ID", {
+											{new Date(selling.createdAt).toLocaleString("id-ID", {
 												year: "numeric",
 												month: "numeric",
 												day: "numeric",
@@ -86,7 +84,7 @@ export default function SellingList() {
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-normal">
-											{selling.status === "success" ? (
+											{selling.status === "sold" ? (
 												<span className="flex items-center w-24 justify-center bg-green-500 px-4 rounded-full text-white">
 													Selesai
 												</span>

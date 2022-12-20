@@ -22,8 +22,10 @@ client/npm-debug.log*
 client/yarn-debug.log*
 client/yarn-error.log*
 
+client/problem.md
 
 backend/node_modules
 backend/.env
-
-client/problem.md
+backend/babel.config.json
+backend/jest.config.js
+backend/test

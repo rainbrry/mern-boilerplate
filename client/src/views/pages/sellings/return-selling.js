@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
 import {
 	addToCart,
 	clearCart,
@@ -14,8 +14,9 @@ import {
 import { rupiah } from "../../../helpers/currency";
 
 export default function ReturnSelling() {
-	const id = window.location.pathname.split("/")[2];
 	const [change, setChange] = useState(0);
+	const id = window.location.pathname.split("/")[2];
+	const redirect = useNavigate();
 	const dispatch = useDispatch();
 	const { cart } = useSelector((state) => state.returnItem);
 	const selling = useSelector((state) =>
@@ -37,6 +38,10 @@ export default function ReturnSelling() {
 	const update = async () => {
 		const data = { id, items: cart };
 		await dispatch(returnItem(data));
+
+		setTimeout(() => {
+			redirect("/sellings");
+		}, 1000);
 	};
 
 	useEffect(() => {
@@ -44,6 +49,7 @@ export default function ReturnSelling() {
 			const data = {
 				product: product.product._id,
 				name: product.product.name,
+				purchasePrice: product.product.purchasePrice,
 				price: product.price,
 				buyQty: product.qty,
 				qty: product.qty,
@@ -194,77 +200,6 @@ export default function ReturnSelling() {
 									</div>
 								);
 							})
-
-							// cart.map((item, index) => {
-							// 	return (
-							// 		<div
-							// 			className="px-8 py-2 border-b-2 flex w-full items-centerw"
-							// 			key={index}
-							// 		>
-							// 			<div className="flex flex-row w-full items-center">
-							// 				<div className="py-1 w-5/12 truncate capitalize">
-							// 					{item.name}
-							// 				</div>
-
-							// 				<div className="px-4 py-1 w-2/12 truncate">
-							// 					{rupiah(item.price)}
-							// 				</div>
-
-							// 				<div className="px-4 py-1">{item.qty} pcs</div>
-
-							// 				<div className="w-2/12 text-center pl-10">
-							// 					<input
-							// 						type="number"
-							// 						min={0}
-							// 						max={item.qty}
-							// 						value={item.returnQty || 0}
-							// 						required
-							// 						className="text-center w-20 py-1 border-2 rounded shadow-lg border-gray-500"
-							// 						autoComplete={"off"}
-							// 						onChange={(e) =>
-							// 							dispatch(
-							// 								updateQuantity({
-							// 									product: item.product,
-							// 									returnQty: e.target.value,
-							// 								})
-							// 							)
-							// 						}
-							// 					/>
-							// 				</div>
-
-							// 				<div className="px-2 py-1 pl-20 flex flex-col">
-							// 					<div className="flex justify-between gap-2">
-							// 						<label htmlFor="change">Tukar</label>
-							// 						<input
-							// 							type="checkbox"
-							// 							id="change"
-							// 							value={"change"}
-							// 							onChange={(e) => handleCheck(e, item.product)}
-							// 						/>
-							// 					</div>
-							// 					<div className="flex justify-between gap-2">
-							// 						<label htmlFor="broken">Rusak</label>
-							// 						<input
-							// 							type="checkbox"
-							// 							id="broken"
-							// 							value={"broken"}
-							// 							onChange={(e) => handleCheck(e, item.product)}
-							// 						/>
-							// 					</div>
-							// 					<div className="flex justify-between gap-2">
-							// 						<label htmlFor="refund">Refund</label>
-							// 						<input
-							// 							type="checkbox"
-							// 							id="refund"
-							// 							value={"refund"}
-							// 							onChange={(e) => handleCheck(e, item.product)}
-							// 						/>
-							// 					</div>
-							// 				</div>
-							// 			</div>
-							// 		</div>
-							// 	);
-							// })
 						)}
 					</div>
 

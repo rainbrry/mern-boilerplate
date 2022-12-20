@@ -27,6 +27,7 @@ export default function AddSelling() {
 			product: product._id,
 			stock: product.stock,
 			name: product.name,
+			purchasePrice: product.purchasePrice,
 			price: product.salesPrice,
 			qty: 1,
 		};

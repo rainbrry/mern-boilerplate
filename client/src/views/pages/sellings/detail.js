@@ -88,17 +88,11 @@ export default function SellingDetail({ id }) {
 				<div className="flex justify-end py-4">
 					<div className="px-2">
 						<div className="text-lg">Grand total : </div>
-						<div className="text-lg">Total Bayar : </div>
-						<div className="text-lg">Kembalian : </div>
 					</div>
 
 					<div className="px-2">
 						<div className="text-lg font-semibold">
 							{rupiah(selling.grandTotal)}
-						</div>
-						<div className="text-lg font-semibold">{rupiah(selling.pay)}</div>
-						<div className="text-lg font-semibold">
-							{rupiah(selling.pay - selling.grandTotal)}
 						</div>
 					</div>
 				</div>

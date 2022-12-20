@@ -22,10 +22,7 @@ export default function SaveTransaction({ cart, grandTotal }) {
 
 		const data = {
 			items: cart,
-			sellings: {
-				paymentMethod,
-				pay,
-			},
+			paymentMethod,
 		};
 
 		if (cart.length) {

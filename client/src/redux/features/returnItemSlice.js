@@ -17,6 +17,7 @@ const returnItemSlice = createSlice({
 					qty: action.payload.qty,
 					returnQty: action.payload.returnQty,
 					total: action.payload.qty * action.payload.price,
+					profit: action.payload.price - action.payload.purchasePrice,
 					reason: [],
 				});
 		},
@@ -30,6 +31,8 @@ const returnItemSlice = createSlice({
 				itemInCart.qty = action.payload.qty;
 				itemInCart.returnQty = itemInCart.buyQty - action.payload.qty;
 				itemInCart.total = itemInCart.qty * itemInCart.price;
+				itemInCart.profit =
+					itemInCart.qty * (itemInCart.price - itemInCart.purchasePrice);
 			}
 
 			if (itemInCart.qty > itemInCart.buyQty) {

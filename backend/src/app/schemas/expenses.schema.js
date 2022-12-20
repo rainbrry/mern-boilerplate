@@ -4,10 +4,11 @@ const { Schema, model } = mongoose;
 
 const ExpenseSchema = new Schema(
 	{
-		type: { Type: String },
-		amount: { Type: Number },
-		description: { Type: String },
-		date: { Type: Date },
+		type: { type: String, required: true },
+		user: { type: Schema.Types.ObjectId, ref: "User", required: true },
+		amount: { type: Number, required: true },
+		description: { type: String, required: true },
+		status: { type: String, default: "success" },
 	},
 	{
 		timestamps: true,

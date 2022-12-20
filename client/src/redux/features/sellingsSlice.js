@@ -22,14 +22,6 @@ export const addSelling = createAsyncThunk(
 	}
 );
 
-export const updateSelling = createAsyncThunk(
-	"sellings/updateSelling",
-	async (data) => {
-		const response = await axios.put(`selling/${data.id}`, data);
-		return response.data.data;
-	}
-);
-
 export const deleteSelling = createAsyncThunk(
 	"sellings/deleteSelling",
 	async (id) => {
@@ -61,10 +53,6 @@ const sellingSlice = createSlice({
 		[addSelling.fulfilled]: (state, action) => {
 			sellingEntity.addOne(state, action.payload);
 			toast.success("Transaksi berhasil");
-		},
-		[updateSelling.fulfilled]: (state, action) => {
-			sellingEntity.upsertOne(state, action.payload);
-			toast.success("Transaksi berhasil diupdate");
 		},
 
 		[deleteSelling.fulfilled]: (state, action) => {

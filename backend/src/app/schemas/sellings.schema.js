@@ -1,5 +1,4 @@
 import mongoose from "mongoose";
-import mongoosePaginate from "mongoose-paginate-v2";
 
 const { Schema, model } = mongoose;
 
@@ -15,17 +14,14 @@ const SellingSchema = new Schema(
 			},
 		],
 		grandTotal: { type: Number, required: true },
+		totalProfit: { type: Number, required: true },
 		paymentMethod: { type: String, required: true },
-		pay: { type: Number, required: true },
-		status: { type: String, required: true, default: "success" },
-		date: { type: Date, default: Date.now },
+		status: { type: String, required: true, default: "sold" },
 	},
 	{
-		timeStamps: true,
+		timestamps: true,
 		versionKey: false,
 	}
 );
-
-SellingSchema.plugin(mongoosePaginate);
 
 export default model("Selling", SellingSchema);

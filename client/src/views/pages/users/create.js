@@ -7,7 +7,7 @@ import { addUser } from "../../../redux/features/usersSlice";
 export default function AddUser() {
 	const [openModal, setOpenModal] = useState(false);
 
-	const dispatch = useDispatch();
+	const dispatch = useDispatch();	
 
 	const { register, handleSubmit, reset } = useForm();
 	const store = (data) => {

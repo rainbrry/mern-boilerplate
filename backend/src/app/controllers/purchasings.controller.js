@@ -2,6 +2,7 @@ import mongoose from "mongoose";
 import Product from "../schemas/products.schema.js";
 import Purchasing from "../schemas/purchasings.schema.js";
 import PurchasingReport from "../schemas/purchasing-reports.schema.js";
+import Expense from "../schemas/expenses.schema.js";
 
 const PurchasingController = {
 	/**
@@ -13,17 +14,12 @@ const PurchasingController = {
 	 * @access Admin
 	 */
 	index: async (req, res) => {
-		const options = {
-			page: req.query.page || 1,
-			limit: req.query.limit || 15,
-			sort: { date: -1 },
-			populate: [
-				{ path: "user", select: "name -_id" },
-				{ path: "products.product", select: "name" },
-			],
-		};
-
-		await Purchasing.paginate({}, options)
+		const today = new Date().setHours(0, 0, 0, 0);
+		await Purchasing.find({ createdAt: { $gte: today } })
+			.limit(15)
+			.sort({ createdAt: -1, startTime: -1 })
+			.populate("user", "name -_id")
+			.populate("products.product", "name")
 			.then((purchasings) => {
 				return res.status(200).json({ data: purchasings });
 			})
@@ -116,7 +112,7 @@ const PurchasingController = {
 			);
 
 			// update product stock
-			Product.bulkWrite(
+			await Product.bulkWrite(
 				items.map((item) => ({
 					updateOne: {
 						filter: { _id: item.product },
@@ -131,7 +127,9 @@ const PurchasingController = {
 				[
 					{
 						purchasing: purchasing[0]._id,
-						description: `Pembelian dengan invoice ${purchasing[0]._id}`,
+						user: req.userId,
+						details: items,
+						grandTotal,
 					},
 				],
 				{ session }
@@ -166,7 +164,7 @@ const PurchasingController = {
 	 * @access Admin
 	 */
 	update: async (req, res) => {
-		const { items } = req.body;
+		const { items, notes } = req.body;
 		const session = await mongoose.startSession();
 
 		try {
@@ -248,6 +246,18 @@ const PurchasingController = {
 				{ new: true, session }
 			);
 
+			// update purchasing report
+			await PurchasingReport.findOneAndUpdate(
+				{ purchasing: purchasingUpdated._id },
+				{
+					user: req.userId,
+					details: items,
+					grandTotal,
+					notes,
+				},
+				{ new: true, session }
+			);
+
 			// populate purchasing
 			const purchasingPopulated = await Purchasing.findById(
 				purchasingUpdated._id
@@ -312,6 +322,31 @@ const PurchasingController = {
 		} finally {
 			session.endSession();
 		}
+	},
+
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Report purchasing
+	 * @route GET /api/purchasing-reports
+	 * @access Protected
+	 * @access Admin
+	 */
+	report: async (req, res) => {
+		const today = new Date().setHours(0, 0, 0, 0);
+
+		await PurchasingReport.find()
+			.where("createdAt")
+			.gte(today)
+			.populate("user", "name -_id")
+			.populate("details.product", "name -_id")
+			.then((reports) => {
+				return res.status(200).json({ data: reports });
+			})
+			.catch((err) => {
+				return res.status(500).json({ message: err.message });
+			});
 	},
 };
 

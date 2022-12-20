@@ -61,7 +61,7 @@ export default function PurchasingList() {
 								>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-medium text-gray-800 capitalize">
-											{new Date(purchasing.date).toLocaleString("id-ID", {
+											{new Date(purchasing.createdAt).toLocaleString("id-ID", {
 												year: "numeric",
 												month: "numeric",
 												day: "numeric",

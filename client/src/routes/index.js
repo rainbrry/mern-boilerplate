@@ -15,6 +15,10 @@ import Error404 from "../views/pages/error/Error404";
 import Dashboard from "../views/pages/dashboard";
 import EditPurchasing from "../views/pages/purchasings/edit";
 import ReturnSelling from "../views/pages/sellings/return-selling";
+import SalesReports from "../views/pages/reports/sales-reports";
+import PurchasingReports from "../views/pages/reports/purchasing-reports";
+import ReturnSalesReports from "../views/pages/reports/return-sales-reports";
+import Expenses from "../views/pages/expenses";
 
 export default function Router() {
 	return (
@@ -107,6 +111,42 @@ export default function Router() {
 						element={
 							<Auth>
 								<ReturnSelling />
+							</Auth>
+						}
+					/>
+
+					<Route
+						path="/expenses"
+						element={
+							<Auth>
+								<Expenses />
+							</Auth>
+						}
+					/>
+
+					<Route
+						path="/sales-reports"
+						element={
+							<Auth>
+								<SalesReports />
+							</Auth>
+						}
+					/>
+
+					<Route
+						path="/purchasing-reports"
+						element={
+							<Auth>
+								<PurchasingReports />
+							</Auth>
+						}
+					/>
+
+					<Route
+						path="/return-reports"
+						element={
+							<Auth>
+								<ReturnSalesReports />
 							</Auth>
 						}
 					/>

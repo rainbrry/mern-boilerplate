@@ -20,6 +20,8 @@ import sellingsCartReducer from "./features/sellingsCartSlice";
 import sellingsReducer from "./features/sellingsSlice";
 import returnItemReducer from "./features/returnItemSlice";
 import dashboardReducer from "./features/dashboardSlice";
+import reportsReducer from "./features/reportsSlice";
+import expensesReducer from "./features/expensesSlice";
 
 const encryptor = encryptTransform({
 	secretKey: "this-is-secret-and-you-dont-know-it",
@@ -42,6 +44,7 @@ const store = configureStore({
 	reducer: {
 		auth: persistedReducer,
 		dashboard: dashboardReducer,
+		expenses: expensesReducer,
 		users: usersReducer,
 		products: productsReducer,
 		purchasingCart: purchasingCartReducer,
@@ -49,6 +52,7 @@ const store = configureStore({
 		sellingCart: sellingsCartReducer,
 		sellings: sellingsReducer,
 		returnItem: returnItemReducer,
+		reports: reportsReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({
