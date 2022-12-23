@@ -1,13 +1,13 @@
 import React, { useState } from "react";
+import { useDeleteProductMutation } from "../../../services/api/products";
 import Confirm from "../../components/Confirm";
-import { useDispatch } from "react-redux";
-import { deleteProduct } from "../../../redux/features/productsSlice";
 
 export default function DeleteProduct({ id, isDisabled }) {
 	const [openModal, setOpenModal] = useState(false);
-	const dispatch = useDispatch();
-	const destroy = (id) => {
-		dispatch(deleteProduct(id));
+	const [deleteProduct] = useDeleteProductMutation();
+
+	const destroy = async (id) => {
+		await deleteProduct(id);
 		setOpenModal(!openModal);
 	};
 
@@ -17,8 +17,8 @@ export default function DeleteProduct({ id, isDisabled }) {
 			setOpen={setOpenModal}
 			btnStyle={` ${
 				isDisabled
-					? "px-4 py-1 bg-gray-500 rounded-lg shadow text-white"
-					: "px-4 py-1 bg-red-500 rounded-lg shadow text-white"
+					? "px-4 py-0.5 bg-gray-600 rounded-lg shadow text-white hover:bg-gray-700"
+					: "px-4 py-0.5 bg-red-600 rounded-lg shadow text-white hover:bg-red-700"
 			}`}
 			btnModal={"Delete"}
 			modalTitle={"Hapus Product"}

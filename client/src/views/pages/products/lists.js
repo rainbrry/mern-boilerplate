@@ -1,23 +1,12 @@
-import React, { useEffect } from "react";
-import { useDispatch, useSelector } from "react-redux";
+import React from "react";
 import { rupiah } from "../../../helpers/currency";
-import {
-	getProducts,
-	productsSelector,
-} from "../../../redux/features/productsSlice";
 import DetailProduct from "./detail";
 import EditProduct from "./edit";
 import DeleteProduct from "./delete";
+import { useGetProductsQuery } from "../../../services/api/products";
 
 export default function ListProducts() {
-	const dispatch = useDispatch();
-	const products = useSelector(productsSelector.selectAll);
-
-	useEffect(() => {
-		if (!products.length) {
-			dispatch(getProducts());
-		}
-	}, [dispatch, products.length]);
+	const { data: products = [], isLoading, isError } = useGetProductsQuery();
 
 	return (
 		<div className="py-4">
@@ -69,8 +58,8 @@ export default function ListProducts() {
 									</td>
 									<td className="p-2 whitespace-nowrap">
 										<div className="text-md flex gap-2 justify-center">
-											<DetailProduct id={product._id} />
-											<EditProduct id={product._id} />
+											<DetailProduct product={product} />
+											<EditProduct product={product} />
 											<DeleteProduct id={product._id} />
 										</div>
 									</td>

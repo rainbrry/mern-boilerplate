@@ -1,19 +1,10 @@
 import React, { useEffect, useState } from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { getAuth } from "./redux/features/authSlice";
+
 import { Toaster } from "react-hot-toast";
 import Router from "./routes";
 
 export default function App() {
 	const [mounted, setMounted] = useState(false);
-	const { auth } = useSelector((state) => state);
-	const dispatch = useDispatch();
-
-	useEffect(() => {
-		if (auth.isLogin) {
-			dispatch(getAuth());
-		}
-	}, [dispatch, auth.isLogin]);
 
 	useEffect(() => {
 		setTimeout(() => {

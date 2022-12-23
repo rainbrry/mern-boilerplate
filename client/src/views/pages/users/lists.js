@@ -1,18 +1,10 @@
-import React, { useEffect } from "react";
+import React from "react";
 import DeleteUser from "./delete";
 import EditUser from "./edit";
-import { useDispatch, useSelector } from "react-redux";
-import { getUsers, usersSelector } from "../../../redux/features/usersSlice";
+import { useGetUsersQuery } from "../../../services/api/users";
 
 export default function ListUser() {
-	const dispatch = useDispatch();
-	const users = useSelector(usersSelector.selectAll);
-
-	useEffect(() => {
-		if (!users.length) {
-			dispatch(getUsers());
-		}
-	}, [dispatch, users.length]);
+	const { data: users = [], isLoading, isError } = useGetUsersQuery();
 
 	return (
 		<div className="py-4">
@@ -38,8 +30,20 @@ export default function ListUser() {
 						</tr>
 					</thead>
 					<tbody className="text-md divide-y text-left divide-gray-100">
-						{users.map((user, index) => {
-							return (
+						{isLoading ? (
+							<tr>
+								<td colSpan="5" className="p-4 text-center">
+									Loading...
+								</td>
+							</tr>
+						) : isError ? (
+							<tr>
+								<td colSpan="5" className="p-4 text-center">
+									No data
+								</td>
+							</tr>
+						) : (
+							users.map((user, index) => (
 								<tr
 									key={user._id}
 									className="border-b-2 border-gray-200 hover:bg-gray-300"
@@ -59,20 +63,20 @@ export default function ListUser() {
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-medium capitalize">
-											<span className="px-4 py-1 rounded-full bg-cyan-600 text-white">
+											<span className="px-4 w-24 flex justify-center items-center rounded-full bg-cyan-600 text-white">
 												{user.role}
 											</span>
 										</div>
 									</td>
 									<td className="p-2 whitespace-nowrap">
-										<div className="text-md text-center flex gap-2 justify-center">
+										<div className="text-md flex gap-2 justify-center">
 											<EditUser user={user} />
 											<DeleteUser id={user._id} />
 										</div>
 									</td>
 								</tr>
-							);
-						})}
+							))
+						)}
 					</tbody>
 				</table>
 			</div>

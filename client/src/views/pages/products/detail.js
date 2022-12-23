@@ -1,15 +1,9 @@
 import React, { useState } from "react";
 import Modal from "../../components/Modal";
 import { rupiah } from "../../../helpers/currency";
-import { useSelector } from "react-redux";
-import { productsSelector } from "../../../redux/features/productsSlice";
 
-export default function DetailProduct({ id }) {
+export default function DetailProduct({ product }) {
 	const [openModal, setOpenModal] = useState(false);
-
-	const product = useSelector((state) =>
-		productsSelector.selectById(state, id)
-	);
 
 	return (
 		<div>
@@ -17,7 +11,7 @@ export default function DetailProduct({ id }) {
 				open={openModal}
 				setOpen={setOpenModal}
 				btnModal={"Detail"}
-				btnStyle={"px-4 py-1 bg-cyan-600 rounded-lg shadow text-white"}
+				btnStyle={`px-4 py-0.5 bg-cyan-600 rounded-lg shadow text-white hover:bg-cyan-700`}
 				modalTitle={"Detail product"}
 				modalWitdh={"max-w-xl"}
 			>

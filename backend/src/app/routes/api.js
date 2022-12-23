@@ -1,9 +1,4 @@
 import { Router } from "express";
-import {
-	isAdmin,
-	isCashier,
-	isLoggedin,
-} from "../middlewares/auth-middleware.js";
 import { verifyRefreshToken } from "../middlewares/token-middleware.js";
 import AuthController from "../controllers/auth.controller.js";
 import UsersController from "../controllers/users.controller.js";
@@ -21,8 +16,8 @@ const route = Router();
  * @access Public
  * @url /api/{url}
  */
-route.get("/dashboard", isLoggedin, DashboardController.index);
-route.post("/set-cash", isAdmin, DashboardController.setCash);
+route.get("/dashboard", DashboardController.index);
+route.post("/set-cash", DashboardController.setCash);
 
 /**
  * @description API routes auth
@@ -40,11 +35,11 @@ route.get("/logout", verifyRefreshToken, AuthController.logout);
  * @url /api/{url}
  * @note Only admin can access this routes
  */
-route.get("/users", isAdmin, UsersController.index);
-route.get("/user/:id", isAdmin, UsersController.show);
-route.post("/user", isAdmin, UsersController.store);
-route.put("/user/:id", isAdmin, UsersController.update);
-route.delete("/user/:id", isAdmin, UsersController.destroy);
+route.get("/users", UsersController.index);
+route.get("/user/:id", UsersController.show);
+route.post("/user", UsersController.store);
+route.put("/user/:id", UsersController.update);
+route.delete("/user/:id", UsersController.destroy);
 
 /**
  * @description API routes products
@@ -53,12 +48,12 @@ route.delete("/user/:id", isAdmin, UsersController.destroy);
  * @note Admin can access all routes
  * @note Cashier can only access index, show, search
  */
-route.get("/products", isAdmin || isCashier, ProductsController.index);
-route.get("/product/:id", isAdmin || isCashier, ProductsController.show);
-route.get("/search-product", isAdmin || isCashier, ProductsController.search);
-route.post("/product", isAdmin, ProductsController.store);
-route.put("/product/:id", isAdmin, ProductsController.update);
-route.delete("/product/:id", isAdmin, ProductsController.destroy);
+route.get("/products", ProductsController.index);
+route.get("/product/:id", ProductsController.show);
+route.get("/search-product", ProductsController.search);
+route.post("/product", ProductsController.store);
+route.put("/product/:id", ProductsController.update);
+route.delete("/product/:id", ProductsController.destroy);
 
 /**
  * @description API routes purchasings
@@ -66,13 +61,13 @@ route.delete("/product/:id", isAdmin, ProductsController.destroy);
  * @url /api/{url}
  * @note Only admin can access this routes
  */
-route.get("/purchasings", isAdmin, PurchasingsController.index);
-route.get("/purchasing/:id", isAdmin, PurchasingsController.show);
-route.get("/search-purchasing", isAdmin, PurchasingsController.search);
-route.post("/purchasing", isAdmin, PurchasingsController.store);
-route.put("/purchasing/:id", isAdmin, PurchasingsController.update);
-route.delete("/purchasing/:id", isAdmin, PurchasingsController.destroy);
-route.get("/purchasing-reports", isAdmin, PurchasingController.report);
+route.get("/purchasings", PurchasingsController.index);
+route.get("/purchasing/:id", PurchasingsController.show);
+route.get("/search-purchasing", PurchasingsController.search);
+route.post("/purchasing", PurchasingsController.store);
+route.put("/purchasing/:id", PurchasingsController.update);
+route.delete("/purchasing/:id", PurchasingsController.destroy);
+route.get("/purchasing-reports", PurchasingController.report);
 
 /**
  * @description API routes sellings and expenses
@@ -81,14 +76,14 @@ route.get("/purchasing-reports", isAdmin, PurchasingController.report);
  * @note Admin can access index and show
  * @note Cashier can access all routes
  */
-route.get("/sellings", isLoggedin, SellingsController.index);
-route.get("/selling/:id", isLoggedin, SellingsController.show);
-route.get("/search-selling", isLoggedin, SellingsController.search);
-route.post("/selling", isLoggedin, SellingsController.store);
-route.put("/return-item/:id", isLoggedin, SellingsController.returnItem);
-route.get("/sales-reports", isAdmin, SellingsController.report);
-route.get("/return-reports", isAdmin, SellingsController.returnReports);
-route.get("/expenses", isLoggedin, ExpensesController.index);
-route.post("/expense", isLoggedin, ExpensesController.store);
+route.get("/sellings", SellingsController.index);
+route.get("/selling/:id", SellingsController.show);
+route.get("/search-selling", SellingsController.search);
+route.post("/selling", SellingsController.store);
+route.put("/return-item/:id", SellingsController.returnItem);
+route.get("/sales-reports", SellingsController.report);
+route.get("/return-reports", SellingsController.returnReports);
+route.get("/expenses", ExpensesController.index);
+route.post("/expense", ExpensesController.store);
 
 export default route;

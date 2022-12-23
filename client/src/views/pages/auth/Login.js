@@ -1,17 +1,14 @@
 import React from "react";
 import { useForm } from "react-hook-form";
 import { useDispatch } from "react-redux";
-import { login } from "../../../redux/features/authSlice";
 
 export default function Login() {
 	const dispatch = useDispatch();
 
 	const { handleSubmit, register } = useForm();
 	const auth = (data) => {
-		dispatch(login(data));
+		// dispatch(login(data));
 	};
-
-	
 
 	return (
 		<main className="h-screen flex justify-center items-center w-full bg-base-300">

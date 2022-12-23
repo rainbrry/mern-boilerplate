@@ -1,16 +1,6 @@
 import React from "react";
-import { useDispatch, useSelector } from "react-redux";
-import { logout } from "../../redux/features/authSlice";
 
 export default function Navbar({ open, setOpen }) {
-	const dispatch = useDispatch();
-
-	const { auth } = useSelector((state) => state);
-
-	const signout = async () => {
-		dispatch(logout());
-	};
-
 	return (
 		<div className="navbar shadow-lg bg-base-100 sticky top-0">
 			<div className="flex-1">
@@ -37,9 +27,10 @@ export default function Navbar({ open, setOpen }) {
 			<div className="flex-none mr-10">
 				<div className="dropdown dropdown-end">
 					<div className="flex items-center">
-						<label tabIndex={-1} className="m-1 capitalize peer cursor-pointer">
-							{auth.user?.name}
-						</label>
+						<label
+							tabIndex={-1}
+							className="m-1 capitalize peer cursor-pointer"
+						></label>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							className="h-4 w-4 peer-focus:rotate-90 duration-200"
@@ -56,7 +47,6 @@ export default function Navbar({ open, setOpen }) {
 						</svg>
 					</div>
 					<button
-						onClick={signout}
 						tabIndex={-1}
 						className="dropdown-content menu hover:overflow-hidden focus:overflow-hidden bg-base-300 shadow-xl opacity-80 rounded-box w-52 p-4 text-lg hover:bg-gray-300 hover:text-white font-semibold"
 					>
