@@ -12,9 +12,11 @@ const UsersController = {
 	 * @access Admin
 	 */
 	index: async (req, res) => {
-		await User.paginate({}, { page: req.query.page, limit: 10 })
+		await User.find()
+			.limit(15)
+			.sort({ role: 1 })
 			.then((users) => {
-				return res.status(200).json({ data: users });
+				return res.status(200).json(users);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });

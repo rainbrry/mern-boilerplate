@@ -10,9 +10,11 @@ const ProductsController = {
 	 * @access Admin && Cashier
 	 */
 	index: async (req, res) => {
-		await Product.paginate({}, { limit: 15, sort: { name: 1 } })
+		await Product.find()
+			.limit(15)
+			.sort({ name: 1 })
 			.then((products) => {
-				return res.status(200).json({ data: products });
+				return res.status(200).json(products);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
