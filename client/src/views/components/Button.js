@@ -1,10 +1,14 @@
 import React from "react";
 
-export const ButtonPrimary = ({ children, type }) => {
+export const ButtonPrimary = ({ children, type, style }) => {
 	return (
 		<button
 			type={type}
-			className="px-6 py-2 bg-blue-500 rounded shadow-lg text-white hover:bg-blue-700"
+			className={`${
+				style
+					? style
+					: "px-6 py-2 bg-blue-500 rounded shadow-lg text-white hover:bg-blue-700"
+			}`}
 		>
 			{children}
 		</button>

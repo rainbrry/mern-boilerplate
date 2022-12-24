@@ -1,16 +1,20 @@
 import React, { useEffect, useState } from "react";
-
-import { Toaster } from "react-hot-toast";
 import Router from "./routes";
+import { Toaster } from "react-hot-toast";
+import { useGetAuthQuery } from "./services/api/auth";
+import { useSelector } from "react-redux";
+import store from "./services/store";
 
 export default function App() {
-	const [mounted, setMounted] = useState(false);
+	const [mounted, setMounted] = useState(true);
 
-	useEffect(() => {
-		setTimeout(() => {
-			setMounted(true);
-		}, 1000);
-	}, [mounted]);
+	const { data, isLoading } = useGetAuthQuery();
+
+	// useEffect(() => {
+	// 	setTimeout(() => {
+	// 		setMounted(true);
+	// 	}, 1000);
+	// }, [mounted]);
 
 	if (!mounted) {
 		return (

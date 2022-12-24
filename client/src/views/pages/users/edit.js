@@ -30,9 +30,10 @@ export default function EditUser({ user }) {
 				<Input
 					type={"hidden"}
 					name={"id"}
-					defaultValue={user._id}
 					register={register}
+					defaultValue={user._id}
 				/>
+
 				<Input
 					label={"Nama"}
 					type={"text"}
@@ -41,27 +42,14 @@ export default function EditUser({ user }) {
 					defaultValue={user.name}
 					register={register}
 				/>
-
 				<Input
 					label={"Username"}
 					type={"text"}
 					name={"username"}
-					required={"true"}
+					required={true}
 					defaultValue={user.username}
 					register={register}
 				/>
-
-				<Select
-					label={"Role"}
-					name={"role"}
-					required={true}
-					defaultValue={user.role}
-					register={register}
-				>
-					<option value="">Pilih</option>
-					<option value="admin">Admin</option>
-					<option value="cashier">Kasir</option>
-				</Select>
 
 				<div className="py-2 mt-2 flex justify-end">
 					<ButtonPrimary type={"submit"}>Simpan</ButtonPrimary>

@@ -18,7 +18,6 @@ export default function Input({
 			<input
 				type={type}
 				name={name}
-				id={name}
 				className="w-full px-2 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
 				placeholder={label}
 				onChange={onChange}

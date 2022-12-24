@@ -5,6 +5,8 @@ import Login from "../views/pages/auth/Login";
 import Dashboard from "../views/pages/dashboard";
 import Users from "../views/pages/users";
 import Products from "../views/pages/products";
+import Purchasings from "../views/pages/purchasings";
+import AddPurchasing from "../views/pages/purchasings/create";
 
 export default function Router() {
 	return (
@@ -16,6 +18,8 @@ export default function Router() {
 					<Route path="/" exact={"true"} element={<Dashboard />} />
 					<Route path="/users" element={<Users />} />
 					<Route path="/products" element={<Products />} />
+					<Route path="/purchasings" element={<Purchasings />} />
+					<Route path="/new-purchasing" element={<AddPurchasing />} />
 				</Route>
 			</Routes>
 		</BrowserRouter>

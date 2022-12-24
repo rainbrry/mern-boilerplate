@@ -21,7 +21,7 @@ const PurchasingController = {
 			.populate("user", "name -_id")
 			.populate("products.product", "name")
 			.then((purchasings) => {
-				return res.status(200).json({ data: purchasings });
+				return res.status(200).json(purchasings);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
