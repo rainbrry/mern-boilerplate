@@ -2,7 +2,17 @@ import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
 
 export const purchasingsApi = createApi({
 	reducerPath: "purchasingsApi",
-	baseQuery: fetchBaseQuery({ baseUrl: "http://localhost:5000/api" }),
+	baseQuery: fetchBaseQuery({
+		baseUrl: "http://localhost:5000/api",
+		credentials: "include",
+		prepareHeaders: (headers, { getState }) => {
+			const token = getState().auth.token;
+			if (token) {
+				headers.set("Authorization", `Bearer ${token}`);
+			}
+			return headers;
+		},
+	}),
 	tagTypes: ["Purchasings"],
 	endpoints: (builder) => ({
 		// GET /purchasings all purchasings
