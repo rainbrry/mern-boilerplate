@@ -1,5 +1,4 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { RootState } from "../store";
 import { authApi } from "../api/auth";
 
 const authSlice = createSlice({
@@ -11,61 +10,33 @@ const authSlice = createSlice({
 	},
 	extraReducers: (builder) => {
 		builder.addMatcher(
-			// if login is fulfilled, set isLoggedIn to true, set user to payload, set token to token
 			authApi.endpoints.login.matchFulfilled,
-			(state, { payload }) => {
+			(state, action) => {
 				state.isLoggedIn = true;
-				state.user = payload.user;
-				state.token = payload.token;
-			},
+				state.user = action.payload.user;
+				state.token = action.payload.token;
+			}
+		);
 
-			// if login is rejected, set isLoggedIn to false, set user to null, set token to null
-			authApi.endpoints.login.matchRejected,
-			(state, { payload }) => {
-				state.isLoggedIn = false;
-				state.user = null;
-				state.token = null;
-			},
-
-			// if logout is fulfilled, set isLoggedIn to false, set user to null, set token to null
-			authApi.endpoints.logout.matchFulfilled,
-			(state, { payload }) => {
-				state.isLoggedIn = false;
-				state.user = null;
-				state.token = null;
-			},
-
-			// if getAuth is fulfilled, set isLoggedIn to true, set user to payload, set token to token
+		builder.addMatcher(
 			authApi.endpoints.getAuth.matchFulfilled,
-			(state, { payload }) => {
-				state.isLoggedIn = true;
-				state.user = payload.user;
-				state.token = payload.token;
-			},
+			(state, action) => {
+				state.user = action.payload.user;
+			}
+		);
 
-			// if getAuth is rejected, set isLoggedIn to false, set user to null, set token to null
-			authApi.endpoints.getAuth.matchRejected,
-			(state, { payload }) => {
-				state.isLoggedIn = false;
-				state.user = null;
-				state.token = null;
-			},
-
-			// if refreshtoken is fulfilled, set isLoggedIn to true, set user to payload, set token to token
-			authApi.endpoints.refreshtoken.matchFulfilled,
-			(state, { payload }) => {
-				state.isLoggedIn = true;
-				state.user = payload.user;
-				state.token = payload.token;
-			},
-
-			// if refreshtoken is rejected, set isLoggedIn to false, set user to null, set token to null
-			authApi.endpoints.refreshtoken.matchRejected,
-			(state, { payload }) => {
+		builder.addMatcher(
+			authApi.endpoints.logout.matchFulfilled,
+			(state, action) => {
 				state.isLoggedIn = false;
 				state.user = null;
 				state.token = null;
 			}
+		);
+
+		builder.addMatcher(
+			authApi.endpoints.refreshtoken.matchFulfilled,
+			(state, action) => (state.token = action.payload.token)
 		);
 	},
 });

@@ -5,15 +5,15 @@ export const authApi = createApi({
 	baseQuery: fetchBaseQuery({
 		baseUrl: "http://localhost:5000/api",
 		credentials: "include",
+		prepareHeaders: (headers, { getState }) => {
+			const token = getState().auth.token;
+			if (token) {
+				headers.set("Authorization", `Bearer ${token}`);
+			}
+			return headers;
+		},
 	}),
 	tagTypes: ["Auth"],
-	prepareHeaders: (headers, store) => {
-		const token = store.getState().auth.token;
-		if (token) {
-			headers.set("authorization", `Bearer ${token}`);
-		}
-		return headers;
-	},
 	endpoints: (builder) => ({
 		login: builder.mutation({
 			query: (body) => ({
@@ -24,8 +24,11 @@ export const authApi = createApi({
 			invalidatesTags: ["Auth"],
 		}),
 
-		logout: builder.query({
-			query: () => "/logout",
+		logout: builder.mutation({
+			query: () => ({
+				url: "/logout",
+				method: "POST",
+			}),
 		}),
 
 		getAuth: builder.query({
@@ -43,5 +46,6 @@ export const {
 	useLoginMutation,
 	useLogoutMutation,
 	useGetAuthQuery,
-	useLazyRefreshtokenQuery,
+	useRefreshtokenQuery,
+	useLazyGetAuthQuery,
 } = authApi;

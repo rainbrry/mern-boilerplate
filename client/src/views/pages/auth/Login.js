@@ -1,5 +1,6 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../services/api/auth";
 import { ButtonPrimary } from "../../components/Button";
 import Input from "../../components/Input";
@@ -7,9 +8,11 @@ import Input from "../../components/Input";
 export default function Login() {
 	const { handleSubmit, register } = useForm();
 	const [login] = useLoginMutation();
+	const redirect = useNavigate();
 
 	const auth = async (data) => {
 		await login(data);
+		redirect("/");
 	};
 
 	return (

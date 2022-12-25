@@ -7,19 +7,63 @@ import Users from "../views/pages/users";
 import Products from "../views/pages/products";
 import Purchasings from "../views/pages/purchasings";
 import AddPurchasing from "../views/pages/purchasings/create";
+import { PrivateRoutes, PublicRoutes } from "./routes.middleware";
 
 export default function Router() {
 	return (
 		<BrowserRouter>
 			<Routes>
-				<Route path="/login" element={<Login />} />
+				<Route
+					path="/login"
+					element={
+						<PublicRoutes>
+							<Login />
+						</PublicRoutes>
+					}
+				/>
 
 				<Route path="/" element={<MainLayout />}>
-					<Route path="/" exact={"true"} element={<Dashboard />} />
-					<Route path="/users" element={<Users />} />
-					<Route path="/products" element={<Products />} />
-					<Route path="/purchasings" element={<Purchasings />} />
-					<Route path="/new-purchasing" element={<AddPurchasing />} />
+					<Route
+						path="/"
+						exact={"true"}
+						element={
+							<PrivateRoutes>
+								<Dashboard />
+							</PrivateRoutes>
+						}
+					/>
+					<Route
+						path="/users"
+						element={
+							<PrivateRoutes>
+								<Users />
+							</PrivateRoutes>
+						}
+					/>
+					<Route
+						path="/products"
+						element={
+							<PrivateRoutes>
+								<Products />
+							</PrivateRoutes>
+						}
+					/>
+					<Route
+						path="/purchasings"
+						element={
+							<PrivateRoutes>
+								<Purchasings />
+							</PrivateRoutes>
+						}
+					/>
+					<Route
+						path="/new-purchasing"
+						element={
+							<PrivateRoutes>
+								<AddPurchasing />
+							</PrivateRoutes>
+						}
+					/>
 				</Route>
 			</Routes>
 		</BrowserRouter>

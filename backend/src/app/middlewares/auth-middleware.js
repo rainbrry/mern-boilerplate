@@ -1,4 +1,4 @@
-import { verifyAccessToken } from "./token-middleware.js";
+import { verifyAccessToken, verifyRefreshToken } from "./token-middleware.js";
 import User from "../schemas/users.schema.js";
 
 /**
@@ -10,12 +10,17 @@ import User from "../schemas/users.schema.js";
  * @middleware verifyAccessToken
  */
 export const isLoggedin = (req, res, next) => {
-	verifyAccessToken(req, res, async () => {
-		const user = await User.findById(req.userId, { password: 0 });
+	verifyRefreshToken(req, res, async () => {
+		const user = await User.findById(req.userId);
 		if (!user) return res.status(404).send({ message: "User Not found." });
 
-		req.user = user;
-		next();
+		verifyAccessToken(req, res, async () => {
+			const user = await User.findById(req.userId);
+			if (!user) return res.status(404).send({ message: "User Not found." });
+
+			req.user = user;
+			next();
+		});
 	});
 };
 
@@ -28,9 +33,9 @@ export const isLoggedin = (req, res, next) => {
  * @middleware isLoggedin
  */
 export const isAdmin = (req, res, next) => {
-	isLoggedin(req, res, async () => {
+	isLoggedin(req, res, () => {
 		if (req.user.role !== "admin") {
-			return res.status(403).send({ message: "Require Admin Role!" });
+			return res.status(403).send({ message: "You're not allowed" });
 		}
 		next();
 	});
@@ -45,10 +50,11 @@ export const isAdmin = (req, res, next) => {
  * @middleware isLoggedin
  */
 export const isCashier = (req, res, next) => {
-	isLoggedin(req, res, async () => {
+	isLoggedin(req, res, () => {
 		if (req.user.role !== "kasir") {
-			return res.status(403).send({ message: "Require Cashier Role!" });
+			return res.status(403).send({ message: "You're not allowed!" });
 		}
+
 		next();
 	});
 };
@@ -64,9 +70,9 @@ export const isCashier = (req, res, next) => {
  * @note Owner role can access all routes
  */
 export const isOwner = (req, res, next) => {
-	isLoggedin(req, res, async () => {
+	isLoggedin(req, res, () => {
 		if (req.user.role !== "owner") {
-			return res.status(403).send({ message: "Require Owner Role!" });
+			return res.status(403).send({ message: "You're not allowed!" });
 		}
 		next();
 	});

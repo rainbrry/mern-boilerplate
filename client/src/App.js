@@ -1,20 +1,26 @@
 import React, { useEffect, useState } from "react";
 import Router from "./routes";
 import { Toaster } from "react-hot-toast";
-import { useGetAuthQuery } from "./services/api/auth";
 import { useSelector } from "react-redux";
-import store from "./services/store";
+import { useLazyGetAuthQuery, useLogoutMutation } from "./services/api/auth";
 
 export default function App() {
-	const [mounted, setMounted] = useState(true);
+	const [mounted, setMounted] = useState(false);
+	const [logout] = useLogoutMutation();
+	const { auth } = useSelector((state) => state);
+	const [getAuth, { isError, error }] = useLazyGetAuthQuery();
 
-	const { data, isLoading } = useGetAuthQuery();
+	useEffect(() => {
+		if (auth.token) getAuth();
+	}, [auth.token, getAuth]);
 
-	// useEffect(() => {
-	// 	setTimeout(() => {
-	// 		setMounted(true);
-	// 	}, 1000);
-	// }, [mounted]);
+	useEffect(() => {
+		if (isError && error.status === 401) logout();
+	}, [isError, error, logout]);
+
+	useEffect(() => {
+		setMounted(true);
+	}, [mounted]);
 
 	if (!mounted) {
 		return (

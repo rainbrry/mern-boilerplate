@@ -1,12 +1,16 @@
 import { Router } from "express";
 import { verifyRefreshToken } from "../middlewares/token-middleware.js";
+import {
+	isAdmin,
+	isCashier,
+	isLoggedin,
+} from "../middlewares/auth-middleware.js";
 import AuthController from "../controllers/auth.controller.js";
 import UsersController from "../controllers/users.controller.js";
 import ProductsController from "../controllers/products.controller.js";
 import PurchasingsController from "../controllers/purchasings.controller.js";
 import SellingsController from "../controllers/sellings.controller.js";
 import DashboardController from "../controllers/dashboard.controller.js";
-import PurchasingController from "../controllers/purchasings.controller.js";
 import ExpensesController from "../controllers/expenses.controller.js";
 
 const route = Router();
@@ -16,8 +20,7 @@ const route = Router();
  * @access Public
  * @url /api/{url}
  */
-route.get("/dashboard", DashboardController.index);
-route.post("/set-cash", DashboardController.setCash);
+route.get("/dashboard", isLoggedin, DashboardController.index);
 
 /**
  * @description API routes auth
@@ -25,9 +28,9 @@ route.post("/set-cash", DashboardController.setCash);
  * @url /api/{url}
  */
 route.post("/login", AuthController.login);
+route.post("/logout", AuthController.logout);
 route.get("/refresh-token", verifyRefreshToken, AuthController.refreshToken);
-route.get("/get-auth", verifyRefreshToken, AuthController.getAuth);
-route.get("/logout", verifyRefreshToken, AuthController.logout);
+route.get("/get-auth", isLoggedin, AuthController.getAuth);
 
 /**
  * @description API routes users
@@ -35,25 +38,26 @@ route.get("/logout", verifyRefreshToken, AuthController.logout);
  * @url /api/{url}
  * @note Only admin can access this routes
  */
-route.get("/users", UsersController.index);
-route.get("/user/:id", UsersController.show);
-route.post("/user", UsersController.store);
-route.put("/user/:id", UsersController.update);
-route.delete("/user/:id", UsersController.destroy);
+route.get("/users", isAdmin, UsersController.index);
+route.get("/user/:id", isAdmin, UsersController.show);
+route.post("/user", isAdmin, UsersController.store);
+route.put("/user/:id", isAdmin, UsersController.update);
+route.delete("/user/:id", isAdmin, UsersController.destroy);
 
 /**
  * @description API routes products
  * @access Public
  * @url /api/{url}
  * @note Admin can access all routes
- * @note Cashier can only access index, show, search
+ * @note Cashier only can access index, show, search
+ * @note isLoggedin middleware is used to check if user is logged in, no matter what role
  */
-route.get("/products", ProductsController.index);
-route.get("/product/:id", ProductsController.show);
-route.get("/search-product", ProductsController.search);
-route.post("/product", ProductsController.store);
-route.put("/product/:id", ProductsController.update);
-route.delete("/product/:id", ProductsController.destroy);
+route.get("/products", isLoggedin, ProductsController.index);
+route.get("/product/:id", isLoggedin, ProductsController.show);
+route.get("/search-product", isLoggedin, ProductsController.search);
+route.post("/product", isAdmin, ProductsController.store);
+route.put("/product/:id", isAdmin, ProductsController.update);
+route.delete("/product/:id", isAdmin, ProductsController.destroy);
 
 /**
  * @description API routes purchasings
@@ -61,13 +65,13 @@ route.delete("/product/:id", ProductsController.destroy);
  * @url /api/{url}
  * @note Only admin can access this routes
  */
-route.get("/purchasings", PurchasingsController.index);
-route.get("/purchasing/:id", PurchasingsController.show);
-route.get("/search-purchasing", PurchasingsController.search);
-route.post("/purchasing", PurchasingsController.store);
-route.put("/purchasing/:id", PurchasingsController.update);
-route.delete("/purchasing/:id", PurchasingsController.destroy);
-route.get("/purchasing-reports", PurchasingController.report);
+route.get("/purchasings", isAdmin, PurchasingsController.index);
+route.get("/purchasing/:id", isAdmin, PurchasingsController.show);
+route.get("/search-purchasing", isAdmin, PurchasingsController.search);
+route.post("/purchasing", isAdmin, PurchasingsController.store);
+route.put("/purchasing/:id", isAdmin, PurchasingsController.update);
+route.delete("/purchasing/:id", isAdmin, PurchasingsController.destroy);
+route.get("/purchasing-reports", isAdmin, PurchasingsController.report);
 
 /**
  * @description API routes sellings and expenses
@@ -75,15 +79,16 @@ route.get("/purchasing-reports", PurchasingController.report);
  * @url /api/{url}
  * @note Admin can access index and show
  * @note Cashier can access all routes
+ * @note isLoggedin middleware is used to check if user is logged in, no matter what role
  */
-route.get("/sellings", SellingsController.index);
-route.get("/selling/:id", SellingsController.show);
-route.get("/search-selling", SellingsController.search);
-route.post("/selling", SellingsController.store);
-route.put("/return-item/:id", SellingsController.returnItem);
-route.get("/sales-reports", SellingsController.report);
-route.get("/return-reports", SellingsController.returnReports);
-route.get("/expenses", ExpensesController.index);
-route.post("/expense", ExpensesController.store);
+route.get("/sellings", isLoggedin, SellingsController.index);
+route.get("/selling/:id", isLoggedin, SellingsController.show);
+route.get("/search-selling", isLoggedin, SellingsController.search);
+route.post("/selling", isCashier, SellingsController.store);
+route.put("/return-item/:id", isCashier, SellingsController.returnItem);
+route.get("/sales-reports", isLoggedin, SellingsController.report);
+route.get("/return-reports", isLoggedin, SellingsController.returnReports);
+route.get("/expenses", isLoggedin, ExpensesController.index);
+route.post("/expense", isCashier, ExpensesController.store);
 
 export default route;

@@ -45,7 +45,9 @@ const AuthController = {
 					path: "/",
 				});
 
-				return res.status(200).json({ token: accessToken, user: user.name });
+				return res
+					.status(200)
+					.json({ token: accessToken, user: user.name, role: user.role });
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
@@ -62,27 +64,8 @@ const AuthController = {
 	 * @middleware auth
 	 */
 	logout: async (req, res) => {
-		await redisClient.del(String(req.userId));
 		res.clearCookie(keyName);
-
 		return res.status(200).json({ message: "Logout successfully" });
-	},
-
-	/**
-	 * @param {Request} req
-	 * @param {Response} res
-	 * @returns {Promise<Response>}
-	 * @description Get auth user
-	 * @route GET /api/get-auth
-	 * @access Private
-	 * @middleware auth
-	 * @middleware refresh-token
-	 */
-	getAuth: async (req, res) => {
-		const user = await User.findById(req.userId);
-		if (!user) return res.status(404).json({ message: "User not found" });
-
-		return res.status(200).json(user);
 	},
 
 	/**
@@ -107,7 +90,21 @@ const AuthController = {
 		});
 
 		await redisClient.set(String(req.userId), refreshToken);
-		return res.status(200).json({ data: accessToken });
+		return res.status(200).json({ token: accessToken });
+	},
+
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Get auth
+	 * @route GET /api/get-auth
+	 */
+	getAuth: async (req, res) => {
+		const user = await User.findById(req.userId);
+		if (!user) return res.status(404).json({ message: "User not found" });
+
+		return res.status(200).json({ user: user.name });
 	},
 };
 

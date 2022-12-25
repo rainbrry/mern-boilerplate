@@ -1,6 +1,11 @@
 import React from "react";
+import { useSelector } from "react-redux";
+import { useLogoutMutation } from "../../services/api/auth";
 
 export default function Navbar({ open, setOpen }) {
+	const { user } = useSelector((state) => state.auth);
+	const [logout] = useLogoutMutation();
+
 	return (
 		<div className="navbar shadow-lg bg-base-100 sticky top-0">
 			<div className="flex-1">
@@ -27,10 +32,9 @@ export default function Navbar({ open, setOpen }) {
 			<div className="flex-none mr-10">
 				<div className="dropdown dropdown-end">
 					<div className="flex items-center">
-						<label
-							tabIndex={-1}
-							className="m-1 capitalize peer cursor-pointer"
-						></label>
+						<label tabIndex={-1} className="m-1 capitalize peer cursor-pointer">
+							{user}
+						</label>
 						<svg
 							xmlns="http://www.w3.org/2000/svg"
 							className="h-4 w-4 peer-focus:rotate-90 duration-200"
@@ -48,6 +52,7 @@ export default function Navbar({ open, setOpen }) {
 					</div>
 					<button
 						tabIndex={-1}
+						onClick={() => logout()}
 						className="dropdown-content menu hover:overflow-hidden focus:overflow-hidden bg-base-300 shadow-xl opacity-80 rounded-box w-52 p-4 text-lg hover:bg-gray-300 hover:text-white font-semibold"
 					>
 						Logout

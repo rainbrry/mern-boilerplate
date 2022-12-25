@@ -21,16 +21,16 @@ import {
 	REHYDRATE,
 } from "redux-persist";
 
-// const encryptor = encryptTransform({
-// 	secretKey: "my-super-secret",
-// 	onError: () => console.log("error"),
-// });
+const encryptor = encryptTransform({
+	secretKey: "my-super-secret",
+	onError: () => console.log("error"),
+});
 
 const persistConfig = {
 	key: "auth",
 	storage,
-	whitelist: ["isLoggedIn", "token", "user"],
-	// transforms: [encryptor],
+	whitelist: ["token", "isLoggedIn"],
+	transforms: [encryptor],
 	debug: false,
 };
 
