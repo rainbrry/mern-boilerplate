@@ -36,7 +36,7 @@ const authSlice = createSlice({
 
 		builder.addMatcher(
 			authApi.endpoints.refreshtoken.matchFulfilled,
-			(state, action) => (state.token = action.payload.token)
+			(state, action) => void (state.token = action.payload.token)
 		);
 	},
 });

@@ -37,7 +37,7 @@ export const authApi = createApi({
 		}),
 
 		refreshtoken: builder.query({
-			query: () => "/refreshtoken",
+			query: () => "/refresh-token",
 		}),
 	}),
 });
@@ -45,7 +45,6 @@ export const authApi = createApi({
 export const {
 	useLoginMutation,
 	useLogoutMutation,
-	useGetAuthQuery,
-	useRefreshtokenQuery,
+	useLazyRefreshtokenQuery,
 	useLazyGetAuthQuery,
 } = authApi;
