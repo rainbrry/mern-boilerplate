@@ -26,6 +26,14 @@ export const productsApi = createApi({
 			query: (id) => `/product/${id}`,
 		}),
 
+		// GET /search-product?search=input
+		searchProduct: builder.query({
+			query: (search) => ({
+				url: "/search-product?",
+				params: { search },
+			}),
+		}),
+
 		// POST /product create product
 		createProduct: builder.mutation({
 			query: (body) => ({
@@ -60,6 +68,7 @@ export const productsApi = createApi({
 export const {
 	useGetProductsQuery,
 	useShowProductQuery,
+	useLazySearchProductQuery,
 	useCreateProductMutation,
 	useUpdateProductMutation,
 	useDeleteProductMutation,

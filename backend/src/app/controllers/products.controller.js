@@ -37,10 +37,16 @@ const ProductsController = {
 	 * @todo Add sort
 	 */
 	search: async (req, res) => {
-		const { query } = req.query;
-		await Product.find({ name: { $regex: query, $options: "i" } })
+		const { search } = req.query;
+		await Product.find({
+			$or: [
+				{ name: { $regex: search, $options: "i" } },
+				{ category: { $regex: search, $options: "i" } },
+				{ supplier: { $regex: search, $options: "i" } },
+			],
+		})
 			.then((products) => {
-				return res.status(200).json({ data: products });
+				return res.status(200).json(products);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
