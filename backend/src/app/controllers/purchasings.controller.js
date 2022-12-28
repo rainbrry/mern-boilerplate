@@ -2,7 +2,6 @@ import mongoose from "mongoose";
 import Product from "../schemas/products.schema.js";
 import Purchasing from "../schemas/purchasings.schema.js";
 import PurchasingReport from "../schemas/purchasing-reports.schema.js";
-import Expense from "../schemas/expenses.schema.js";
 
 const PurchasingController = {
 	/**
@@ -42,7 +41,7 @@ const PurchasingController = {
 			.populate("user", "name -_id")
 			.populate("products.product", "name")
 			.then((purchasing) => {
-				return res.status(200).json({ data: purchasing });
+				return res.status(200).json(purchasing);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
@@ -89,6 +88,7 @@ const PurchasingController = {
 	 */
 	store: async (req, res) => {
 		const { items } = req.body;
+
 		const session = await mongoose.startSession();
 
 		try {
@@ -130,6 +130,7 @@ const PurchasingController = {
 						user: req.userId,
 						details: items,
 						grandTotal,
+						status: "sold",
 					},
 				],
 				{ session }
@@ -146,6 +147,7 @@ const PurchasingController = {
 			return res.status(201).json({
 				message: "Pembelian berhasil disimpan",
 				data: purchasingPopulated,
+				status: 201,
 			});
 		} catch (err) {
 			await session.abortTransaction();
@@ -164,117 +166,94 @@ const PurchasingController = {
 	 * @access Admin
 	 */
 	update: async (req, res) => {
-		const { items, notes } = req.body;
+		const { qty, productId, actions } = req.body;
 		const session = await mongoose.startSession();
 
 		try {
+			// start transaction
 			session.startTransaction();
-
-			// calculate grand total
-			const grandTotal = items.reduce((acc, item) => {
-				return acc + item.qty * item.price;
-			}, 0);
 
 			// get purchasing
 			const purchasing = await Purchasing.findById(req.params.id).session(
 				session
 			);
-
+			// if purchasing is not found return 404
 			if (!purchasing) {
 				return res.status(404).json({ message: "Pembelian tidak ditemukan" });
 			}
 
-			purchasing.products.map(async (item) => {
-				// check if product is not in items
-				if (!items.find((i) => i.product == item.product)) {
-					// update product stock - qty
-					await Product.findByIdAndUpdate(
-						item.product,
-						{
-							$inc: { stock: -item.qty },
-						},
-						{ new: true, session }
-					);
+			// get product from purchasing by product id from request body, then update qty
+			const product = purchasing.products.find(
+				(product) => product.product == productId
+			);
 
-					// remove product from purchasing
-					await Purchasing.findByIdAndUpdate(
-						req.params.id,
-						{
-							$pull: { products: { product: item.product } },
-						},
-						{ new: true, session }
-					);
-				}
-			});
+			// if actions is update
+			if (actions === "update") {
+				// update product stock
+				await Product.findOneAndUpdate(
+					{ _id: productId },
+					{ $inc: { stock: qty - product.qty } },
+					{ new: true, session }
+				);
+			}
 
-			items.map(async (item) => {
-				// check if product is in purchasing
-				const product = purchasing.products.find(
-					(i) => i.product == item.product
+			if (actions === "remove") {
+				// update product stock
+				await Product.findOneAndUpdate(
+					{ _id: productId },
+					{ $inc: { stock: -product.qty } },
+					{ new: true, session }
 				);
 
-				// if product is in purchasing
-				if (product) {
-					// update product stock + item.qty - item.qty before
-					await Product.findByIdAndUpdate(
-						item.product,
-						{
-							$inc: { stock: item.qty - product.qty },
-						},
-						{ new: true, session }
-					);
-				} else {
-					// update product stock + item.qty
-					await Product.findByIdAndUpdate(
-						item.product,
-						{
-							$inc: { stock: item.qty },
-						},
-						{ new: true, session }
-					);
-				}
-			});
+				// remove product from purchasing
+				purchasing.products = purchasing.products.filter(
+					(product) => product.product != productId
+				);
+			}
 
-			// update purchasing
-			const purchasingUpdated = await Purchasing.findByIdAndUpdate(
-				req.params.id,
-				{
-					user: req.userId,
-					products: items,
-					grandTotal,
-				},
+			// update purchasing product qty
+			product.qty = qty;
+
+			// re-calculate grand total
+			const grandTotal = purchasing.products.reduce((acc, item) => {
+				return acc + item.qty * item.price;
+			}, 0);
+
+			// update purchasing grand total and products (qty is updated)
+			await Purchasing.findOneAndUpdate(
+				{ _id: req.params.id },
+				{ $set: { grandTotal, products: purchasing.products } },
 				{ new: true, session }
 			);
 
-			// update purchasing report
+			// create purchasing report
 			await PurchasingReport.findOneAndUpdate(
-				{ purchasing: purchasingUpdated._id },
+				{ purchasing: req.params.id },
 				{
-					user: req.userId,
-					details: items,
-					grandTotal,
-					notes,
+					$set: {
+						details: purchasing.products,
+						grandTotal,
+						status: "updated",
+					},
 				},
 				{ new: true, session }
 			);
 
 			// populate purchasing
-			const purchasingPopulated = await Purchasing.findById(
-				purchasingUpdated._id
-			)
+			const purchasingPopulated = await Purchasing.findById(req.params.id)
 				.populate("user", "name -_id")
 				.populate("products.product", "name")
 				.session(session);
 
 			await session.commitTransaction();
 
-			return res.status(201).json({
+			return res.status(200).json({
 				message: "Pembelian berhasil diubah",
 				data: purchasingPopulated,
+				status: 200,
 			});
 		} catch (err) {
 			await session.abortTransaction();
-
 			return res.status(500).json({ message: err.message });
 		} finally {
 			session.endSession();
@@ -294,12 +273,20 @@ const PurchasingController = {
 		const session = await mongoose.startSession();
 
 		try {
+			// start transaction
 			session.startTransaction();
 
+			// get purchasing
 			const purchasing = await Purchasing.findById(req.params.id).session(
 				session
 			);
 
+			// if purchasing is not found return 404
+			if (!purchasing) {
+				return res.status(404).json({ message: "Pembelian tidak ditemukan" });
+			}
+
+			// update product stock
 			purchasing.products.map(async (item) => {
 				await Product.findByIdAndUpdate(
 					item.product,
@@ -310,8 +297,16 @@ const PurchasingController = {
 				);
 			});
 
+			// update purchasing report
+			await PurchasingReport.findOneAndDelete(
+				{ purchasing: req.params.id },
+				{ session }
+			);
+
+			// delete purchasing
 			await Purchasing.findByIdAndDelete(req.params.id, { session });
 
+			// commit transaction
 			await session.commitTransaction();
 
 			return res.status(201).json({ message: "Pembelian berhasil dihapus" });

@@ -16,8 +16,7 @@ const PurchasingReportSchema = new Schema(
 			},
 		],
 		grandTotal: { type: Number },
-		description: { type: String },
-		notes: { type: String },
+		status: { type: String },
 	},
 	{
 		timestamps: true,

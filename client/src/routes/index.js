@@ -8,6 +8,7 @@ import Products from "../views/pages/products";
 import Purchasings from "../views/pages/purchasings";
 import AddPurchasing from "../views/pages/purchasings/create";
 import { PrivateRoutes, PublicRoutes } from "./routes.middleware";
+import EditPurchasing from "../views/pages/purchasings/edit";
 
 export default function Router() {
 	return (
@@ -61,6 +62,15 @@ export default function Router() {
 						element={
 							<PrivateRoutes>
 								<AddPurchasing />
+							</PrivateRoutes>
+						}
+					/>
+
+					<Route
+						path="/edit-purchasing/:id"
+						element={
+							<PrivateRoutes>
+								<EditPurchasing />
 							</PrivateRoutes>
 						}
 					/>

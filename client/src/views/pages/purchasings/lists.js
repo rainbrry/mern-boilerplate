@@ -1,9 +1,9 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
 import { rupiah } from "../../../helpers/currency";
+import { useGetPurchasingsQuery } from "../../../services/api/purchasings";
 import PurchasingDetail from "./detail";
 import DeletePurchasing from "./delete";
-import { useGetPurchasingsQuery } from "../../../services/api/purchasings";
 
 export default function ListPurchasings() {
 	const { data: purchasings = [] } = useGetPurchasingsQuery();
@@ -83,11 +83,11 @@ export default function ListPurchasings() {
 										</div>
 									</td>
 									<td className="p-2 whitespace-nowrap">
-										<div className="text-md flex gap-2 justify-center">
+										<div className="text-md flex gap-2 justify-center items-center">
 											<PurchasingDetail purchasing={purchasing} />
 											<NavLink
 												to={`/edit-purchasing/${purchasing._id}`}
-												className="px-4 py-1 bg-green-500 hover:bg-green-800 rounded-lg shadow text-white"
+												className="px-4 py-0.5 bg-green-600 rounded-lg shadow text-white hover:bg-green-700"
 											>
 												Edit
 											</NavLink>

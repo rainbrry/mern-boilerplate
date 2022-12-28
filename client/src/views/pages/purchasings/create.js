@@ -1,68 +1,69 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavLink } from "react-router-dom";
+import { useDispatch, useSelector } from "react-redux";
 import SearchProduct from "../../components/SearchProduct";
+import Cart from "../../components/Cart";
+import {
+	clearCart,
+	removeItem,
+	updateItemQty,
+	addItem,
+} from "../../../services/slice/purchasingCart";
+import { useCreatePurchasingMutation } from "../../../services/api/purchasings";
+import TransactionPage from "../../components/TransactionPage";
 
 export default function AddPurchasing() {
-	const addItem = () => {};
-	const store = () => {};
-	const cart = [];
+	const dispatch = useDispatch();
+	const [grandTotal, setGrandTotal] = useState(0);
+	const [createPurchasing] = useCreatePurchasingMutation();
+	const cart = useSelector((state) => state.purchasingCart.items);
+
+	const selectProduct = (product) => {
+		const data = {
+			product: product._id,
+			name: product.name,
+			price: product.purchasePrice,
+			qty: 1,
+		};
+
+		dispatch(addItem(data));
+	};
+
+	const store = async () => {
+		await createPurchasing({ items: cart })
+			.then(() => {
+				dispatch(clearCart());
+			})
+			.catch((err) => {
+				console.log(err);
+			});
+	};
+
+	useEffect(() => {
+		setGrandTotal(cart.reduce((acc, item) => acc + item.qty * item.price, 0));
+	}, [cart]);
 
 	return (
-		<div className="px-8 py-4 overflow-hidden">
-			<h3 className="text-2xl text-base-500">Transaksi baru</h3>
-			<div className="w-full flex gap-4 justify-end items-center px-4 py-2 bg-base-200">
-				<div className="flex flex-1 items-center">
-					<SearchProduct addItem={addItem} cartType={"purchasing"} />
-				</div>
-				<div className="flex gap-2">
-					<button
-						onClick={store}
-						className={`px-6 py-2 rounded shadow-lg text-white ${
-							!cart.length ? "bg-gray-400" : "bg-green-500 hover:bg-green-700"
-						}`}
-						tabIndex={-1}
-						disabled={!cart.length}
-					>
-						Simpan
-					</button>
-					<button
-						className={`px-6 py-2 rounded shadow-lg text-white ${
-							!cart.length ? "bg-gray-400" : "bg-cyan-500 hover:bg-cyan-700"
-						}`}
-						tabIndex={-1}
-						disabled={!cart.length}
-					>
-						Hold
-					</button>
-					<button
-						className={`px-6 py-2 rounded shadow-lg text-white ${
-							!cart.length ? "bg-gray-400" : "bg-yellow-500 hover:bg-yellow-700"
-						}`}
-						tabIndex={-1}
-						disabled={!cart.length}
-					>
-						Clear
-					</button>
-					<NavLink
-						to={"/purchasings"}
-						className="px-4 py-2 bg-red-500 hover:bg-red-700 rounded-md shadow-md text-white"
-						tabIndex={-1}
-					>
-						Batal
-					</NavLink>
-				</div>
-			</div>
+		<TransactionPage
+			header={"Transaksi baru"}
+			selectProduct={selectProduct}
+			actions={store}
+			cart={cart}
+			clearCart={() => dispatch(clearCart())}
+			redirectPath={"/purchasings"}
+			cartType={"purchasing"}
+		>
 			<div>
-				{/* <Cart
+				<Cart
 					cart={cart}
 					clearCart={clearCart}
 					grandTotal={grandTotal}
-					updateQuantity={updateQuantity}
+					updateQuantity={updateItemQty}
 					removeItem={removeItem}
 					redirect={"/purchasing"}
 					cartType={"purchasing"}
-				/> */}
+				/>
 			</div>
-		</div>
+		</TransactionPage>
 	);
 }
