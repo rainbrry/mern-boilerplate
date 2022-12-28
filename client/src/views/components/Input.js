@@ -8,6 +8,9 @@ export default function Input({
 	required,
 	onChange,
 	defaultValue,
+	style,
+	capitalize,
+	disabled,
 	...props
 }) {
 	return (
@@ -18,11 +21,19 @@ export default function Input({
 			<input
 				type={type}
 				name={name}
-				className="w-full px-2 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500"
+				className={`${
+					style
+						? style
+						: `w-full px-2 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500 ${
+								capitalize ? "capitalize" : ""
+						  }`
+				}`}
 				placeholder={label}
 				onChange={onChange}
 				defaultValue={defaultValue}
 				{...register(name, { required })}
+				disabled={disabled}
+				{...props}
 			/>
 		</div>
 	);
