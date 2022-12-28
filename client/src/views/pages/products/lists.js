@@ -10,7 +10,7 @@ export default function ListProducts() {
 
 	return (
 		<div className="py-4">
-			<div className="w-full h-[450px] bg-base-100 rounded shadow-lg overflow-hidden overflow-y-auto">
+			<div className="w-full h-[600px] bg-base-100 rounded shadow-lg overflow-hidden overflow-y-auto">
 				<table className="table-auto w-full">
 					<thead className="text-xs font-semibold uppercase text-gray-400 bg-gray-50 border-b-2 text-left">
 						<tr>
