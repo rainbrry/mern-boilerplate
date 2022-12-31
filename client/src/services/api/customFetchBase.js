@@ -1,6 +1,6 @@
 import { fetchBaseQuery } from "@reduxjs/toolkit/dist/query";
-import { Mutex } from "async-mutex";
 import { logout, refreshToken } from "../slice/authSlice";
+import { Mutex } from "async-mutex";
 
 const baseUrl = "http://localhost:5000/api";
 const mutex = new Mutex();
