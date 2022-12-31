@@ -1,10 +1,17 @@
 import React from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 import { useLogoutMutation } from "../../services/api/auth";
+import { logout } from "../../services/slice/authSlice";
 
 export default function Navbar({ open, setOpen }) {
 	const { user } = useSelector((state) => state.auth);
-	const [logout] = useLogoutMutation();
+	const dispatch = useDispatch();
+	const [loggedOut] = useLogoutMutation();
+
+	const signout = async () => {
+		await loggedOut();
+		dispatch(logout());
+	};
 
 	return (
 		<div className="navbar shadow-lg bg-base-100 sticky top-0">
@@ -52,7 +59,7 @@ export default function Navbar({ open, setOpen }) {
 					</div>
 					<button
 						tabIndex={-1}
-						onClick={() => logout()}
+						onClick={signout}
 						className="dropdown-content menu hover:overflow-hidden focus:overflow-hidden bg-base-300 shadow-xl opacity-80 rounded-box w-52 p-4 text-lg hover:bg-gray-300 hover:text-white font-semibold"
 					>
 						Logout

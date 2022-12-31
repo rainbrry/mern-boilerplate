@@ -1,17 +1,21 @@
 import React from "react";
 import { useForm } from "react-hook-form";
+import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
 import { useLoginMutation } from "../../../services/api/auth";
+import { setCredential } from "../../../services/slice/authSlice";
 import { ButtonPrimary } from "../../components/Button";
 import Input from "../../components/Input";
 
 export default function Login() {
 	const { handleSubmit, register } = useForm();
+	const dispatch = useDispatch();
 	const [login] = useLoginMutation();
 	const redirect = useNavigate();
 
 	const auth = async (data) => {
-		await login(data);
+		const user = await login(data);
+		dispatch(setCredential(user.data));
 		redirect("/");
 	};
 

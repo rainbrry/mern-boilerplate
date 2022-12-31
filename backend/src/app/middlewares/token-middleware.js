@@ -20,15 +20,15 @@ import {
 export const verifyAccessToken = (req, res, next) => {
 	const accessToken = req.headers.authorization?.split(" ")[1];
 	if (!accessToken) {
-		return res.status(403).send({
-			message: "No token provided!",
+		return res.status(405).send({
+			message: "Invalid token!",
 		});
 	}
 
 	jwt.verify(accessToken, accessTokenKey, (err, decoded) => {
 		if (err) {
 			return res.status(405).send({
-				message: "Failed to authenticate token!",
+				message: "Invalid token!",
 			});
 		}
 		req.userId = decoded.id;

@@ -1,18 +1,9 @@
-import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/dist/query/react";
+import { createApi } from "@reduxjs/toolkit/dist/query/react";
+import customFetchBase from "./customFetchBase";
 
 export const productsApi = createApi({
 	reducerPath: "productsApi",
-	baseQuery: fetchBaseQuery({
-		baseUrl: "http://localhost:5000/api",
-		credentials: "include",
-		prepareHeaders: (headers, { getState }) => {
-			const token = getState().auth.token;
-			if (token) {
-				headers.set("Authorization", `Bearer ${token}`);
-			}
-			return headers;
-		},
-	}),
+	baseQuery: customFetchBase,
 	tagTypes: ["Products"],
 	endpoints: (builder) => ({
 		// GET /products all products

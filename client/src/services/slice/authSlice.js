@@ -1,44 +1,33 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { authApi } from "../api/auth";
 
 const authSlice = createSlice({
 	name: "auth",
 	initialState: {
 		isLoggedIn: false,
 		user: null,
+		role: null,
 		token: null,
 	},
-	extraReducers: (builder) => {
-		builder.addMatcher(
-			authApi.endpoints.login.matchFulfilled,
-			(state, action) => {
-				state.isLoggedIn = true;
-				state.user = action.payload.user;
-				state.token = action.payload.token;
-			}
-		);
+	reducers: {
+		setCredential: (state, action) => {
+			state.isLoggedIn = true;
+			state.user = action.payload.user;
+			state.role = action.payload.role;
+			state.token = action.payload.token;
+		},
 
-		builder.addMatcher(
-			authApi.endpoints.getAuth.matchFulfilled,
-			(state, action) => {
-				state.user = action.payload.user;
-			}
-		);
+		logout: (state) => {
+			state.user = null;
+			state.role = null;
+			state.token = null;
+			state.isLoggedIn = false;
+		},
 
-		builder.addMatcher(
-			authApi.endpoints.logout.matchFulfilled,
-			(state, action) => {
-				state.isLoggedIn = false;
-				state.user = null;
-				state.token = null;
-			}
-		);
-
-		builder.addMatcher(
-			authApi.endpoints.refreshtoken.matchFulfilled,
-			(state, action) => void (state.token = action.payload.token)
-		);
+		refreshToken: (state, action) => {
+			void (state.token = action.payload.token);
+		},
 	},
 });
 
 export default authSlice.reducer;
+export const { setCredential, logout, refreshToken } = authSlice.actions;

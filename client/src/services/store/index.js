@@ -29,7 +29,7 @@ const encryptor = encryptTransform({
 const persistConfig = {
 	key: "auth",
 	storage,
-	whitelist: ["token", "isLoggedIn"],
+	whitelist: ["token", "isLoggedIn", "user", "role"],
 	transforms: [encryptor],
 	debug: false,
 };
