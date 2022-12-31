@@ -1,13 +1,14 @@
 import { configureStore } from "@reduxjs/toolkit";
 import { setupListeners } from "@reduxjs/toolkit/dist/query";
+import { encryptTransform } from "redux-persist-transform-encrypt";
 import { authApi } from "../api/auth";
 import { usersApi } from "../api/users";
 import { productsApi } from "../api/products";
-import { purchasingsApi } from "../api/purchasings";
-import { encryptTransform } from "redux-persist-transform-encrypt";
 import { sellingsApi } from "../api/sellings";
-import purchasingCart from "../slice/purchasingCart";
-import sellingCart from "../slice/sellingCart";
+import { purchasingsApi } from "../api/purchasings";
+import { dashboardApi } from "../api/dashboard";
+import purchasingCartReducer from "../slice/purchasingCartSlice";
+import sellingCartReducer from "../slice/sellingCartSlice";
 import auth from "../slice/authSlice";
 import storage from "redux-persist/lib/storage";
 import persistReducer from "redux-persist/es/persistReducer";
@@ -43,9 +44,10 @@ const store = configureStore({
 		[productsApi.reducerPath]: productsApi.reducer,
 		[sellingsApi.reducerPath]: sellingsApi.reducer,
 		[purchasingsApi.reducerPath]: purchasingsApi.reducer,
+		[dashboardApi.reducerPath]: dashboardApi.reducer,
 		auth: persistedReducer,
-		sellingCart,
-		purchasingCart,
+		sellingCart: sellingCartReducer,
+		purchasingCart: purchasingCartReducer,
 	},
 	middleware: (getDefaultMiddleware) =>
 		getDefaultMiddleware({

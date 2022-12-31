@@ -1,15 +1,13 @@
 import React, { useEffect, useState } from "react";
-import { NavLink } from "react-router-dom";
 import { useDispatch, useSelector } from "react-redux";
-import SearchProduct from "../../components/SearchProduct";
-import Cart from "../../components/Cart";
+import { useCreatePurchasingMutation } from "../../../services/api/purchasings";
 import {
 	clearCart,
 	removeItem,
 	updateItemQty,
 	addItem,
-} from "../../../services/slice/purchasingCart";
-import { useCreatePurchasingMutation } from "../../../services/api/purchasings";
+} from "../../../services/slice/purchasingCartSlice";
+import Cart from "../../components/Cart";
 import TransactionPage from "../../components/TransactionPage";
 
 export default function AddPurchasing() {
