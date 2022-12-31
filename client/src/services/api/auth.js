@@ -22,20 +22,10 @@ export const authApi = createApi({
 			}),
 		}),
 
-		getAuth: builder.query({
-			query: () => "/get-auth",
-			providesTags: ["Auth"],
-		}),
-
 		refreshtoken: builder.query({
 			query: () => "/refresh-token",
 		}),
 	}),
 });
 
-export const {
-	useLoginMutation,
-	useLogoutMutation,
-	useLazyRefreshtokenQuery,
-	useLazyGetAuthQuery,
-} = authApi;
+export const { useLoginMutation, useLogoutMutation } = authApi;
