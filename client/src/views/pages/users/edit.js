@@ -3,7 +3,6 @@ import { useForm } from "react-hook-form";
 import { useUpdateUserMutation } from "../../../services/api/users";
 import CreatePage from "../../components/CreatePage";
 import Input from "../../components/Input";
-import Select from "../../components/Select";
 import { ButtonPrimary } from "../../components/Button";
 
 export default function EditUser({ user }) {
