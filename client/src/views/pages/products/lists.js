@@ -32,40 +32,58 @@ export default function ListProducts() {
 						</tr>
 					</thead>
 					<tbody className="text-md divide-y text-left divide-gray-100">
-						{products.map((product, index) => {
-							return (
-								<tr
-									key={product._id}
-									className="border-b-2 border-gray-200 hover:bg-gray-300"
-								>
-									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-medium text-gray-800 capitalize w-80 truncate">
-											{product.name}
-										</div>
-									</td>
-									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-normal">
-											{rupiah(product.purchasePrice)}
-										</div>
-									</td>
-									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-normal">
-											{rupiah(product.salesPrice)}
-										</div>
-									</td>
-									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-normal">{product.stock}</div>
-									</td>
-									<td className="p-2 whitespace-nowrap">
-										<div className="text-md flex gap-2 justify-center">
-											<DetailProduct product={product} />
-											<EditProduct product={product} />
-											<DeleteProduct id={product._id} />
-										</div>
-									</td>
-								</tr>
-							);
-						})}
+						{isLoading ? (
+							<tr>
+								<td className="p-4 whitespace-nowrap" colSpan="5">
+									<div className="text-center text-lg font-semibold mt-56">
+										Loading...
+									</div>
+								</td>
+							</tr>
+						) : isError || !products.length ? (
+							<tr>
+								<td className="p-4 whitespace-nowrap" colSpan="5">
+									<div className="text-center text-lg font-semibold mt-56">
+										No data
+									</div>
+								</td>
+							</tr>
+						) : (
+							products.map((product, index) => {
+								return (
+									<tr
+										key={product._id}
+										className="border-b-2 border-gray-200 hover:bg-gray-300"
+									>
+										<td className="px-4 py-2 whitespace-nowrap">
+											<div className="font-medium text-gray-800 capitalize w-80 truncate">
+												{product.name}
+											</div>
+										</td>
+										<td className="px-4 py-2 whitespace-nowrap">
+											<div className="font-normal">
+												{rupiah(product.purchasePrice)}
+											</div>
+										</td>
+										<td className="px-4 py-2 whitespace-nowrap">
+											<div className="font-normal">
+												{rupiah(product.salesPrice)}
+											</div>
+										</td>
+										<td className="px-4 py-2 whitespace-nowrap">
+											<div className="font-normal">{product.stock}</div>
+										</td>
+										<td className="p-2 whitespace-nowrap">
+											<div className="text-md flex gap-2 justify-center">
+												<DetailProduct product={product} />
+												<EditProduct product={product} />
+												<DeleteProduct id={product._id} />
+											</div>
+										</td>
+									</tr>
+								);
+							})
+						)}
 					</tbody>
 				</table>
 			</div>

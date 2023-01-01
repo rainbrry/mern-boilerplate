@@ -32,14 +32,18 @@ export default function ListUser() {
 					<tbody className="text-md divide-y text-left divide-gray-100">
 						{isLoading ? (
 							<tr>
-								<td colSpan="5" className="p-4 text-center">
-									Loading...
+								<td className="p-4 whitespace-nowrap" colSpan="5">
+									<div className="text-center text-lg font-semibold mt-56">
+										Loading...
+									</div>
 								</td>
 							</tr>
-						) : isError ? (
+						) : isError || !users.length ? (
 							<tr>
-								<td colSpan="5" className="p-4 text-center">
-									No data
+								<td className="p-4 whitespace-nowrap" colSpan="5">
+									<div className="text-center text-lg font-semibold mt-56">
+										No data
+									</div>
 								</td>
 							</tr>
 						) : (
