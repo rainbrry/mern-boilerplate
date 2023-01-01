@@ -1,9 +1,9 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
 import { useUpdateUserMutation } from "../../../services/api/users";
+import { ButtonPrimary } from "../../components/Button";
 import CreatePage from "../../components/CreatePage";
 import Input from "../../components/Input";
-import { ButtonPrimary } from "../../components/Button";
 
 export default function EditUser({ user }) {
 	const [openModal, setOpenModal] = useState(false);
