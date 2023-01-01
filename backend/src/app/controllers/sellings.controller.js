@@ -1,9 +1,9 @@
 import mongoose from "mongoose";
 import Selling from "../schemas/sellings.schema.js";
 import Product from "../schemas/products.schema.js";
+import Expenses from "../schemas/expenses.schema.js";
 import SalesReport from "../schemas/sales-reports.schema.js";
 import ReturnReport from "../schemas/return-report.schema.js";
-import Expense from "../schemas/expenses.schema.js";
 
 const SellingsController = {
 	/**
@@ -22,7 +22,7 @@ const SellingsController = {
 			.populate("user", "name -_id")
 			.populate("products.product", "name purchasePrice")
 			.then((sellings) => {
-				return res.status(200).json({ data: sellings });
+				return res.status(200).json(sellings);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
@@ -45,7 +45,7 @@ const SellingsController = {
 			.populate("user", "name -_id")
 			.populate("products.product", "name")
 			.then((selling) => {
-				return res.status(200).json({ data: selling });
+				return res.status(200).json(selling);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
@@ -63,9 +63,9 @@ const SellingsController = {
 	show: async (req, res) => {
 		await Selling.findById(req.params.id)
 			.populate("user", "name -_id")
-			.populate("products.product", "name")
+			.populate("products.product", "name purchasePrice")
 			.then((selling) => {
-				return res.status(201).json({ data: selling });
+				return res.status(201).json(selling);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
@@ -143,7 +143,7 @@ const SellingsController = {
 				.session(session);
 
 			await session.commitTransaction();
-			return res.status(201).json({ data: sellingPopulated });
+			return res.status(201).json(sellingPopulated);
 		} catch (err) {
 			await session.abortTransaction();
 			return res.status(500).json({ message: err.message });
@@ -173,123 +173,129 @@ const SellingsController = {
 	 * 11. Update selling return note
 	 */
 	returnItem: async (req, res) => {
-		const { items } = req.body;
+		const { productId, price, purchasePrice, returnQty, qty, reason } =
+			req.body;
 
 		const session = await mongoose.startSession();
+		const returnedItems = [
+			{
+				product: productId,
+				price,
+				returnQty,
+				total: price * returnQty,
+				reason,
+			},
+		];
 
 		try {
 			session.startTransaction();
 
-			// find selling
-			const selling = await Selling.findById(req.params.id);
-
-			// get product from items where return qty is not 0, then create return reports
-			const returnedItems = items.filter((item) => item.returnQty != 0);
-
-			// calculate total returned (returned qty * price)
-			const returnedTotal = returnedItems.reduce((acc, item) => {
-				return acc + item.returnQty * item.price;
-			}, 0);
-
-			// calculate total profit (returned qty * (price - purchase price))
-			const returnedProfit = items.reduce((acc, item) => {
-				return acc + item.returnQty * (item.price - item.purchasePrice);
-			}, 0);
-
+			// get selling by id, return 404 if selling not found
+			const selling = await Selling.findById(req.params.id).session(session);
 			if (!selling) {
 				return res.status(404).json({ message: "Selling not found" });
 			}
 
-			// map items
-			items.map(async (item) => {
-				const product = selling.products.find((i) => i.product == item.product);
-
-				// if old product is exist
-				if (product) {
-					// if returned reason is not broken, update product stok (current stock + return qty)
-					if (!item.reason.includes("broken")) {
-						await Product.findByIdAndUpdate(
-							item.product,
-							{
-								$inc: { stock: +item.returnQty },
-							},
-							{ new: true, session }
-						);
-					}
-
-					// if returned qty more than product qty, return error
-					if (item.returnQty > product.qty) {
-						return res.status(400).json({
-							message: `Return qty more than product qty for product ${product.product.name}`,
-						});
-					}
-				}
-			});
-
-			// update grand total (current grand total - total returned) and update qty for each product
-			const sellingUpdated = await Selling.findByIdAndUpdate(
-				req.params.id,
-				{
-					$inc: { grandTotal: -returnedTotal, totalProfit: -returnedProfit },
-					products: items,
-				},
-				{ new: true, session }
+			const product = selling.products.find(
+				(product) => product.product == productId
 			);
 
-			// pull product where qty is 0
-			const updatedSellingStatus = await Selling.findByIdAndUpdate(
-				sellingUpdated._id,
-				{
-					$pull: { products: { qty: 0 } },
-				},
-				{ new: true, session }
-			);
-
-			if (returnedItems.length != 0) {
-				await ReturnReport.create(
-					[
-						{
-							sales: selling._id,
-							user: req.userId,
-							details: returnedItems,
-							buyDate: selling.createdAt,
-						},
-					],
-					{ session }
-				);
-
-				await Expense.create(
-					[
-						{
-							type: "retur barang",
-							typeId: selling._id,
-							user: req.userId,
-							amount: returnedTotal,
-							description:
-								"Pengembalian barang dari penjualan dengan nomor transaksi " +
-								selling._id,
-						},
-					],
-					{ session }
-				);
-			}
-
-			if (updatedSellingStatus.products.length == 0) {
-				await Selling.findByIdAndUpdate(
-					updatedSellingStatus._id,
-					{ $set: { status: "returned" } },
+			if (!reason.includes("broken")) {
+				// update product stock
+				await Product.findByIdAndUpdate(
+					productId,
+					{
+						$inc: { stock: returnQty },
+					},
 					{ new: true, session }
 				);
 			}
 
-			// populate user and product name
-			const sellingPopulated = await Selling.findById(updatedSellingStatus._id)
+			// calculate returned total and returned profit
+			const returnedTotal = returnQty * product.price;
+			const returnedProfit = returnQty * (product.price - purchasePrice);
+
+			// update selling and grand total, total profit and product qty
+			await Selling.findByIdAndUpdate(
+				req.params.id,
+				{
+					$inc: {
+						grandTotal: -returnedTotal,
+						totalProfit: -returnedProfit,
+						[`products.$[product].qty`]: -returnQty,
+					},
+				},
+				{
+					new: true,
+					arrayFilters: [{ "product.product": productId }],
+					session,
+				}
+			);
+
+			if (product.qty === Number(returnQty)) {
+				const removeProduct = await Selling.findByIdAndUpdate(
+					req.params.id,
+					{
+						$pull: { products: { product: productId } },
+					},
+					{ new: true, session }
+				);
+
+				if (removeProduct.products.length == 0) {
+					await Selling.findByIdAndUpdate(
+						req.params.id,
+						{
+							$set: { status: "returned" },
+						},
+						{ new: true, session }
+					);
+				}
+			}
+
+			// create or update return report
+			const returnReport = await ReturnReport.findOneAndUpdate(
+				{ sales: req.params.id },
+				{
+					user: req.userId,
+					sales: req.params.id,
+					$push: { details: returnedItems },
+					$inc: {
+						total: returnedTotal,
+						profit: returnedProfit,
+					},
+					buyDate: selling.createdAt,
+				},
+				{
+					new: true,
+					upsert: true,
+					session,
+				}
+			);
+
+			await Expenses.create(
+				[
+					{
+						type: "return item",
+						user: req.userId,
+						amount: returnedTotal,
+						description: `Return barang dengan no transaksi ${selling._id}`,
+						status: "success",
+					},
+				],
+				{ session }
+			);
+
+			const sellingPopulated = await Selling.findById(req.params.id)
 				.populate("user", "name -_id")
 				.populate("products.product", "name purchasePrice")
 				.session(session);
 
 			await session.commitTransaction();
-			return res.status(201).json({ data: sellingPopulated });
+			return res.status(200).json({
+				message: "Item returned",
+				data: sellingPopulated,
+				status: 200,
+			});
 		} catch (err) {
 			await session.abortTransaction();
 			return res.status(500).json({ message: err.message });
@@ -303,47 +309,12 @@ const SellingsController = {
 	 * @param {Response} res
 	 * @returns {Promise<Response>}
 	 * @description Delete selling
-	 * @route DELETE /api/sellings/:id
+	 * @route DELETE /api/selling/:id
 	 * @access Cashier
-	 * @todo
-	 * 1. Delete selling
-	 * 2. Update product stock if qty is not 0
 	 */
 	destroy: async (req, res) => {
-		const session = await mongoose.startSession();
-
-		try {
-			session.startTransaction();
-
-			const selling = await Selling.findById(req.params.id).session(session);
-
-			if (!selling) {
-				return res.status(404).json({ message: "Selling not found" });
-			}
-
-			selling.products.map(async (item) => {
-				// if qty is not 0, update product stock (current stock + qty)
-				if (item.qty != 0) {
-					await Product.findByIdAndUpdate(
-						item.product,
-						{
-							$inc: { stock: +item.qty },
-						},
-						{ new: true, session }
-					);
-				}
-			});
-
-			await Selling.findByIdAndDelete(req.params.id).session(session);
-
-			await session.commitTransaction();
-			return res.status(200).json({ message: "Selling deleted" });
-		} catch (err) {
-			await session.abortTransaction();
-			return res.status(500).json({ message: err.message });
-		} finally {
-			session.endSession();
-		}
+		await Selling.findByIdAndDelete(req.params.id);
+		return res.status(200).json({ message: "Selling deleted" });
 	},
 
 	/**

@@ -14,7 +14,8 @@ export const sellingsApi = createApi({
 
 		// GET /sellings/:id show selling
 		showSelling: builder.query({
-			query: (id) => `/sellings/${id}`,
+			query: (id) => `/selling/${id}`,
+			providesTags: ["Sellings"],
 		}),
 
 		// POST /selling create selling
@@ -30,7 +31,7 @@ export const sellingsApi = createApi({
 		// PUT /selling/:id update selling
 		returnItem: builder.mutation({
 			query: (body) => ({
-				url: `/selling/${body.id}`,
+				url: `/return-selling/${body.sellingId}`,
 				method: "PUT",
 				body,
 			}),

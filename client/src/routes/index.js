@@ -1,5 +1,6 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { PrivateRoutes, PublicRoutes } from "./routes.middleware";
 import MainLayout from "../views/layouts/MainLayout";
 import Login from "../views/pages/auth/Login";
 import Dashboard from "../views/pages/dashboard";
@@ -7,8 +8,10 @@ import Users from "../views/pages/users";
 import Products from "../views/pages/products";
 import Purchasings from "../views/pages/purchasings";
 import AddPurchasing from "../views/pages/purchasings/create";
-import { PrivateRoutes, PublicRoutes } from "./routes.middleware";
 import EditPurchasing from "../views/pages/purchasings/edit";
+import Sellings from "../views/pages/sellings";
+import AddSelling from "../views/pages/sellings/create";
+import ReturnSelling from "../views/pages/sellings/edit";
 
 export default function Router() {
 	return (
@@ -33,6 +36,7 @@ export default function Router() {
 							</PrivateRoutes>
 						}
 					/>
+
 					<Route
 						path="/users"
 						element={
@@ -41,6 +45,7 @@ export default function Router() {
 							</PrivateRoutes>
 						}
 					/>
+
 					<Route
 						path="/products"
 						element={
@@ -49,6 +54,7 @@ export default function Router() {
 							</PrivateRoutes>
 						}
 					/>
+
 					<Route
 						path="/purchasings"
 						element={
@@ -57,6 +63,7 @@ export default function Router() {
 							</PrivateRoutes>
 						}
 					/>
+
 					<Route
 						path="/new-purchasing"
 						element={
@@ -71,6 +78,33 @@ export default function Router() {
 						element={
 							<PrivateRoutes>
 								<EditPurchasing />
+							</PrivateRoutes>
+						}
+					/>
+
+					<Route
+						path="/sellings"
+						element={
+							<PrivateRoutes>
+								<Sellings />
+							</PrivateRoutes>
+						}
+					/>
+
+					<Route
+						path="/new-selling"
+						element={
+							<PrivateRoutes>
+								<AddSelling />
+							</PrivateRoutes>
+						}
+					/>
+
+					<Route
+						path="/return-selling/:id"
+						element={
+							<PrivateRoutes>
+								<ReturnSelling />
 							</PrivateRoutes>
 						}
 					/>
