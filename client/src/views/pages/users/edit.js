@@ -34,22 +34,28 @@ export default function EditUser({ user }) {
 					defaultValue={user._id}
 				/>
 
-				<Input
-					label={"Nama"}
-					type={"text"}
-					name={"name"}
-					required={true}
-					defaultValue={user.name}
-					register={register}
-				/>
-				<Input
-					label={"Username"}
-					type={"text"}
-					name={"username"}
-					required={true}
-					defaultValue={user.username}
-					register={register}
-				/>
+				<div className="p-2">
+					<Input
+						label={"Nama"}
+						type={"text"}
+						name={"name"}
+						required={true}
+						capitalize={true}
+						defaultValue={user.name}
+						register={register}
+					/>
+				</div>
+
+				<div className="p-2">
+					<Input
+						label={"Username"}
+						type={"text"}
+						name={"username"}
+						required={true}
+						defaultValue={user.username}
+						register={register}
+					/>
+				</div>
 
 				<div className="py-2 mt-2 flex justify-end">
 					<ButtonPrimary type={"submit"}>Simpan</ButtonPrimary>

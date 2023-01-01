@@ -25,49 +25,62 @@ export default function AddProduct() {
 			setOpenModal={setOpenModal}
 		>
 			<form onSubmit={handleSubmit(store)} className="w-full">
-				<Input
-					label={"Nama barang"}
-					type={"text"}
-					name={"name"}
-					required={true}
-					register={register}
-				/>
+				<div className="p-2">
+					<Input
+						label={"Nama barang"}
+						type={"text"}
+						name={"name"}
+						capitalize={true}
+						required={true}
+						register={register}
+					/>
+				</div>
 
-				<Input
-					label={"Kategori"}
-					type={"text"}
-					name={"category"}
-					required={true}
-					register={register}
-				/>
+				<div className="p-2">
+					<Input
+						label={"Kategori"}
+						type={"text"}
+						name={"category"}
+						capitalize={true}
+						required={true}
+						register={register}
+					/>
+				</div>
 
-				<Input
-					label={"Supplier"}
-					type={"text"}
-					name={"supplier"}
-					required={true}
-					register={register}
-				/>
+				<div className="p-2">
+					<Input
+						label={"Supplier"}
+						type={"text"}
+						name={"supplier"}
+						capitalize={true}
+						required={true}
+						register={register}
+					/>
+				</div>
 
-				<Input
-					label={"Harga beli"}
-					type={"number"}
-					min={0}
-					step={500}
-					name={"purchasePrice"}
-					required={true}
-					register={register}
-				/>
+				<div className="p-2">
+					<Input
+						label={"Harga beli"}
+						type={"number"}
+						min={0}
+						step={500}
+						name={"purchasePrice"}
+						required={true}
+						register={register}
+					/>
+				</div>
 
-				<Input
-					label={"Harga jual"}
-					type={"number"}
-					min={0}
-					step={500}
-					name={"salesPrice"}
-					required={true}
-					register={register}
-				/>
+				<div className="p-2">
+					<Input
+						label={"Harga jual"}
+						type={"number"}
+						min={0}
+						step={500}
+						name={"salesPrice"}
+						required={true}
+						register={register}
+					/>
+				</div>
 
 				<div className="py-2 mt-2 flex justify-end">
 					<ButtonPrimary type={"submit"}>Simpan</ButtonPrimary>

@@ -25,28 +25,30 @@ export default function Login() {
 				<h1 className="text-3xl text-dark text-center py-6">Login</h1>
 
 				<form onSubmit={handleSubmit(auth)} method="POST" className="mb-5">
-					<Input
-						label={"Username"}
-						type={"text"}
-						name={"username"}
-						required={true}
-						register={register}
-					/>
+					<div className="p-2">
+						<Input
+							label={"Username"}
+							type={"text"}
+							name={"username"}
+							required={true}
+							register={register}
+						/>
+					</div>
 
-					<Input
-						label={"Password"}
-						type={"password"}
-						name={"password"}
-						required={true}
-						register={register}
-					/>
+					<div className="p-2">
+						<Input
+							label={"Password"}
+							type={"password"}
+							name={"password"}
+							required={true}
+							register={register}
+						/>
+					</div>
 
 					<div className="p-2">
 						<ButtonPrimary
 							type={"submit"}
-							style={
-								"px-3 py-2 bg-blue-500 rounded-lg shadow w-full mt-3 hover:bg-blue-600 text-white font-bold focus:outline-none focus:bg-blue-600 focus:ring-2"
-							}
+							style={`px-3 py-2 bg-blue-500 rounded-lg shadow w-full mt-3 hover:bg-blue-600 text-white font-bold focus:outline-none focus:bg-blue-600 focus:ring-2`}
 						>
 							Login
 						</ButtonPrimary>

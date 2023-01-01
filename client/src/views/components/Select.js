@@ -11,7 +11,7 @@ export default function Select({
 	...props
 }) {
 	return (
-		<div className="p-2">
+		<>
 			<label htmlFor={name} className="block text-sm text-dark">
 				{label}
 			</label>
@@ -25,6 +25,6 @@ export default function Select({
 			>
 				{children}
 			</select>
-		</div>
+		</>
 	);
 }

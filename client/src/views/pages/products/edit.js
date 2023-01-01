@@ -33,50 +33,68 @@ export default function EditProduct({ product }) {
 					defaultValue={product._id}
 				/>
 
-				<Input
-					label={"Nama barang"}
-					type={"text"}
-					name={"name"}
-					required={true}
-					defaultValue={product.name}
-					register={register}
-				/>
-				<Input
-					label={"Kategori"}
-					type={"text"}
-					name={"category"}
-					required={true}
-					defaultValue={product.category}
-					register={register}
-				/>
-				<Input
-					label={"Supplier"}
-					type={"text"}
-					name={"supplier"}
-					required={true}
-					defaultValue={product.supplier}
-					register={register}
-				/>
-				<Input
-					label={"Harga beli"}
-					type={"number"}
-					min={0}
-					step={500}
-					name={"purchasePrice"}
-					required={true}
-					defaultValue={product.purchasePrice}
-					register={register}
-				/>
-				<Input
-					label={"Harga jual"}
-					type={"number"}
-					min={0}
-					step={500}
-					name={"salesPrice"}
-					required={true}
-					defaultValue={product.salesPrice}
-					register={register}
-				/>
+				<div className="p-2">
+					<Input
+						label={"Nama barang"}
+						type={"text"}
+						name={"name"}
+						capitalize={true}
+						required={true}
+						defaultValue={product.name}
+						register={register}
+					/>
+				</div>
+
+				<div className="p-2">
+					<Input
+						label={"Kategori"}
+						type={"text"}
+						name={"category"}
+						capitalize={true}
+						required={true}
+						defaultValue={product.category}
+						register={register}
+					/>
+				</div>
+
+				<div className="p-2">
+					<Input
+						label={"Supplier"}
+						type={"text"}
+						name={"supplier"}
+						capitalize={true}
+						required={true}
+						defaultValue={product.supplier}
+						register={register}
+					/>
+				</div>
+
+				<div className="p-2">
+					<Input
+						label={"Harga beli"}
+						type={"number"}
+						min={0}
+						step={500}
+						name={"purchasePrice"}
+						required={true}
+						defaultValue={product.purchasePrice}
+						register={register}
+					/>
+				</div>
+
+				<div className="p-2">
+					<Input
+						label={"Harga jual"}
+						type={"number"}
+						min={0}
+						step={500}
+						name={"salesPrice"}
+						required={true}
+						defaultValue={product.salesPrice}
+						register={register}
+					/>
+				</div>
+
 				<div className="py-2 mt-2 flex justify-end">
 					<ButtonPrimary type={"submit"}>Simpan</ButtonPrimary>
 				</div>

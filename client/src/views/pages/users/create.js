@@ -25,40 +25,49 @@ export default function AddUser() {
 			setOpenModal={setOpenModal}
 		>
 			<form onSubmit={handleSubmit(store)} className="w-full">
-				<Input
-					label={"Nama"}
-					type={"text"}
-					name={"name"}
-					required={true}
-					register={register}
-				/>
+				<div className="p-2">
+					<Input
+						label={"Nama"}
+						type={"text"}
+						name={"name"}
+						capitalize={true}
+						required={true}
+						register={register}
+					/>
+				</div>
 
-				<Input
-					label={"Username"}
-					type={"text"}
-					name={"username"}
-					required={"true"}
-					register={register}
-				/>
+				<div className="p-2">
+					<Input
+						label={"Username"}
+						type={"text"}
+						name={"username"}
+						required={"true"}
+						register={register}
+					/>
+				</div>
 
-				<Select
-					label={"Role"}
-					name={"role"}
-					required={true}
-					register={register}
-				>
-					<option value="">Pilih</option>
-					<option value="admin">Admin</option>
-					<option value="cashier">Kasir</option>
-				</Select>
+				<div className="p-2">
+					<Select
+						label={"Role"}
+						name={"role"}
+						required={true}
+						register={register}
+					>
+						<option value="">Pilih</option>
+						<option value="admin">Admin</option>
+						<option value="cashier">Kasir</option>
+					</Select>
+				</div>
 
-				<Input
-					label={"Password"}
-					type={"password"}
-					name={"password"}
-					required={"true"}
-					register={register}
-				/>
+				<div className="p-2">
+					<Input
+						label={"Password"}
+						type={"password"}
+						name={"password"}
+						required={"true"}
+						register={register}
+					/>
+				</div>
 
 				<div className="py-2 mt-2 flex justify-end">
 					<ButtonPrimary type={"submit"}>Simpan</ButtonPrimary>
