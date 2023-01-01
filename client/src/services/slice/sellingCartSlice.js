@@ -8,6 +8,7 @@ const sellingCartSlice = createSlice({
 		// Add item to cart
 		addItem: (state, action) => {
 			const item = action.payload;
+
 			const itemExists = state.items.find((i) => i.product === item.product);
 
 			if (item.stock < 1) toast.error("Stok barang tidak mencukupi");

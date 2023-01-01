@@ -54,6 +54,7 @@ export default function Cart({
 													updateQuantity({
 														product: item.product,
 														qty: e.target.value,
+														stock: item.stock,
 													})
 												)
 											}

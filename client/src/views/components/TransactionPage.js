@@ -1,14 +1,17 @@
 import React from "react";
 import { NavLink } from "react-router-dom";
+import SaveTransaction from "../pages/sellings/save";
 import SearchProduct from "./SearchProduct";
 
 export default function TransactionPage({
-	header,
-	selectProduct,
-	actions,
 	cart,
+	header,
+	actions,
+	cartType,
 	clearCart,
+	grandTotal,
 	redirectPath,
+	selectProduct,
 	children,
 }) {
 	return (
@@ -18,20 +21,26 @@ export default function TransactionPage({
 				<div className="flex flex-1 items-center">
 					<SearchProduct
 						selectProduct={selectProduct}
-						cartType={"purchasing"}
+						cartType={cartType}
+						actions={actions}
 					/>
 				</div>
 				<div className="flex gap-2">
-					<button
-						onClick={actions}
-						className={`px-6 py-2 rounded shadow-lg text-white ${
-							!cart.length ? "bg-gray-400" : "bg-green-500 hover:bg-green-700"
-						}`}
-						tabIndex={-1}
-						disabled={!cart.length}
-					>
-						Simpan
-					</button>
+					{cartType === "selling" ? (
+						<SaveTransaction grandTotal={grandTotal} cart={cart} />
+					) : (
+						<button
+							onClick={actions}
+							className={`px-6 py-2 rounded shadow-lg text-white ${
+								!cart.length ? "bg-gray-400" : "bg-green-500 hover:bg-green-700"
+							}`}
+							tabIndex={-1}
+							disabled={!cart.length}
+						>
+							Simpan
+						</button>
+					)}
+
 					<button
 						className={`px-6 py-2 rounded shadow-lg text-white ${
 							!cart.length ? "bg-gray-400" : "bg-cyan-500 hover:bg-cyan-700"
@@ -41,6 +50,7 @@ export default function TransactionPage({
 					>
 						Hold
 					</button>
+
 					<button
 						className={`px-6 py-2 rounded shadow-lg text-white ${
 							!cart.length ? "bg-gray-400" : "bg-yellow-500 hover:bg-yellow-700"
@@ -50,6 +60,7 @@ export default function TransactionPage({
 					>
 						Clear
 					</button>
+
 					<NavLink
 						onClick={clearCart}
 						to={redirectPath}
