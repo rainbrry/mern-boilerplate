@@ -31,8 +31,8 @@ export default function Input({
 				placeholder={label}
 				onChange={onChange}
 				defaultValue={defaultValue}
-				{...register(name, { required })}
 				disabled={disabled}
+				{...register(name, { required })}
 				{...props}
 			/>
 		</>
