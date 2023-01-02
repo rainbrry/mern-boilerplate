@@ -90,6 +90,8 @@ route.delete("/selling/:id", isLoggedin, SellingsController.destroy);
 route.get("/sales-reports", isLoggedin, SellingsController.report);
 route.get("/return-reports", isLoggedin, SellingsController.returnReports);
 route.get("/expenses", isLoggedin, ExpensesController.index);
-route.post("/expense", isCashier, ExpensesController.store);
+route.post("/expense", isLoggedin, ExpensesController.store);
+route.put("/expense/:id", isLoggedin, ExpensesController.update);
+route.delete("/expense/:id", isLoggedin, ExpensesController.destroy);
 
 export default route;

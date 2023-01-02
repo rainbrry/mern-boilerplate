@@ -12,6 +12,7 @@ import EditPurchasing from "../views/pages/purchasings/edit";
 import Sellings from "../views/pages/sellings";
 import AddSelling from "../views/pages/sellings/create";
 import ReturnSelling from "../views/pages/sellings/edit";
+import Expenses from "../views/pages/expenses";
 
 export default function Router() {
 	return (
@@ -105,6 +106,15 @@ export default function Router() {
 						element={
 							<PrivateRoutes>
 								<ReturnSelling />
+							</PrivateRoutes>
+						}
+					/>
+
+					<Route
+						path="/expenses"
+						element={
+							<PrivateRoutes>
+								<Expenses />
 							</PrivateRoutes>
 						}
 					/>

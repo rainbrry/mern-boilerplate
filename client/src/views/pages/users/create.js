@@ -27,12 +27,12 @@ export default function AddUser() {
 			<form onSubmit={handleSubmit(store)} className="w-full">
 				<div className="p-2">
 					<Input
-						label={"Nama"}
-						type={"text"}
-						name={"name"}
-						capitalize={true}
-						required={true}
-						register={register}
+							label={"Nama"}
+							type={"text"}
+							name={"name"}
+							capitalize={true}
+							required={true}
+							register={register}
 					/>
 				</div>
 

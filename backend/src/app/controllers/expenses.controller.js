@@ -17,7 +17,7 @@ const ExpensesController = {
 			.gte(new Date().setHours(0, 0, 0, 0))
 			.populate("user", "name -_id")
 			.then((expenses) => {
-				return res.status(200).json({ data: expenses });
+				return res.status(200).json(expenses);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
@@ -38,7 +38,7 @@ const ExpensesController = {
 		await Expense.findById(req.params.id)
 			.populate("user", "name -_id")
 			.then((expense) => {
-				return res.status(200).json({ data: expense });
+				return res.status(200).json(expense);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
@@ -60,7 +60,7 @@ const ExpensesController = {
 			user: req.user._id,
 		});
 
-		await expense.save((err, expense) => {
+		expense.save((err, expense) => {
 			if (err) {
 				return res.status(500).json({ message: err.message });
 			}
@@ -70,8 +70,34 @@ const ExpensesController = {
 					return res.status(500).json({ message: err.message });
 				}
 
-				return res.status(201).json({ data: expense });
+				return res.status(201).json(expense);
 			});
+		});
+	},
+
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Update expense data by id
+	 * @route PUT /api/expense/:id
+	 */
+	update: async (req, res) => {
+		await Expense.findByIdAndUpdate(req.params.id, req.body).then((expense) => {
+			return res.status(200).json(expense);
+		});
+	},
+
+	/**
+	 * @param {Request} req
+	 * @param {Response} res
+	 * @returns {Promise<Response>}
+	 * @description Delete expense data by id
+	 * @route DELETE /api/expense/:id
+	 */
+	destroy: async (req, res) => {
+		await Expense.findByIdAndDelete(req.params.id).then((expense) => {
+			return res.status(200).json(expense);
 		});
 	},
 };

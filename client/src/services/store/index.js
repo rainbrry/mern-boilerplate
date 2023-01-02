@@ -7,6 +7,7 @@ import { productsApi } from "../api/products";
 import { sellingsApi } from "../api/sellings";
 import { purchasingsApi } from "../api/purchasings";
 import { dashboardApi } from "../api/dashboard";
+import { expensesApi } from "../api/expenses";
 import purchasingCartReducer from "../slice/purchasingCartSlice";
 import sellingCartReducer from "../slice/sellingCartSlice";
 import auth from "../slice/authSlice";
@@ -45,6 +46,7 @@ const store = configureStore({
 		[sellingsApi.reducerPath]: sellingsApi.reducer,
 		[purchasingsApi.reducerPath]: purchasingsApi.reducer,
 		[dashboardApi.reducerPath]: dashboardApi.reducer,
+		[expensesApi.reducerPath]: expensesApi.reducer,
 		auth: persistedReducer,
 		sellingCart: sellingCartReducer,
 		purchasingCart: purchasingCartReducer,
@@ -58,6 +60,7 @@ const store = configureStore({
 			authApi.middleware,
 			usersApi.middleware,
 			productsApi.middleware,
+			expensesApi.middleware,
 			purchasingsApi.middleware,
 			sellingsApi.middleware
 		),
