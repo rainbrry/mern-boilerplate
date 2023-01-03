@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { toast } from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { useCreatePurchasingMutation } from "../../../services/api/purchasings";
 import {
@@ -29,11 +30,13 @@ export default function AddPurchasing() {
 
 	const store = async () => {
 		await createPurchasing({ items: cart })
+			.unwrap()
 			.then(() => {
 				dispatch(clearCart());
+				toast.success("Transaksi berhasil");
 			})
 			.catch((err) => {
-				console.log(err);
+				toast.error("Transaksi gagal");
 			});
 	};
 
@@ -54,11 +57,9 @@ export default function AddPurchasing() {
 			<div>
 				<Cart
 					cart={cart}
-					clearCart={clearCart}
 					grandTotal={grandTotal}
 					updateQuantity={updateItemQty}
 					removeItem={removeItem}
-					redirect={"/purchasing"}
 					cartType={"purchasing"}
 				/>
 			</div>

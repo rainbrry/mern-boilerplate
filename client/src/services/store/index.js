@@ -8,9 +8,11 @@ import { sellingsApi } from "../api/sellings";
 import { purchasingsApi } from "../api/purchasings";
 import { dashboardApi } from "../api/dashboard";
 import { expensesApi } from "../api/expenses";
+import { reportsApi } from "../api/reports";
+import auth from "../slice/authSlice";
+import chartReducer from "../slice/chartSlice";
 import purchasingCartReducer from "../slice/purchasingCartSlice";
 import sellingCartReducer from "../slice/sellingCartSlice";
-import auth from "../slice/authSlice";
 import storage from "redux-persist/lib/storage";
 import persistReducer from "redux-persist/es/persistReducer";
 import persistStore from "redux-persist/es/persistStore";
@@ -47,7 +49,9 @@ const store = configureStore({
 		[purchasingsApi.reducerPath]: purchasingsApi.reducer,
 		[dashboardApi.reducerPath]: dashboardApi.reducer,
 		[expensesApi.reducerPath]: expensesApi.reducer,
+		[reportsApi.reducerPath]: reportsApi.reducer,
 		auth: persistedReducer,
+		chart: chartReducer,
 		sellingCart: sellingCartReducer,
 		purchasingCart: purchasingCartReducer,
 	},
@@ -62,7 +66,9 @@ const store = configureStore({
 			productsApi.middleware,
 			expensesApi.middleware,
 			purchasingsApi.middleware,
-			sellingsApi.middleware
+			sellingsApi.middleware,
+			dashboardApi.middleware,
+			reportsApi.middleware
 		),
 });
 

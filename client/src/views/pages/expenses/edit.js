@@ -6,6 +6,7 @@ import CreatePage from "../../components/CreatePage";
 import Textarea from "../../components/Textarea";
 import Input from "../../components/Input";
 import Select from "../../components/Select";
+import { toast } from "react-hot-toast";
 
 export default function EditExpenses({ expense }) {
 	const [openModal, setOpenModal] = useState(false);
@@ -13,12 +14,14 @@ export default function EditExpenses({ expense }) {
 	const [updateExpense] = useUpdateExpenseMutation();
 	const update = async (data) => {
 		await updateExpense(data)
+			.unwrap()
 			.then(() => {
 				reset();
 				setOpenModal(!openModal);
+				toast.success("Berhasil mengubah data");
 			})
 			.catch((err) => {
-				console.log(err);
+				toast.error("Gagal mengubah data");
 			});
 	};
 	return (

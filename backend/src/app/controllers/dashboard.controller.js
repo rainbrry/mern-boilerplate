@@ -53,13 +53,11 @@ const DashboardController = {
 		}, 0);
 
 		return res.status(200).json({
-			data: {
-				sellings,
-				todaysRevenue,
-				todaysProfit,
-				todaysSales,
-				todaysExpenses,
-			},
+			sellings,
+			todaysRevenue,
+			todaysProfit,
+			todaysSales,
+			todaysExpenses,
 		});
 	},
 
@@ -130,39 +128,6 @@ const DashboardController = {
 	// 		},
 	// 	});
 	// },
-
-	/**
-	 * @param {Request} req
-	 * @param {Response} res
-	 * @returns {Promise<Response>}
-	 * @description Set cash
-	 * @route POST /api/dashboard/cash
-	 * @access Cashier
-	 * @access Admin
-	 */
-	setCash: async (req, res) => {
-		const { cash } = req.body;
-
-		if (!cash) {
-			return res.status(400).json({ error: "Cash is required" });
-		}
-
-		// get cash
-		const cashData = await Cash.find();
-
-		// if not cash, create new cash
-		if (cashData.length === 0) {
-			const newCash = new Cash({ cash });
-			await newCash.save();
-			return res.status(200).json({ data: newCash });
-		}
-
-		// if cash, update cash
-		cashData[0].cash = cash;
-		await cashData[0].save();
-
-		return res.status(200).json({ data: cashData });
-	},
 };
 
 export default DashboardController;

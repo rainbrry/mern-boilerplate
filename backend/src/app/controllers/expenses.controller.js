@@ -15,6 +15,7 @@ const ExpensesController = {
 		await Expense.find()
 			.where("createdAt")
 			.gte(new Date().setHours(0, 0, 0, 0))
+			.sort({ createdAt: -1 })
 			.populate("user", "name -_id")
 			.then((expenses) => {
 				return res.status(200).json(expenses);

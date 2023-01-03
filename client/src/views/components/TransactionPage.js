@@ -52,6 +52,7 @@ export default function TransactionPage({
 					</button>
 
 					<button
+						onClick={clearCart}
 						className={`px-6 py-2 rounded shadow-lg text-white ${
 							!cart.length ? "bg-gray-400" : "bg-yellow-500 hover:bg-yellow-700"
 						}`}

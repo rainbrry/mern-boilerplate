@@ -1,6 +1,11 @@
 import React from "react";
 import { BrowserRouter, Routes, Route } from "react-router-dom";
-import { PrivateRoutes, PublicRoutes } from "./routes.middleware";
+import {
+	AdminRoutes,
+	CashierRoutes,
+	PrivateRoutes,
+	PublicRoutes,
+} from "./routes.middleware";
 import MainLayout from "../views/layouts/MainLayout";
 import Login from "../views/pages/auth/Login";
 import Dashboard from "../views/pages/dashboard";
@@ -13,6 +18,9 @@ import Sellings from "../views/pages/sellings";
 import AddSelling from "../views/pages/sellings/create";
 import ReturnSelling from "../views/pages/sellings/edit";
 import Expenses from "../views/pages/expenses";
+import PurchasingReport from "../views/pages/reports/purchasing-report";
+import SalesReports from "../views/pages/reports/sales-report";
+import ReturnSalesReport from "../views/pages/reports/return-sales-report";
 
 export default function Router() {
 	return (
@@ -42,7 +50,9 @@ export default function Router() {
 						path="/users"
 						element={
 							<PrivateRoutes>
-								<Users />
+								<AdminRoutes>
+									<Users />
+								</AdminRoutes>
 							</PrivateRoutes>
 						}
 					/>
@@ -51,7 +61,9 @@ export default function Router() {
 						path="/products"
 						element={
 							<PrivateRoutes>
-								<Products />
+								<AdminRoutes>
+									<Products />
+								</AdminRoutes>
 							</PrivateRoutes>
 						}
 					/>
@@ -60,7 +72,9 @@ export default function Router() {
 						path="/purchasings"
 						element={
 							<PrivateRoutes>
-								<Purchasings />
+								<AdminRoutes>
+									<Purchasings />
+								</AdminRoutes>
 							</PrivateRoutes>
 						}
 					/>
@@ -69,7 +83,9 @@ export default function Router() {
 						path="/new-purchasing"
 						element={
 							<PrivateRoutes>
-								<AddPurchasing />
+								<AdminRoutes>
+									<AddPurchasing />
+								</AdminRoutes>
 							</PrivateRoutes>
 						}
 					/>
@@ -78,7 +94,9 @@ export default function Router() {
 						path="/edit-purchasing/:id"
 						element={
 							<PrivateRoutes>
-								<EditPurchasing />
+								<AdminRoutes>
+									<EditPurchasing />
+								</AdminRoutes>
 							</PrivateRoutes>
 						}
 					/>
@@ -96,7 +114,9 @@ export default function Router() {
 						path="/new-selling"
 						element={
 							<PrivateRoutes>
-								<AddSelling />
+								<CashierRoutes>
+									<AddSelling />
+								</CashierRoutes>
 							</PrivateRoutes>
 						}
 					/>
@@ -105,7 +125,9 @@ export default function Router() {
 						path="/return-selling/:id"
 						element={
 							<PrivateRoutes>
-								<ReturnSelling />
+								<CashierRoutes>
+									<ReturnSelling />
+								</CashierRoutes>
 							</PrivateRoutes>
 						}
 					/>
@@ -114,7 +136,38 @@ export default function Router() {
 						path="/expenses"
 						element={
 							<PrivateRoutes>
-								<Expenses />
+								<CashierRoutes>
+									<Expenses />
+								</CashierRoutes>
+							</PrivateRoutes>
+						}
+					/>
+
+					<Route
+						path="/purchasing-reports"
+						element={
+							<PrivateRoutes>
+								<AdminRoutes>
+									<PurchasingReport />
+								</AdminRoutes>
+							</PrivateRoutes>
+						}
+					/>
+
+					<Route
+						path="/sales-reports"
+						element={
+							<PrivateRoutes>
+								<SalesReports />
+							</PrivateRoutes>
+						}
+					/>
+
+					<Route
+						path="/return-sales-reports"
+						element={
+							<PrivateRoutes>
+								<ReturnSalesReport />
 							</PrivateRoutes>
 						}
 					/>

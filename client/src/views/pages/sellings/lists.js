@@ -1,4 +1,5 @@
 import React from "react";
+import { useSelector } from "react-redux";
 import { NavLink } from "react-router-dom";
 import { rupiah } from "../../../helpers/currency";
 import {
@@ -8,6 +9,7 @@ import {
 import SellingDetail from "./detail";
 
 export default function ListSellings() {
+	const { auth } = useSelector((state) => state);
 	const { data: sellings = [], isLoading, isError } = useGetSellingsQuery();
 	const [deleteSelling] = useDeleteSellingMutation();
 
@@ -62,7 +64,7 @@ export default function ListSellings() {
 											<div className="font-medium text-gray-800 capitalize">
 												{new Date(selling.createdAt).toLocaleString("id-ID", {
 													year: "numeric",
-													month: "numeric",
+													month: "short",
 													day: "numeric",
 													hour: "numeric",
 													minute: "numeric",
@@ -81,14 +83,20 @@ export default function ListSellings() {
 										</td>
 
 										<td className="px-4 py-2 whitespace-nowrap text-center w-28">
-											<div
-												className={`px-4 font-normal rounded-full text-white flex items-center justify-center ${
-													selling.status === "sold"
-														? "bg-green-500"
-														: "bg-red-500"
-												}`}
-											>
-												{selling.status === "sold" ? "Sold" : "Returned"}
+											<div className="font-normal">
+												{selling.status === "sold" ? (
+													<span className="flex items-center w-22 justify-center bg-teal-500 px-4 rounded-full text-white">
+														Selesai
+													</span>
+												) : selling.status === "hold" ? (
+													<span className="flex items-center w-22 justify-center bg-yellow-500 px-4 rounded-full text-white">
+														Ditahan
+													</span>
+												) : (
+													<span className="flex items-center w-22 justify-center bg-red-500 px-4 rounded-full text-white">
+														Dibatalkan
+													</span>
+												)}
 											</div>
 										</td>
 
@@ -96,17 +104,28 @@ export default function ListSellings() {
 											<div className="text-md flex gap-2 justify-center items-center">
 												<SellingDetail selling={selling} />
 
-												{selling.status === "sold" ? (
+												{auth.role === "kasir" && selling.status === "sold" ? (
 													<NavLink
 														to={`/return-selling/${selling._id}`}
-														className="px-4 py-0.5 bg-yellow-500 rounded-lg shadow text-white hover:bg-yellow-700"
+														className="px-6 py-0.5 bg-yellow-500 rounded-lg shadow text-white hover:bg-yellow-700"
 													>
 														Retur
 													</NavLink>
 												) : (
+													selling.status === "hold" && (
+														<button
+															onClick={() => deleteSelling(selling._id)}
+															className="px-6 py-0.5 bg-blue-600 rounded-lg shadow text-white hover:bg-blue-700"
+														>
+															Lanjutkan
+														</button>
+													)
+												)}
+
+												{selling.status === "returned" && (
 													<button
 														onClick={() => deleteSelling(selling._id)}
-														className="px-4 py-0.5 bg-red-600 rounded-lg shadow text-white hover:bg-red-700"
+														className="px-6 py-0.5 bg-red-600 rounded-lg shadow text-white hover:bg-red-700"
 													>
 														Hapus
 													</button>

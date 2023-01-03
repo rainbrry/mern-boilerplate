@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { ButtonPrimary } from "../../components/Button";
 import { useUpdatePurchasingMutation } from "../../../services/api/purchasings";
@@ -15,7 +16,15 @@ export default function EditItemQty({ item, purchasing }) {
 			...payload,
 			actions: "update",
 		};
-		await updatePurchasing(data);
+		await updatePurchasing(data)
+			.unwrap()
+			.then(() => {
+				setOpenModal(!openModal);
+				toast.success("Berhasil mengubah data");
+			})
+			.catch((err) => {
+				toast.error("Gagal mengubah data");
+			});
 	};
 
 	return (

@@ -14,7 +14,7 @@ export default function PurchasingDetail({ purchasing }) {
 				btnStyle={
 					"px-4 py-0.5 bg-cyan-600 rounded-lg shadow text-white hover:bg-cyan-800"
 				}
-				modalTitle={"Detail Penjualan"}
+				modalTitle={"Detail pembelian"}
 				modalWitdh={"max-w-5xl"}
 			>
 				<div className="w-full p-4 flex flex-row gap-2 justify-between border-b-2">

@@ -65,7 +65,7 @@ export default function ListPurchasings() {
 													"id-ID",
 													{
 														year: "numeric",
-														month: "numeric",
+														month: "short",
 														day: "numeric",
 														hour: "numeric",
 														minute: "numeric",

@@ -3,7 +3,7 @@ import { rupiah } from "../../helpers/currency";
 import { useLazySearchProductQuery } from "../../services/api/products";
 import Modal from "./Modal";
 
-export default function SearchProduct({ selectProduct, cartType }) {
+export default function SearchProduct({ cartType, selectProduct }) {
 	const [openModal, setOpenModal] = useState(false);
 	const [search, { data: products }] = useLazySearchProductQuery();
 

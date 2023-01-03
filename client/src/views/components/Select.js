@@ -17,7 +17,6 @@ export default function Select({
 			</label>
 			<select
 				name={name}
-				id={name}
 				className="w-full px-2 py-1.5 rounded-md border border-gray-300 outline-none focus:border-cyan-500 bg-white"
 				onChange={onChange}
 				defaultValue={defaultValue}

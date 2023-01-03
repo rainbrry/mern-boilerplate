@@ -1,10 +1,10 @@
 import React from "react";
+import { useGetUsersQuery } from "../../../services/api/users";
 import DeleteUser from "./delete";
 import EditUser from "./edit";
-import { useGetUsersQuery } from "../../../services/api/users";
 
 export default function ListUser() {
-	const { data: users = [], isLoading, isError } = useGetUsersQuery();
+	const { data: users, isLoading, isError } = useGetUsersQuery();
 
 	return (
 		<div className="py-4">

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { ButtonPrimary } from "../../components/Button";
 import { useUpdateProductMutation } from "../../../services/api/products";
@@ -11,9 +12,16 @@ export default function EditProduct({ product }) {
 	const { register, handleSubmit, reset } = useForm();
 
 	const update = async (data) => {
-		await updateProduct(data);
-		reset();
-		setOpenModal(!openModal);
+		await updateProduct(data)
+			.unwrap()
+			.then(() => {
+				setOpenModal(!openModal);
+				reset();
+				toast.success("Berhasil mengubah data");
+			})
+			.catch((err) => {
+				toast.error("Gagal mengubah data");
+			});
 	};
 
 	return (

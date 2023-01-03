@@ -8,7 +8,7 @@ export default function LineChart({ data }) {
 
 	return (
 		<div className="chart-container">
-			<h2 className="text-xl font-semibold">Line chart</h2>
+			<h2 className="text-xl font-semibold">Diagram pemasukan hari ini</h2>
 			<Line style={{ maxHeight: "480px" }} data={data} />
 		</div>
 	);

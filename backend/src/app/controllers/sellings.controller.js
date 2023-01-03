@@ -253,7 +253,7 @@ const SellingsController = {
 			}
 
 			// create or update return report
-			const returnReport = await ReturnReport.findOneAndUpdate(
+			await ReturnReport.findOneAndUpdate(
 				{ sales: req.params.id },
 				{
 					user: req.userId,
@@ -278,7 +278,7 @@ const SellingsController = {
 						type: "return item",
 						user: req.userId,
 						amount: returnedTotal,
-						description: `Return barang dengan no transaksi ${selling._id}`,
+						description: `Pengembalian barang dengan no transaksi ${selling._id}`,
 						status: "success",
 					},
 				],
@@ -334,7 +334,7 @@ const SellingsController = {
 			.populate("user", "name -_id")
 			.populate("details.product", "name -_id")
 			.then((reports) => {
-				return res.status(200).json({ data: reports });
+				return res.status(200).json(reports);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });
@@ -358,7 +358,7 @@ const SellingsController = {
 			.populate("user", "name -_id")
 			.populate("details.product", "name -_id")
 			.then((reports) => {
-				return res.status(200).json({ data: reports });
+				return res.status(200).json(reports);
 			})
 			.catch((err) => {
 				return res.status(500).json({ message: err.message });

@@ -1,10 +1,11 @@
 import React from "react";
+import { toast } from "react-hot-toast";
+import { rupiah } from "../../../helpers/currency";
 import {
 	useShowPurchasingQuery,
 	useUpdatePurchasingMutation,
 } from "../../../services/api/purchasings";
 import IndexPage from "../../components/IndexPage";
-import { rupiah } from "../../../helpers/currency";
 import EditItemQty from "./editItemQty";
 
 export default function EditPurchasing() {
@@ -21,7 +22,14 @@ export default function EditPurchasing() {
 			actions: "remove",
 		};
 
-		await updatePurchasing(data);
+		await updatePurchasing(data)
+			.unwrap()
+			.then(() => {
+				toast.success("Berhasil menghapus item");
+			})
+			.catch((err) => {
+				toast.error("Gagal menghapus item");
+			});
 	};
 	return (
 		<IndexPage header={"Edit pembelian"}>

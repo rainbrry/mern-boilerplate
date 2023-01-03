@@ -1,9 +1,11 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useUpdateUserMutation } from "../../../services/api/users";
 import { ButtonPrimary } from "../../components/Button";
 import CreatePage from "../../components/CreatePage";
 import Input from "../../components/Input";
+import Select from "../../components/Select";
 
 export default function EditUser({ user }) {
 	const [openModal, setOpenModal] = useState(false);
@@ -11,9 +13,16 @@ export default function EditUser({ user }) {
 
 	const { register, handleSubmit, reset } = useForm();
 	const update = async (data) => {
-		await updateUser(data);
-		reset();
-		setOpenModal(!openModal);
+		await updateUser(data)
+			.unwrap()
+			.then(() => {
+				reset();
+				setOpenModal(false);
+				toast.success("Berhasil mengubah data");
+			})
+			.catch((err) => {
+				toast.error("Gagal mengubah data");
+			});
 	};
 
 	return (
@@ -54,6 +63,20 @@ export default function EditUser({ user }) {
 						defaultValue={user.username}
 						register={register}
 					/>
+				</div>
+
+				<div className="p-2">
+					<Select
+						label={"Role"}
+						name={"role"}
+						required={true}
+						register={register}
+						defaultValue={user.role}
+					>
+						<option value="">Pilih</option>
+						<option value="admin">Admin</option>
+						<option value="kasir">Kasir</option>
+					</Select>
 				</div>
 
 				<div className="py-2 mt-2 flex justify-end">

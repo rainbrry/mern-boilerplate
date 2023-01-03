@@ -50,7 +50,9 @@ export const usersApi = createApi({
 
 export const {
 	useGetUsersQuery,
+	useLazyGetUsersQuery,
 	useShowUserQuery,
+	useLazyShowUserQuery,
 	useCreateUserMutation,
 	useUpdateUserMutation,
 	useDeleteUserMutation,

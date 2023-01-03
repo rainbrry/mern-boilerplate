@@ -1,9 +1,9 @@
 import React from "react";
 import { rupiah } from "../../../helpers/currency";
+import { useGetProductsQuery } from "../../../services/api/products";
 import DetailProduct from "./detail";
 import EditProduct from "./edit";
 import DeleteProduct from "./delete";
-import { useGetProductsQuery } from "../../../services/api/products";
 
 export default function ListProducts() {
 	const { data: products = [], isLoading, isError } = useGetProductsQuery();

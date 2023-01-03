@@ -55,18 +55,18 @@ export default function ListExpenses() {
 									className="border-b-2 border-gray-200 hover:bg-gray-300"
 								>
 									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-normal">
-											{new Date(expense.createdAt).toLocaleDateString("id-ID", {
+										<div className="font-medium text-gray-800 capitalize">
+											{new Date(expense.createdAt).toLocaleString("id-ID", {
 												year: "numeric",
-												month: "long",
+												month: "short",
 												day: "numeric",
+												hour: "numeric",
+												minute: "numeric",
 											})}
 										</div>
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
-										<div className="font-normal">
-											{expense.type === "other" ? "Lainnya" : expense.type}
-										</div>
+										<div className="font-normal">{expense.type}</div>
 									</td>
 									<td className="px-4 py-2 whitespace-nowrap">
 										<div className="font-normal">{expense.user.name}</div>

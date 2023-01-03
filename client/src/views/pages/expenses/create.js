@@ -6,6 +6,7 @@ import Input from "../../components/Input";
 import Select from "../../components/Select";
 import Textarea from "../../components/Textarea";
 import CreatePage from "../../components/CreatePage";
+import { toast } from "react-hot-toast";
 
 export default function AddExpenses() {
 	const [openModal, setOpenModal] = useState(false);
@@ -13,12 +14,14 @@ export default function AddExpenses() {
 	const [createExpense] = useCreateExpenseMutation();
 	const store = async (data) => {
 		await createExpense(data)
+			.unwrap()
 			.then(() => {
 				setOpenModal(!openModal);
 				reset();
+				toast.success("Berhasil menambahkan data");
 			})
 			.catch((err) => {
-				console.log(err);
+				toast.error("Gagal menambahkan data");
 			});
 	};
 
@@ -39,9 +42,9 @@ export default function AddExpenses() {
 						register={register}
 					>
 						<option value="">Pilih</option>
-						<option value="purchasing">Pembelian</option>
+						<option value="pembelian">Pembelian</option>
 						<option value="refund">Refund</option>
-						<option value="other">Lainnya</option>
+						<option value="lainnya">Lainnya</option>
 					</Select>
 				</div>
 

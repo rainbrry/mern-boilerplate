@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useForm } from "react-hook-form";
+import { toast } from "react-hot-toast";
 import { useCreateUserMutation } from "../../../services/api/users";
 import { ButtonPrimary } from "../../components/Button";
 import CreatePage from "../../components/CreatePage";
@@ -10,10 +11,18 @@ export default function AddUser() {
 	const [openModal, setOpenModal] = useState(false);
 	const [createUser] = useCreateUserMutation();
 	const { register, handleSubmit, reset } = useForm();
+
 	const store = async (data) => {
-		await createUser(data);
-		setOpenModal(!openModal);
-		reset();
+		await createUser(data)
+			.unwrap()
+			.then(() => {
+				setOpenModal(false);
+				reset();
+				toast.success("Berhasil menambahkan data");
+			})
+			.catch((err) => {
+				toast.error("Gagal menambahkan data");
+			});
 	};
 
 	return (
@@ -27,12 +36,12 @@ export default function AddUser() {
 			<form onSubmit={handleSubmit(store)} className="w-full">
 				<div className="p-2">
 					<Input
-							label={"Nama"}
-							type={"text"}
-							name={"name"}
-							capitalize={true}
-							required={true}
-							register={register}
+						label={"Nama"}
+						type={"text"}
+						name={"name"}
+						capitalize={true}
+						required={true}
+						register={register}
 					/>
 				</div>
 
@@ -55,7 +64,7 @@ export default function AddUser() {
 					>
 						<option value="">Pilih</option>
 						<option value="admin">Admin</option>
-						<option value="cashier">Kasir</option>
+						<option value="kasir">Kasir</option>
 					</Select>
 				</div>
 

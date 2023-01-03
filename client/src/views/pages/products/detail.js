@@ -12,7 +12,7 @@ export default function DetailProduct({ product }) {
 				setOpen={setOpenModal}
 				btnModal={"Detail"}
 				btnStyle={`px-4 py-0.5 bg-cyan-600 rounded-lg shadow text-white hover:bg-cyan-700`}
-				modalTitle={"Detail product"}
+				modalTitle={"Detail produk"}
 				modalWitdh={"max-w-xl"}
 			>
 				<div className="w-full px-4 py-2 flex flex-col gap-2">

@@ -11,3 +11,13 @@ export const PublicRoutes = ({ children }) => {
 	const { auth } = useSelector((state) => state);
 	return auth.isLoggedIn && auth.token ? <Navigate to="/" /> : children;
 };
+
+export const AdminRoutes = ({ children }) => {
+	const { auth } = useSelector((state) => state);
+	return auth.role === "admin" ? children : <Navigate to="/" />;
+};
+
+export const CashierRoutes = ({ children }) => {
+	const { auth } = useSelector((state) => state);
+	return auth.role === "kasir" ? children : <Navigate to="/" />;
+};

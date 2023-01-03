@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { useCreateProductMutation } from "../../../services/api/products";
 import { ButtonPrimary } from "../../components/Button";
@@ -11,9 +12,16 @@ export default function AddProduct() {
 	const [createProduct] = useCreateProductMutation();
 
 	const store = async (data) => {
-		await createProduct(data);
-		reset();
-		setOpenModal(!openModal);
+		await createProduct(data)
+			.unwrap()
+			.then(() => {
+				setOpenModal(!openModal);
+				reset();
+				toast.success("Berhasil menambahkan data");
+			})
+			.catch((err) => {
+				toast.error("Gagal menambahkan data");
+			});
 	};
 
 	return (

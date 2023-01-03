@@ -9,10 +9,7 @@ export const dashboardApi = createApi({
 		// GET /dashboard => Dashboard
 		getDashboard: builder.query({
 			query: () => "/dashboard",
-			providesTags: (result) => [{ type: "Dashboard", id: "LIST" }],
-
-			// if the result is undefined, it means that the request failed
-			// so we don't want to cache the result
+			providesTags: ["Dashboard"],
 			keepUnusedDataFor: 0,
 		}),
 	}),

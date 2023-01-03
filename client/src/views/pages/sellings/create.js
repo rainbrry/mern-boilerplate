@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from "react";
 import TransactionPage from "../../components/TransactionPage";
 import { useDispatch, useSelector } from "react-redux";
-import { useCreateSellingMutation } from "../../../services/api/sellings";
 import {
 	addItem,
 	clearCart,
@@ -45,12 +44,10 @@ export default function AddSelling() {
 			<div>
 				<Cart
 					cart={cart}
-					clearCart={clearCart}
 					grandTotal={grandTotal}
 					updateQuantity={updateItemQty}
 					removeItem={removeItem}
-					redirect={"/purchasing"}
-					cartType={"purchasing"}
+					cartType={"selling"}
 				/>
 			</div>
 		</TransactionPage>

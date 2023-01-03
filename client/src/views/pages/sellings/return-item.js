@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useForm } from "react-hook-form";
 import { ButtonPrimary } from "../../components/Button";
 import { useReturnItemMutation } from "../../../services/api/sellings";
@@ -16,13 +17,16 @@ export default function ReturnItem({ item, selling }) {
 			purchasePrice: item.product.purchasePrice,
 			...payload,
 		};
+
 		await returnSelling(data)
+			.unwrap()
 			.then(() => {
 				setOpenModal(!openModal);
 				reset();
+				toast.success("Pengembalian barang berhasil");
 			})
 			.catch((err) => {
-				console.log(err);
+				toast.error("Pengembalian barang gagal");
 			});
 	};
 

@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { toast } from "react-hot-toast";
 import { useDispatch } from "react-redux";
 import { rupiah } from "../../../helpers/currency";
 import { useCreateSellingMutation } from "../../../services/api/sellings";
@@ -26,17 +27,16 @@ export default function SaveTransaction({ cart, grandTotal }) {
 			paymentMethod,
 		};
 
-		if (cart.length) {
-			await createSelling(data)
-				.then(() => {
-					dispatch(clearCart());
-				})
-				.catch((err) => {
-					console.log(err);
-				});
-		}
-
-		setOpenModal(false);
+		await createSelling(data)
+			.unwrap()
+			.then(() => {
+				dispatch(clearCart());
+				setOpenModal(false);
+				toast.success("Transaksi berhasil");
+			})
+			.catch((err) => {
+				toast.error("Transaksi gagal");
+			});
 	};
 
 	return (
